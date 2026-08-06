@@ -52,7 +52,8 @@ de resolución de conflictos completo.
 | Aritmética, invariantes, parámetros | `docs/Contexto completo Michelena/Kit_Desarrollo_Sistema_DM.zip` → `motor_calculo_spec.md` + los 2 JSON Schema · luego `Ejemplo_Presupuesto_Sistema_DM.xlsx` · luego la narrativa del Documento Maestro |
 | Cifras del caso de referencia | `golden_test.json` — **ley, tolerancia cero** |
 | Reparto de trabajo y arquitectura | `docs/Diseño de producto/Segmentacion_Tareas_Kabunik_dcode_v2.md` |
-| Alcance y plan de la v1 | `docs/00-Fundamentos/ALCANCE_v1.md` → GitHub Project [kabunik/projects/2](https://github.com/orgs/kabunik/projects/2) |
+| Alcance de la v1 | `docs/00-Fundamentos/ALCANCE_v1.md` → GitHub Project [kabunik/projects/2](https://github.com/orgs/kabunik/projects/2) |
+| Fechas y milestones | `docs/Diseño de producto/Planificacion_Fechas_v1.md` (v2) — propuesta, pendiente de validar en J1.3 |
 | Contrato de integración | Contrato v0 congelado (pendiente, C1.6) → `docs/00-Fundamentos/CONTRATO_INTEGRACION_v0.md` como borrador |
 | Diseño visual y comportamiento de UI | `docs/mockup/design_handoff_plataforma_presupuestos/README.md` + `tokens.css` |
 | Frontera de alcance (ERP) | `docs/doc inicial/Hoja_de_Ruta_del_Producto.pdf` |

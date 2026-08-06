@@ -99,7 +99,8 @@ calibración, P12 admin — más las pantallas nuevas que introduce la decisión
 |---|---|
 | `CLAUDE.md` | Instrucciones de proyecto para agentes. Actualizado en esta revisión: rutas, jerarquía de fuentes, orden de resolución de conflictos |
 | `CLAUDE.base.md` | Núcleo común compartido entre proyectos. **No editar por proyecto** |
-| `docs/Planificacion_Fechas_v1.md` | Propuesta de fechas (PR #66, abierto). Al mergear, reubicar bajo `docs/Diseño de producto/` |
+Nota: `Planificacion_Fechas_v1.md` se reubicó bajo `docs/Diseño de producto/` y está en **v2**
+(2026-08-06), revisada tras las decisiones D1/D2. Es **propuesta**, pendiente de validar en J1.3.
 
 ---
 
