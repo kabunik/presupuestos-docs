@@ -13,16 +13,24 @@ Este paquete cubre las pantallas de **prioridad alta/crítica** de la primera et
 
 | Ref | Pantalla | Flow | Estado en el mock |
 |---|---|---|---|
-| P3 | Wizard de intake (3 pasos) | Flow 1 | 3 sub-pasos navegables |
+| P3 | Wizard de intake (**4 pasos**) | Flow 1 | 4 sub-pasos navegables |
 | P4 | Progreso de generación (streaming) | Flow 1 | 1 estado (etapa 3 en curso) |
 | P5·A | Workspace — revisión del primer output | Flow 2 | gate de BOM visible |
 | P5·B | Workspace — edición conversacional en vivo | Flow 3 | delta + rechazo por guardarraíl |
-| P5·C | Workspace — comparación de escenarios | Flow 4 | panel derecho expandido |
-| P6 | Grilla BOM + gate de aprobación | Flow 2 | estado "re-abierto" |
+| P5·C | Workspace — comparación de opciones de oferta | Flow 4 | panel derecho expandido |
+| P6 | Grilla BOM + gate de aprobación | Flow 2 | estado "re-abierto" + exclusiones |
 | P8 | Chat de edición + historial de cambios | Flow 3 | rail en detalle + timeline |
-| P9 | Escenarios + flujo de caja + v1 vs v2 | Flow 4 | pantalla completa (1440×1080) |
+| P9 | Opciones de oferta + flujo de caja + v1 vs v2 | Flow 4 | pantalla completa (1440×1080) |
+| **P13** | **Gate de confirmación de precios de MP** | — | modal de 720 px · compuerta bloqueante |
+| **P14** | **Carga de planta y ocupación de habilitado** | — | carga combinada + chequeos S11 |
+| **P15** | **Decisión de programa (A/B/B\*/C)** | — | 4 escenarios + compuerta de comunicación |
+| **P16** | **Interferencia de familias y subproyectos** | — | alerta no suprimible + 4 opciones |
 
-Fuera de alcance en esta etapa: P1 login, P2 dashboard, P7 aislado, P10 emisión de oferta, P11 calibración, P12 admin.
+Las cuatro últimas se añadieron en la **reconciliación con el Sistema DM v1.7** (issue #80). Su
+especificación completa —junto con la de P17, P18 y P19, aún sin mockear— está en
+`docs/Diseño de producto/RECONCILIACION_DISENO_Mockup.md`.
+
+Fuera de alcance en esta etapa: P1 login, P2 dashboard, P7 aislado, P10 emisión de oferta, P11 calibración, P12 admin, P17 cierre, P18 desviaciones como panel, P19 requisición.
 
 ---
 
@@ -354,3 +362,14 @@ En el prototipo: la plantilla HTML contiene la maquetación de cada pantalla; la
 - No cambiar los defaults ⚙️ sin decisión del equipo.
 - No usar rojo fuera de gates y alertas críticas, ni violeta fuera de acciones del agente.
 - No portar el switcher de pantallas ni la clase única del prototipo a producción.
+- **No dar control de silencio a las alertas no suprimibles.** `advertencia_bajo_equilibrio`,
+  `alerta_ocupacion` (≥100%), `alerta_interferencia_familias` y `advertencia_comunicacion_cliente`
+  no llevan «Ignorar» ni «Ocultar». «Aceptar el impacto documentado» sí es válido: es una decisión
+  registrada, no una supresión.
+- **No tratar el gate de precios de MP (P13) como un aviso.** Bloquea la emisión igual que el gate
+  de BOM y lleva el mismo peso visual (rojo). Los otros tres momentos de decisión —programa,
+  interferencia, recalibración— exigen decisión registrada pero **no** bloquean el cálculo: van en
+  ámbar. Esa distinción es la mitigación de la fatiga de alertas.
+- **No mostrar cifras de costo antes de que exista el motor.** En F0 el visor entrega geometría, BOM
+  y alertas de percepción; el total de la barra inferior va en estado «pendiente de motor», no con un
+  número.

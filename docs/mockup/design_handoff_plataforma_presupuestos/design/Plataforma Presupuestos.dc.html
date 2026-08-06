@@ -70,6 +70,16 @@ a{color:#1F9E91;text-decoration:none}a:hover{color:#17786e;text-decoration:under
           <div style="display:flex;flex-direction:column;gap:6px"><label style="font-size:12px;font-weight:600;color:#475569">Tipo de estructura</label><div style="height:42px;border:1px solid #CBD5E1;border-radius:10px;background:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 12px;font-size:14px">Domo / cubierta especial<span style="color:#94A3B8">›</span></div></div>
           <div style="display:flex;flex-direction:column;gap:6px"><label style="font-size:12px;font-weight:600;color:#475569">Destino (transporte)</label><div style="height:42px;border:1px solid #CBD5E1;border-radius:10px;background:#fff;display:flex;align-items:center;padding:0 12px;font-size:14px">Monterrey, N.L. · 312 km</div></div>
         </div>
+        <div style="border-top:1px solid #E3E8EF;padding-top:20px;display:flex;flex-direction:column;gap:10px">
+          <div><label style="font-size:12px;font-weight:600;color:#475569">Clase de complejidad (HH/ton)</label><div style="font-size:11.5px;color:#94A3B8;margin-top:3px">Un solo eje mueve desperdicio, soldadura, conexiones y horas. No se mezclan clases.</div></div>
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px">
+            <div style="border:1px solid #E3E8EF;border-radius:11px;padding:12px;cursor:pointer;background:#fff"><div style="font-family:'JetBrains Mono';font-size:17px;font-weight:600;color:#94A3B8">24</div><div style="font-size:11px;color:#94A3B8;margin-top:4px;line-height:1.4">Naves simples, racks</div></div>
+            <div style="border:1px solid #E3E8EF;border-radius:11px;padding:12px;cursor:pointer;background:#fff"><div style="font-family:'JetBrains Mono';font-size:17px;font-weight:600;color:#94A3B8">40</div><div style="font-size:11px;color:#94A3B8;margin-top:4px;line-height:1.4">Estándar industrial</div></div>
+            <div style="border:1px solid #CFE7E3;border-radius:11px;padding:12px;cursor:pointer;background:#E8F6F4"><div style="font-family:'JetBrains Mono';font-size:17px;font-weight:600;color:#17786e">60</div><div style="font-size:11px;color:#17786e;margin-top:4px;line-height:1.4">Gran claro, sismorresistente</div></div>
+            <div style="border:1px solid #E3E8EF;border-radius:11px;padding:12px;cursor:pointer;background:#fff"><div style="font-family:'JetBrains Mono';font-size:17px;font-weight:600;color:#94A3B8">90</div><div style="font-size:11px;color:#94A3B8;margin-top:4px;line-height:1.4">Offshore, misceláneos</div></div>
+          </div>
+          <div onClick="{{ goP16 }}" style="font-size:12px;font-weight:600;color:#1F9E91;cursor:pointer;margin-top:2px">Partir en subproyectos por familia ›</div>
+        </div>
       </div>
       </sc-if>
 
@@ -105,6 +115,99 @@ a{color:#1F9E91;text-decoration:none}a:hover{color:#17786e;text-decoration:under
         <div style="display:flex;flex-direction:column;gap:6px">
           <label style="font-size:12px;font-weight:600;color:#475569">Consideraciones libres</label>
           <div style="min-height:120px;border:1px solid #CBD5E1;border-radius:12px;background:#fff;padding:12px 14px;font-size:14px;line-height:1.6;color:#334155">Montaje nocturno restringido. Grúa máxima disponible en sitio: 80 t. Cliente exige perfiles nacionales cuando exista equivalencia. Entrega parcial del anillo perimetral antes de la semana 14.</div>
+        </div>
+
+        <div style="border-top:1px solid #E3E8EF;padding-top:20px;display:flex;flex-direction:column;gap:10px">
+          <div>
+            <label style="font-size:12px;font-weight:600;color:#475569">Desviaciones de concurso</label>
+            <div style="font-size:11.5px;color:#94A3B8;margin-top:3px">Las especificaciones del concurso rigen donde difieran de la norma. Cada desviación se costea y su impacto entra al presupuesto.</div>
+          </div>
+          <div style="border:1px solid #E3E8EF;border-radius:12px;background:#fff;overflow:hidden">
+            <div style="display:grid;grid-template-columns:1fr 150px 170px 96px 104px;background:#F8FAFC;border-bottom:1px solid #E3E8EF;padding:9px 14px;font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#94A3B8">
+              <span>Concepto</span><span>Norma</span><span>Concurso</span><span>Rige</span><span style="text-align:right">Impacto</span>
+            </div>
+            <sc-for list="{{ devs }}" as="d" hint-placeholder-count="4">
+              <div style="display:grid;grid-template-columns:1fr 150px 170px 96px 104px;align-items:center;padding:10px 14px;border-bottom:1px solid #F1F5F9;font-size:12.5px">
+                <span style="font-weight:500">{{ d.concepto }}</span>
+                <span style="color:#64748B">{{ d.norma }}</span>
+                <span style="color:#1E2A3A">{{ d.concurso }}</span>
+                <span style="font-size:10.5px;font-weight:700;padding:3px 8px;border-radius:999px;background:#E8F6F4;color:#17786e;justify-self:start">{{ d.rige }}</span>
+                <span style="{{ d.impactoStyle }}">{{ d.impacto }}</span>
+              </div>
+            </sc-for>
+            <div style="display:flex;align-items:center;padding:11px 14px;background:#F8FAFC;font-size:12px">
+              <span style="color:#64748B">Impacto neto al presupuesto</span>
+              <span style="margin-left:auto;font-family:'JetBrains Mono';font-size:13px;font-weight:600">{{ devTotal }}</span>
+            </div>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;background:#FEFBF5;border:1px solid #F5E4C4;border-radius:10px;padding:10px 13px">
+            <span style="width:7px;height:7px;border-radius:2px;background:#F5A623;flex:none"></span>
+            <span style="font-size:11.5px;color:#7C5308;line-height:1.45">Las correas Z375 están sin costear. Una desviación sin costo asignado es una desviación sin registrar.</span>
+          </div>
+        </div>
+      </div>
+      </sc-if>
+
+      <sc-if value="{{ isStep4 }}" hint-placeholder-val="{{ true }}">
+      <div style="max-width:880px;display:flex;flex-direction:column;gap:24px">
+        <div>
+          <div style="font-family:'Space Grotesk';font-size:26px;font-weight:600">Plan de montaje</div>
+          <div style="font-size:14px;color:#64748B;margin-top:6px">El plan de montaje del cliente es una <b style="font-weight:600">entrada</b>: los lotes, la secuencia y el programa se calculan hacia atrás para cumplirlo contra la planta cargada.</div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 260px;gap:20px;align-items:start">
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <label style="font-size:12px;font-weight:600;color:#475569">Toneladas por semana</label>
+            <div style="border:1px solid #E3E8EF;border-radius:12px;background:#fff;overflow:hidden">
+              <sc-for list="{{ plan }}" as="p" hint-placeholder-count="5">
+                <div style="display:grid;grid-template-columns:88px 1fr;align-items:center;padding:8px 14px;border-bottom:1px solid #F1F5F9;gap:12px">
+                  <span style="font-family:'JetBrains Mono';font-size:12px;color:#94A3B8">{{ p.sem }}</span>
+                  <div style="height:34px;border:1px solid #CBD5E1;border-radius:8px;display:flex;align-items:center;padding:0 11px;font-family:'JetBrains Mono';font-size:13px">{{ p.t }}</div>
+                </div>
+              </sc-for>
+            </div>
+            <div style="display:flex;gap:10px">
+              <div style="height:34px;padding:0 13px;border:1px solid #CBD5E1;border-radius:9px;background:#fff;display:flex;align-items:center;font-size:12.5px;font-weight:500;cursor:pointer" style-hover="background:#F1F5F9">Importar del cliente</div>
+              <div style="height:34px;padding:0 13px;border:1px solid #CBD5E1;border-radius:9px;background:#fff;display:flex;align-items:center;font-size:12.5px;color:#475569;cursor:pointer" style-hover="background:#F1F5F9">+ Añadir semana</div>
+            </div>
+          </div>
+
+          <div style="border:1px solid #E3E8EF;border-radius:12px;background:#F8FAFC;padding:16px;display:flex;flex-direction:column;gap:13px">
+            <div style="font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:#94A3B8">Derivados del plan</div>
+            <div><div style="font-size:11.5px;color:#64748B">Total del plan</div><div style="font-family:'JetBrains Mono';font-size:18px;font-weight:600;margin-top:2px">{{ planTotal }}</div></div>
+            <div><div style="font-size:11.5px;color:#64748B">Pico</div><div style="font-family:'JetBrains Mono';font-size:18px;font-weight:600;margin-top:2px;color:#9A6408">{{ planPico }}</div><div style="font-size:11px;color:#9A6408;margin-top:3px;line-height:1.4">Supera la velocidad con sobretiempo (24 t/sem)</div></div>
+            <div style="display:flex;gap:18px">
+              <div><div style="font-size:11.5px;color:#64748B">Semanas</div><div style="font-family:'JetBrains Mono';font-size:15px;font-weight:600;margin-top:2px">{{ planSemanas }}</div></div>
+              <div><div style="font-size:11.5px;color:#64748B">Ritmo medio</div><div style="font-family:'JetBrains Mono';font-size:15px;font-weight:600;margin-top:2px">{{ planRitmo }}</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div style="border-top:1px solid #E3E8EF;padding-top:22px;display:flex;flex-direction:column;gap:12px">
+          <div>
+            <label style="font-size:12px;font-weight:600;color:#475569">Estado de la ingeniería (semáforo RSS)</label>
+            <div style="font-size:11.5px;color:#94A3B8;margin-top:3px">Gobierna la contingencia y el porcentaje de crecimiento por defecto del método «Más 6%».</div>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
+            <sc-for list="{{ rssPhases }}" as="r" hint-placeholder-count="3">
+              <div style="{{ r.cardStyle }}">
+                <div style="display:flex;align-items:center;gap:8px"><span style="{{ r.dot }}"></span><span style="font-size:13.5px;font-weight:600">{{ r.name }}</span></div>
+                <div style="font-size:11.5px;color:#64748B;margin-top:6px;line-height:1.45">{{ r.sub }}</div>
+                <div style="{{ r.pctStyle }}">{{ r.pct }}</div>
+              </div>
+            </sc-for>
+          </div>
+          <div style="display:grid;grid-template-columns:220px 1fr;gap:16px;align-items:start;margin-top:4px">
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <label style="font-size:12px;font-weight:600;color:#475569">% de crecimiento aplicado</label>
+              <div style="height:42px;border:1px solid #CBD5E1;border-radius:10px;background:#fff;display:flex;align-items:center;padding:0 12px;font-family:'JetBrains Mono';font-size:14px">6%</div>
+              <span style="font-size:11px;color:#9A6408">Difiere del defecto de fase ámbar (10%)</span>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <label style="font-size:12px;font-weight:600;color:#475569">Justificación del cambio · obligatoria</label>
+              <div style="min-height:70px;border:1px solid #F5D7A6;background:#FEFBF5;border-radius:10px;padding:11px 13px;font-size:13px;line-height:1.55;color:#334155">Ingeniería de detalle recibida al 85% y validada por el EOR; el crecimiento observado en proyectos análogos de gran claro se mantuvo bajo el 6%.</div>
+            </div>
+          </div>
         </div>
       </div>
       </sc-if>
@@ -167,11 +270,14 @@ a{color:#1F9E91;text-decoration:none}a:hover{color:#17786e;text-decoration:under
 <div data-screen-label="P5 Workspace" style="width:1440px;height:900px;background:#F4F6F9;border-radius:14px;overflow:hidden;box-shadow:0 24px 60px rgba(16,24,40,.16);display:flex;flex-direction:column;position:relative">
 
   <div style="height:56px;flex:none;background:#1E2A3A;display:flex;align-items:center;padding:0 16px;gap:14px">
-    <div style="display:flex;align-items:center;gap:9px"><div style="width:9px;height:9px;background:#6EC6D8;border-radius:2px"></div><span style="font-family:'Space Grotesk';font-weight:600;font-size:14px;color:#fff;letter-spacing:-.2px">Bid platform</span></div>
+    <div style="display:flex;align-items:center;gap:9px"><div style="width:9px;height:9px;background:#6EC6D8;border-radius:2px"></div><span style="font-family:'Space Grotesk';font-weight:600;font-size:14px;color:#fff;letter-spacing:-.2px">Kabunik Bid</span></div>
     <span style="color:rgba(255,255,255,.28)">/</span>
     <span style="font-size:13.5px;color:#fff;font-weight:500">CNARCCS — Domo</span>
     <span style="font-family:'JetBrains Mono';font-size:11px;color:#6EC6D8;border:1px solid rgba(110,198,216,.4);padding:2px 7px;border-radius:6px">{{ modelVersion }}</span>
     <span style="{{ sessionChipStyle }}"><span style="width:6px;height:6px;border-radius:50%;background:currentColor;animation:pulseDot 1.6s infinite"></span>{{ sessionLabel }}</span>
+    <span style="{{ rssChipStyle }}"><span style="width:6px;height:6px;border-radius:50%;background:currentColor"></span>{{ rssChip }}</span>
+    <span style="{{ weightChipStyle }}">{{ weightChip }}</span>
+    <span onClick="{{ goP13 }}" style="{{ emissionChipStyle }}">{{ emissionChip }}</span>
     <div style="margin-left:auto;display:flex;align-items:center;gap:10px">
       <div style="height:34px;padding:0 14px;border:1px solid rgba(255,255,255,.18);border-radius:9px;color:rgba(255,255,255,.8);font-size:13px;display:flex;align-items:center;cursor:pointer" style-hover="background:rgba(255,255,255,.08)">Historial</div>
       <div style="{{ topCtaStyle }}">{{ topCtaLabel }}</div>
@@ -406,6 +512,21 @@ a{color:#1F9E91;text-decoration:none}a:hover{color:#17786e;text-decoration:under
       <div style="display:grid;grid-template-columns:92px 168px 84px 70px 84px 82px 96px 108px;padding:12px 20px;background:#F8FAFC;border-top:1px solid #E3E8EF;font-family:'JetBrains Mono';font-size:12.5px;font-weight:600">
         <span style="grid-column:1 / 4;font-family:'DM Sans';font-size:12.5px;color:#64748B">Subtotal mostrado · 8 de 28 marcas</span><span style="text-align:right">1,318</span><span></span><span></span><span style="text-align:right">522.1</span><span></span>
       </div>
+
+      <div style="border-top:1px solid #E3E8EF;background:#fff;padding:16px 20px 20px">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+          <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:#94A3B8">Exclusiones declaradas</span>
+          <span style="font-size:11px;color:#64748B">Ningún cero silencioso: lo excluido se declara, nunca se omite.</span>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:7px">
+          <sc-for list="{{ exclusions }}" as="x" hint-placeholder-count="4">
+            <div style="display:flex;align-items:flex-start;gap:11px;border:1px solid #E3E8EF;border-radius:10px;padding:10px 13px;background:#F8FAFC">
+              <span style="font-size:10px;font-weight:700;padding:3px 8px;border-radius:999px;background:#EEF2F6;color:#64748B;flex:none;margin-top:1px">Excluido</span>
+              <div style="min-width:0"><div style="font-size:12.5px;font-weight:600">{{ x.t }}</div><div style="font-size:11.5px;color:#64748B;margin-top:2px;line-height:1.45">{{ x.n }}</div></div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
     </div>
 
     <div style="width:400px;flex:none;border-left:1px solid #E3E8EF;background:#F8FAFC;display:flex;flex-direction:column">
@@ -506,7 +627,7 @@ a{color:#1F9E91;text-decoration:none}a:hover{color:#17786e;text-decoration:under
 
   <div style="flex:1;overflow:auto;padding:24px 26px;display:flex;flex-direction:column;gap:20px">
     <div style="display:flex;align-items:center;gap:12px">
-      <div style="font-family:'Space Grotesk';font-size:20px;font-weight:600">Comparación de escenarios</div>
+      <div style="font-family:'Space Grotesk';font-size:20px;font-weight:600">Comparación de opciones de oferta</div>
       <span style="font-size:11px;background:#E8F6F4;color:#17786e;padding:4px 9px;border-radius:999px;font-weight:600">Vigentes · generados sobre v2 · 14:58</span>
       <span style="margin-left:auto;font-size:12.5px;color:#64748B">Base: 734 t cobrables · calibración METALITEC v4</span>
     </div>
@@ -599,6 +720,347 @@ a{color:#1F9E91;text-decoration:none}a:hover{color:#17786e;text-decoration:under
           <div style="font-family:'JetBrains Mono';font-size:13px;padding:10px 0;border-top:1px solid #F1F5F9;text-align:right;color:#64748B">{{ c.v1 }}</div>
           <div style="font-family:'JetBrains Mono';font-size:13px;padding:10px 0;border-top:1px solid #F1F5F9;text-align:right;font-weight:600">{{ c.v2 }}</div>
           <div style="{{ c.dStyle }}">{{ c.d }}</div>
+        </sc-for>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 420px;gap:20px;align-items:start">
+      <div style="background:#F8FAFC;border:1px solid #E3E8EF;border-radius:16px;padding:20px">
+        <div style="font-size:12px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:#475569;margin-bottom:8px">Alcance del precio</div>
+        <div style="font-size:12.5px;line-height:1.6;color:#475569">{{ leyenda }}</div>
+        <div style="display:flex;align-items:center;gap:8px;margin-top:14px;padding-top:13px;border-top:1px solid #E3E8EF">
+          <span style="font-size:10.5px;font-weight:700;padding:3px 8px;border-radius:999px;background:#E8F6F4;color:#17786e">Precios confirmados</span>
+          <span style="font-size:11.5px;color:#64748B">J. Pérez · 06/08 14:12 · 4 materiales</span>
+          <span onClick="{{ goP13 }}" style="margin-left:auto;font-size:11.5px;font-weight:600;color:#1F9E91;cursor:pointer">Ver bitácora ›</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;margin-top:9px">
+          <span style="font-family:'JetBrains Mono';font-size:10.5px;padding:3px 8px;border-radius:6px;background:#EEF2F6;color:#475569">v2026.1</span>
+          <span style="font-size:11.5px;color:#94A3B8">Versión de parámetros con la que se calculó esta oferta</span>
+        </div>
+      </div>
+
+      <div style="background:#fff;border:1px solid #E3E8EF;border-radius:16px;padding:20px">
+        <div style="font-size:12px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:#475569;margin-bottom:14px">Composición y reconciliación</div>
+        <sc-for list="{{ reconc }}" as="r" hint-placeholder-count="3">
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:1px solid #F1F5F9;font-size:13px">
+            <span style="color:#475569">{{ r.k }}</span>
+            <span style="font-family:'JetBrains Mono';font-size:13px;font-weight:500">{{ r.v }}</span>
+          </div>
+        </sc-for>
+        <div style="display:flex;align-items:center;gap:9px;margin-top:14px">
+          <span style="font-size:10.5px;font-weight:700;padding:4px 9px;border-radius:999px;background:#E8F6F4;color:#17786e">✓ Δ 0.57% &lt; 1%</span>
+          <span style="font-size:11.5px;color:#64748B;line-height:1.4">Los dos métodos reconcilian a margen comparable</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isP13 }}" hint-placeholder-val="{{ true }}">
+<div data-screen-label="P13 Gate de precios de MP" style="width:1440px;height:900px;background:#F4F6F9;border-radius:14px;overflow:hidden;box-shadow:0 24px 60px rgba(16,24,40,.16);display:flex;flex-direction:column;position:relative">
+  <div style="height:56px;flex:none;background:#1E2A3A;display:flex;align-items:center;padding:0 16px;gap:14px">
+    <div style="display:flex;align-items:center;gap:9px"><div style="width:9px;height:9px;background:#6EC6D8;border-radius:2px"></div><span style="font-family:'Space Grotesk';font-weight:600;font-size:14px;color:#fff;letter-spacing:-.2px">Kabunik Bid</span></div>
+    <span style="color:rgba(255,255,255,.28)">/</span><span style="font-size:13.5px;color:#fff">CNARCCS — Domo</span>
+    <span style="font-family:'JetBrains Mono';font-size:11px;color:#6EC6D8;border:1px solid rgba(110,198,216,.4);padding:2px 7px;border-radius:6px">v2</span>
+    <span style="font-size:11px;font-weight:600;padding:4px 9px;border-radius:6px;background:rgba(245,166,35,.18);color:#F5C77E">Emisión bloqueada</span>
+    <div style="margin-left:auto;display:flex;gap:10px"><div style="height:34px;padding:0 14px;border-radius:9px;border:1px solid rgba(255,255,255,.18);color:#fff;font-size:13px;display:flex;align-items:center;cursor:pointer">Volver a la oferta</div></div>
+  </div>
+
+  <div style="flex:1;position:relative;background:#EDF1F5;display:flex;align-items:center;justify-content:center;overflow:hidden">
+    <div style="position:absolute;inset:0;background:rgba(16,24,40,.45)"></div>
+    <div style="position:relative;width:720px;background:#fff;border-radius:16px;box-shadow:0 18px 44px rgba(16,24,40,.18);overflow:hidden;display:flex;flex-direction:column;max-height:96%">
+      <div style="padding:22px 24px;border-bottom:1px solid #E3E8EF;border-left:4px solid #B0392F">
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:#B0392F">Compuerta de emisión</div>
+        <div style="font-family:'Space Grotesk';font-size:17px;font-weight:600;margin-top:7px">Confirma los precios de materia prima</div>
+        <div style="font-size:12.5px;color:#64748B;margin-top:5px;line-height:1.5">Sin confirmación registrada no se emite precio de licitación. La confirmación queda ligada a esta oferta como evidencia y se audita en el cierre.</div>
+      </div>
+
+      <div style="flex:1;overflow:auto">
+        <div style="display:grid;grid-template-columns:1fr 108px 138px 100px 92px;background:#F8FAFC;border-bottom:1px solid #E3E8EF;padding:9px 22px;font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#94A3B8">
+          <span>Material</span><span>Precio</span><span>Fuente</span><span>Fecha</span><span>Vigencia</span>
+        </div>
+        <sc-for list="{{ mpPrices }}" as="m" hint-placeholder-count="4">
+          <div style="{{ m.rowStyle }}">
+            <span style="font-weight:500">{{ m.material }}</span>
+            <span style="font-family:'JetBrains Mono';font-size:12.5px">{{ m.precio }}</span>
+            <span style="color:#64748B;font-size:12px">{{ m.fuente }}</span>
+            <span style="font-family:'JetBrains Mono';font-size:11.5px;color:#64748B">{{ m.fecha }}</span>
+            <span style="{{ m.vigStyle }}">{{ m.vig }}</span>
+          </div>
+        </sc-for>
+        <div style="margin:16px 22px;display:flex;align-items:flex-start;gap:10px;background:#FEF7EA;border:1px solid #F5D7A6;border-radius:12px;padding:13px 15px">
+          <span style="width:7px;height:7px;border-radius:2px;background:#F5A623;flex:none;margin-top:5px"></span>
+          <div style="font-size:12px;color:#7C5308;line-height:1.5"><b style="font-weight:600">HSS (A500-C) vence en 6 días.</b> Si la oferta se emite después de esa fecha, la compuerta se reabre automáticamente y habrá que volver a confirmar.</div>
+        </div>
+      </div>
+
+      <div style="border-top:1px solid #E3E8EF;padding:18px 24px;background:#F8FAFC">
+        <div style="display:flex;align-items:center;gap:11px">
+          <div style="width:22px;height:22px;flex:none;border-radius:6px;background:#1F9E91;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700">✓</div>
+          <span style="font-size:13px">Confirmo que estos son los precios considerados en la oferta</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;margin-top:16px">
+          <span style="font-size:11.5px;color:#94A3B8;line-height:1.4">Se registrará en bitácora:<br>J. Pérez · 06/08 · oferta CNARCCS-2026-014</span>
+          <div style="margin-left:auto;display:flex;gap:10px">
+            <div style="height:42px;padding:0 18px;border:1px solid #CBD5E1;border-radius:10px;background:#fff;display:flex;align-items:center;font-size:14px;font-weight:500;cursor:pointer" style-hover="background:#F1F5F9">Cancelar</div>
+            <div style="height:42px;padding:0 20px;border-radius:10px;background:#B0392F;color:#fff;font-size:14px;font-weight:600;display:flex;align-items:center;cursor:pointer" style-hover="background:#8F2E26">Confirmar y habilitar emisión</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isP14 }}" hint-placeholder-val="{{ true }}">
+<div data-screen-label="P14 Carga de planta" style="width:1440px;height:900px;background:#F4F6F9;border-radius:14px;overflow:hidden;box-shadow:0 24px 60px rgba(16,24,40,.16);display:flex;flex-direction:column">
+  <div style="height:56px;flex:none;background:#1E2A3A;display:flex;align-items:center;padding:0 16px;gap:14px">
+    <div style="display:flex;align-items:center;gap:9px"><div style="width:9px;height:9px;background:#6EC6D8;border-radius:2px"></div><span style="font-family:'Space Grotesk';font-weight:600;font-size:14px;color:#fff;letter-spacing:-.2px">Kabunik Bid</span></div>
+    <span style="color:rgba(255,255,255,.28)">/</span><span style="font-size:13.5px;color:#fff">CNARCCS — Domo</span>
+    <span style="color:rgba(255,255,255,.28)">/</span><span style="font-size:13.5px;color:rgba(255,255,255,.7)">Carga de planta</span>
+    <div style="margin-left:auto;display:flex;gap:10px">
+      <div style="height:34px;padding:0 14px;border-radius:9px;border:1px solid rgba(255,255,255,.18);color:#fff;font-size:13px;display:flex;align-items:center;cursor:pointer">Actualizar carga</div>
+      <div onClick="{{ goP15 }}" style="height:34px;padding:0 16px;border-radius:9px;background:#1F9E91;color:#fff;font-size:13px;font-weight:600;display:flex;align-items:center;cursor:pointer">Decidir programa</div>
+    </div>
+  </div>
+
+  <div style="flex:1;display:flex;overflow:hidden">
+    <div style="flex:1;overflow:auto;padding:22px 24px;display:flex;flex-direction:column;gap:18px">
+      <div style="display:flex;align-items:center;gap:12px">
+        <div style="font-family:'Space Grotesk';font-size:20px;font-weight:600">Carga de planta</div>
+        <span style="font-size:10.5px;font-weight:700;padding:4px 10px;border-radius:999px;background:#E8F6F4;color:#17786e">E7 actualizado hace 2 días</span>
+        <span style="margin-left:auto;font-size:12px;color:#64748B">METALITEC · capacidad de habilitado 600 HH/sem</span>
+      </div>
+
+      <div style="background:#fff;border:1px solid #E3E8EF;border-radius:16px;padding:20px">
+        <div style="display:flex;align-items:center;gap:14px;margin-bottom:16px">
+          <div style="font-size:12px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:#475569">Carga combinada · t/semana</div>
+          <div style="margin-left:auto;display:flex;gap:14px;font-size:11px;color:#64748B">
+            <span style="display:flex;align-items:center;gap:6px"><span style="width:9px;height:9px;border-radius:2px;background:#1F9E91"></span>Proyecto nuevo</span>
+            <span style="display:flex;align-items:center;gap:6px"><span style="width:9px;height:9px;border-radius:2px;background:#BFDDD9"></span>Contratos en curso</span>
+          </div>
+        </div>
+        <div style="display:flex;align-items:flex-end;gap:26px;height:230px;padding:0 8px">
+          <sc-for list="{{ load }}" as="w" hint-placeholder-count="5">
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:7px">
+              <span style="font-family:'JetBrains Mono';font-size:12px;font-weight:600">{{ w.total }}</span>
+              <div style="width:100%;max-width:76px;display:flex;flex-direction:column;justify-content:flex-end">
+                <div style="{{ w.newStyle }}"></div>
+                <div style="{{ w.curStyle }}"></div>
+              </div>
+              <span style="font-family:'JetBrains Mono';font-size:11px;color:#94A3B8">{{ w.sem }}</span>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+
+      <div style="background:#fff;border:1px solid #E3E8EF;border-radius:16px;padding:20px;position:relative">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px">
+          <div style="font-size:12px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:#475569">Ocupación de habilitado</div>
+          <span style="font-size:11px;color:#64748B">La línea roja marca el 100%. La alerta de saturación no se puede desactivar.</span>
+        </div>
+        <div style="position:relative;display:flex;align-items:flex-end;gap:26px;height:120px;padding:0 8px">
+          <div style="position:absolute;left:8px;right:8px;bottom:83px;border-top:1.5px dashed #B0392F;opacity:.8"></div>
+          <span style="position:absolute;right:8px;bottom:87px;font-family:'JetBrains Mono';font-size:10px;font-weight:600;color:#B0392F">100%</span>
+          <sc-for list="{{ load }}" as="w" hint-placeholder-count="5">
+            <div style="flex:1;max-width:76px;display:flex;flex-direction:column;justify-content:flex-end;height:100%"><div style="{{ w.occStyle }}"></div></div>
+          </sc-for>
+        </div>
+        <div style="display:flex;gap:26px;padding:0 8px;margin-top:8px">
+          <sc-for list="{{ load }}" as="w" hint-placeholder-count="5">
+            <div style="flex:1;max-width:76px;display:flex;flex-direction:column;align-items:center;gap:4px">
+              <span style="{{ w.pctStyle }}">{{ w.pct }}</span>
+              <span style="{{ w.pillStyle }}">{{ w.pill }}</span>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </div>
+
+    <div style="width:400px;flex:none;background:#fff;border-left:1px solid #E3E8EF;overflow:auto;padding:18px;display:flex;flex-direction:column;gap:14px">
+      <div style="font-size:12px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:#475569">Chequeos de velocidad · S11</div>
+
+      <div style="border:1px solid #F5D7A6;background:#FEFBF5;border-radius:14px;padding:15px">
+        <div style="display:flex;align-items:center;gap:8px"><span style="font-size:10.5px;font-weight:700;padding:3px 8px;border-radius:999px;background:#FBE7C2;color:#9A6408">Alerta</span><span style="font-size:13px;font-weight:600">Velocidad de montaje</span></div>
+        <div style="margin-top:11px;display:flex;flex-direction:column;gap:7px">
+          <sc-for list="{{ s11 }}" as="x" hint-placeholder-count="3">
+            <div style="display:flex;align-items:center;justify-content:space-between;font-size:12.5px"><span style="color:#64748B">{{ x.k }}</span><span style="font-family:'JetBrains Mono';font-size:12.5px;font-weight:500">{{ x.v }}</span></div>
+          </sc-for>
+        </div>
+        <div style="margin-top:12px;padding-top:11px;border-top:1px solid #F5E4C4;font-size:12px;color:#7C5308;line-height:1.5">El pico excede la velocidad con sobretiempo. Se requiere subcontrato por <b style="font-family:'JetBrains Mono';font-weight:600">560 HH</b>.</div>
+      </div>
+
+      <div style="border:1px solid #F5D7A6;background:#FEFBF5;border-radius:14px;padding:15px">
+        <div style="display:flex;align-items:center;gap:8px"><span style="font-size:10.5px;font-weight:700;padding:3px 8px;border-radius:999px;background:#FBE7C2;color:#9A6408">No suprimible</span><span style="font-size:13px;font-weight:600">Bajo el punto de equilibrio</span></div>
+        <div style="margin-top:11px;display:flex;flex-direction:column;gap:7px">
+          <sc-for list="{{ equil }}" as="x" hint-placeholder-count="3">
+            <div style="display:flex;align-items:center;justify-content:space-between;font-size:12.5px"><span style="color:#64748B">{{ x.k }}</span><span style="font-family:'JetBrains Mono';font-size:12.5px;font-weight:500">{{ x.v }}</span></div>
+          </sc-for>
+        </div>
+        <div style="margin-top:12px;padding-top:11px;border-top:1px solid #F5E4C4;font-size:12px;color:#7C5308;line-height:1.5">Déficit de <b style="font-family:'JetBrains Mono';font-weight:600">172 t</b> (<b style="font-family:'JetBrains Mono';font-weight:600">50 t</b> con Lean). Esta advertencia no tiene control de silencio.</div>
+      </div>
+
+      <div style="border:1px solid #E3E8EF;border-radius:14px;padding:15px">
+        <div style="font-size:13px;font-weight:600">Requisición neta</div>
+        <div style="font-size:11.5px;color:#94A3B8;margin-top:3px">El inventario libre se aplica antes de procurar.</div>
+        <div style="margin-top:12px;display:flex;flex-direction:column;gap:9px">
+          <sc-for list="{{ requi }}" as="x" hint-placeholder-count="3">
+            <div style="display:flex;align-items:center;justify-content:space-between;font-size:12.5px"><span style="color:#64748B">{{ x.k }}</span><span style="{{ x.vStyle }}">{{ x.v }}</span></div>
+          </sc-for>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isP15 }}" hint-placeholder-val="{{ true }}">
+<div data-screen-label="P15 Decisión de programa" style="width:1440px;height:900px;background:#F4F6F9;border-radius:14px;overflow:hidden;box-shadow:0 24px 60px rgba(16,24,40,.16);display:flex;flex-direction:column">
+  <div style="height:56px;flex:none;background:#1E2A3A;display:flex;align-items:center;padding:0 16px;gap:14px">
+    <div style="display:flex;align-items:center;gap:9px"><div style="width:9px;height:9px;background:#6EC6D8;border-radius:2px"></div><span style="font-family:'Space Grotesk';font-weight:600;font-size:14px;color:#fff;letter-spacing:-.2px">Kabunik Bid</span></div>
+    <span style="color:rgba(255,255,255,.28)">/</span><span style="font-size:13.5px;color:#fff">CNARCCS — Domo</span>
+    <span style="color:rgba(255,255,255,.28)">/</span><span style="font-size:13.5px;color:rgba(255,255,255,.7)">Decisión de programa</span>
+    <div style="margin-left:auto;display:flex;gap:10px">
+      <div onClick="{{ goP14 }}" style="height:34px;padding:0 14px;border-radius:9px;border:1px solid rgba(255,255,255,.18);color:#fff;font-size:13px;display:flex;align-items:center;cursor:pointer">Ver carga de planta</div>
+      <div style="height:34px;padding:0 16px;border-radius:9px;background:rgba(255,255,255,.14);color:rgba(255,255,255,.5);font-size:13px;font-weight:600;display:flex;align-items:center">Confirmar programa</div>
+    </div>
+  </div>
+
+  <div style="flex:1;overflow:auto;padding:24px 26px;display:flex;flex-direction:column;gap:18px">
+    <div style="display:flex;align-items:center;gap:12px">
+      <div style="font-family:'Space Grotesk';font-size:20px;font-weight:600">Decisión de programa</div>
+      <span style="font-size:10.5px;font-weight:700;padding:4px 10px;border-radius:999px;background:#FEF7EA;color:#9A6408">Requiere decisión</span>
+      <span style="margin-left:auto;font-size:12px;color:#64748B">Semana 2 al <b style="font-family:'JetBrains Mono';font-weight:600">111%</b> de ocupación · déficit <b style="font-family:'JetBrains Mono';font-weight:600">920 HH</b></span>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px">
+      <sc-for list="{{ program }}" as="p" hint-placeholder-count="4">
+        <div style="{{ p.cardStyle }}">
+          <div style="display:flex;align-items:center;gap:9px">
+            <span style="font-family:'Space Grotesk';font-size:15px;font-weight:600">{{ p.name }}</span>
+            <span style="{{ p.tagStyle }}">{{ p.tag }}</span>
+          </div>
+          <div style="font-size:12px;color:#64748B;line-height:1.45;min-height:52px;margin-top:4px">{{ p.desc }}</div>
+          <div style="font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#94A3B8;margin-top:6px">Costo del déficit</div>
+          <div style="{{ p.costoStyle }}">{{ p.costo }}</div>
+          <div style="margin-top:12px;border-top:1px solid #F1F5F9;padding-top:11px;display:flex;flex-direction:column;gap:8px">
+            <div style="display:flex;align-items:center;justify-content:space-between;font-size:12px"><span style="color:#64748B">Utilidad</span><span style="font-family:'JetBrains Mono';font-size:12.5px;font-weight:600">{{ p.utilidad }}</span></div>
+            <div style="display:flex;align-items:center;justify-content:space-between;font-size:12px"><span style="color:#64748B">Retraso</span><span style="font-family:'JetBrains Mono';font-size:12.5px;font-weight:600">{{ p.retraso }}</span></div>
+            <div style="display:flex;align-items:center;justify-content:space-between;font-size:12px"><span style="color:#64748B">Pena máx. soportable</span><span style="font-family:'JetBrains Mono';font-size:12.5px;font-weight:600">{{ p.pena }}</span></div>
+          </div>
+          <div style="{{ p.selStyle }}">{{ p.selLabel }}</div>
+        </div>
+      </sc-for>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 520px;gap:18px;align-items:start">
+      <div style="background:#fff;border:1px solid #E3E8EF;border-radius:16px;padding:20px">
+        <div style="font-size:12px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:#475569">Cómo se optimiza el escenario recomendado</div>
+        <div style="font-size:12px;color:#64748B;margin-top:6px;line-height:1.5">Primero sobretiempo; sólo el excedente se desplaza a la semana con holgura. Así se minimiza a la vez el tiempo y el costo del retraso.</div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:16px">
+          <sc-for list="{{ progOpt }}" as="o" hint-placeholder-count="3">
+            <div style="border:1px solid #EEF2F6;background:#F8FAFC;border-radius:10px;padding:12px">
+              <div style="font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:#94A3B8">{{ o.k }}</div>
+              <div style="font-family:'JetBrains Mono';font-size:16px;font-weight:600;margin-top:5px">{{ o.v }}</div>
+            </div>
+          </sc-for>
+        </div>
+        <div style="margin-top:15px;padding-top:13px;border-top:1px solid #F1F5F9;display:flex;align-items:center;gap:9px">
+          <span style="font-family:'JetBrains Mono';font-size:11.5px;background:#E8F6F4;color:#17786e;padding:3px 8px;border-radius:5px">retraso = ceil(HH_a_desplazar / HH_sem)</span>
+          <span style="font-size:11.5px;color:#94A3B8">Toda cifra visible puede explicarse</span>
+        </div>
+        <div style="margin-top:14px;font-size:11.5px;color:#94A3B8;line-height:1.5">El escenario C no se recomienda con la planta operando bajo el punto de equilibrio.</div>
+      </div>
+
+      <div style="background:#FEF7EA;border:1px solid #F5D7A6;border-left:4px solid #F5A623;border-radius:14px;padding:20px">
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:#9A6408">Compuerta obligatoria</div>
+        <div style="font-size:14px;font-weight:700;color:#7C5308;margin-top:8px;line-height:1.4">Acuerda el retraso antes de comprometer el contrato nuevo</div>
+        <div style="font-size:12.5px;color:#7C5308;margin-top:8px;line-height:1.55">El escenario recomendado desplaza <b style="font-weight:600">1 semana</b> la entrega de <b style="font-weight:600">Nave Industrial Tultitlán</b>. Debes comunicarlo y acordarlo con ese cliente <b style="font-weight:600">antes</b> de firmar. Sin acuerdo registrado, la recomendación cae al escenario A.</div>
+        <div style="display:flex;align-items:center;gap:11px;margin-top:16px">
+          <div style="width:22px;height:22px;flex:none;border-radius:6px;border:1px solid #CBD5E1;background:#fff"></div>
+          <span style="font-size:12.5px;color:#7C5308">Retraso comunicado y acordado con el cliente afectado</span>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px">
+          <div style="display:flex;flex-direction:column;gap:5px"><label style="font-size:11.5px;font-weight:600;color:#7C5308">Fecha del acuerdo</label><div style="height:38px;border:1px solid #F5D7A6;border-radius:9px;background:#fff;display:flex;align-items:center;padding:0 11px;font-family:'JetBrains Mono';font-size:12.5px;color:#94A3B8">dd/mm/aaaa</div></div>
+          <div style="display:flex;flex-direction:column;gap:5px"><label style="font-size:11.5px;font-weight:600;color:#7C5308">Responsable</label><div style="height:38px;border:1px solid #F5D7A6;border-radius:9px;background:#fff;display:flex;align-items:center;padding:0 11px;font-size:12.5px;color:#94A3B8">Selecciona…</div></div>
+        </div>
+        <div style="margin-top:14px;font-size:11.5px;color:#9A6408">«Confirmar programa» permanece deshabilitado hasta registrar el acuerdo.</div>
+      </div>
+    </div>
+  </div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isP16 }}" hint-placeholder-val="{{ true }}">
+<div data-screen-label="P16 Interferencia de familias" style="width:1440px;height:900px;background:#F4F6F9;border-radius:14px;overflow:hidden;box-shadow:0 24px 60px rgba(16,24,40,.16);display:flex;flex-direction:column">
+  <div style="height:56px;flex:none;background:#1E2A3A;display:flex;align-items:center;padding:0 16px;gap:14px">
+    <div style="display:flex;align-items:center;gap:9px"><div style="width:9px;height:9px;background:#6EC6D8;border-radius:2px"></div><span style="font-family:'Space Grotesk';font-weight:600;font-size:14px;color:#fff;letter-spacing:-.2px">Kabunik Bid</span></div>
+    <span style="color:rgba(255,255,255,.28)">/</span><span style="font-size:13.5px;color:#fff">Planta Pachuca — 400 t</span>
+    <span style="color:rgba(255,255,255,.28)">/</span><span style="font-size:13.5px;color:rgba(255,255,255,.7)">Interferencia de familias</span>
+    <div style="margin-left:auto;display:flex;gap:10px"><div style="height:34px;padding:0 16px;border-radius:9px;background:rgba(255,255,255,.14);color:rgba(255,255,255,.5);font-size:13px;font-weight:600;display:flex;align-items:center">Registrar decisión</div></div>
+  </div>
+
+  <div style="flex:1;overflow:auto;padding:20px 26px;display:flex;flex-direction:column;gap:14px">
+    <div style="background:#FEF7EA;border:1px solid #F5D7A6;border-left:4px solid #F5A623;border-radius:14px;padding:15px 20px">
+      <div style="display:flex;align-items:center;gap:10px">
+        <span style="font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:999px;background:#FBE7C2;color:#9A6408">Alerta · no suprimible</span>
+        <span style="font-family:'JetBrains Mono';font-size:11px;color:#9A6408">INV-03</span>
+      </div>
+      <div style="font-size:14px;font-weight:700;color:#7C5308;margin-top:9px;line-height:1.4">Los misceláneos saturan habilitado y reducen la productividad de las armaduras</div>
+      <div style="font-size:12.5px;color:#7C5308;margin-top:6px;line-height:1.55">Esta alerta no se puede desactivar. Requiere una decisión documentada: la IA propone las opciones con su costo; la dirección dispone.</div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:start">
+      <div style="background:#fff;border:1px solid #E3E8EF;border-radius:16px;padding:20px">
+        <div style="font-size:12px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:#475569;margin-bottom:14px">Familias en conflicto</div>
+        <div style="display:grid;grid-template-columns:1.5fr 1fr 1fr;gap:0">
+          <div style="font-size:11px;color:#94A3B8;text-transform:uppercase;letter-spacing:.5px;font-weight:700;padding:0 0 10px">Métrica</div>
+          <div style="font-size:11px;color:#9A6408;text-transform:uppercase;letter-spacing:.5px;font-weight:700;padding:0 0 10px;text-align:right">Misceláneos</div>
+          <div style="font-size:11px;color:#17786e;text-transform:uppercase;letter-spacing:.5px;font-weight:700;padding:0 0 10px;text-align:right">Armaduras</div>
+          <sc-for list="{{ families }}" as="f" hint-placeholder-count="5">
+            <div style="font-size:12.5px;padding:10px 0;border-top:1px solid #F1F5F9;color:#475569">{{ f.k }}</div>
+            <div style="font-family:'JetBrains Mono';font-size:12.5px;padding:10px 0;border-top:1px solid #F1F5F9;text-align:right;font-weight:600;color:#9A6408">{{ f.alta }}</div>
+            <div style="font-family:'JetBrains Mono';font-size:12.5px;padding:10px 0;border-top:1px solid #F1F5F9;text-align:right;font-weight:600;color:#17786e">{{ f.afect }}</div>
+          </sc-for>
+        </div>
+      </div>
+
+      <div style="background:#fff;border:1px solid #E3E8EF;border-radius:16px;padding:20px">
+        <div style="font-size:12px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:#475569">Subproyectos por familia</div>
+        <div style="font-size:12px;color:#64748B;margin-top:6px;line-height:1.5">El salto entre clases es de más de un nivel del eje, así que el proyecto se parte. Promediar clases distintas está prohibido: el promedio esconde el error en ambas direcciones.</div>
+        <div style="display:flex;flex-direction:column;gap:9px;margin-top:14px">
+          <sc-for list="{{ subprojects }}" as="sp" hint-placeholder-count="2">
+            <div style="border:1px solid #E3E8EF;border-radius:12px;padding:13px 15px;background:#F8FAFC">
+              <div style="display:flex;align-items:center;gap:9px">
+                <span style="font-size:13px;font-weight:600">{{ sp.fam }}</span>
+                <span style="font-family:'JetBrains Mono';font-size:10.5px;padding:3px 8px;border-radius:6px;background:#EEF2F6;color:#475569">{{ sp.clase }}</span>
+              </div>
+              <div style="display:flex;gap:22px;margin-top:9px">
+                <div><div style="font-size:11px;color:#94A3B8">Tonelaje</div><div style="font-family:'JetBrains Mono';font-size:13px;font-weight:600;margin-top:2px">{{ sp.ton }}</div></div>
+                <div><div style="font-size:11px;color:#94A3B8">APU propio</div><div style="font-family:'JetBrains Mono';font-size:13px;font-weight:600;margin-top:2px">{{ sp.apu }}</div></div>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </div>
+
+    <div style="background:#fff;border:1px solid #E3E8EF;border-radius:16px;padding:20px">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px">
+        <div style="font-size:12px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:#475569">Opciones para la dirección</div>
+        <span style="font-size:11.5px;color:#94A3B8">Aceptar el impacto es una decisión registrada, no una supresión de la alerta.</span>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:9px">
+        <sc-for list="{{ famOpts }}" as="o" hint-placeholder-count="4">
+          <div style="{{ o.cardStyle }}" style-hover="background:#F8FAFC">
+            <div style="flex:1;min-width:0">
+              <div style="font-size:13px;font-weight:600">{{ o.title }}</div>
+              <div style="font-size:11.5px;color:#64748B;margin-top:2px">{{ o.desc }}</div>
+            </div>
+            <span style="font-family:'JetBrains Mono';font-size:12px;color:#475569">{{ o.cost }}</span>
+            <span style="font-size:11.5px;font-weight:600;color:#1F9E91">Elegir</span>
+          </div>
         </sc-for>
       </div>
     </div>
@@ -769,7 +1231,9 @@ class Component extends DCLogic {
       ['P5·A Revisión', { screen: 'ws', mode: 'a', tab: 'bom' }],
       ['P5·B Edición', { screen: 'ws', mode: 'b', tab: 'alerts' }],
       ['P5·C Escenarios', { screen: 'ws', mode: 'c' }],
-      ['P6 · BOM', { screen: 'p6' }], ['P8 · Chat', { screen: 'p8' }], ['P9 · Escenarios', { screen: 'p9' }]
+      ['P6 · BOM', { screen: 'p6' }], ['P8 · Chat', { screen: 'p8' }], ['P9 · Opciones', { screen: 'p9' }],
+      ['P13 · Precios MP', { screen: 'p13' }], ['P14 · Carga de planta', { screen: 'p14' }],
+      ['P15 · Programa', { screen: 'p15' }], ['P16 · Familias', { screen: 'p16' }]
     ];
     const active = (p) => p.screen === s.screen && (p.screen !== 'ws' || p.mode === mode);
     const nav = navDefs.map(([label, p]) => ({
@@ -777,7 +1241,7 @@ class Component extends DCLogic {
       style: 'height:32px;padding:0 13px;border-radius:8px;display:flex;align-items:center;font-size:12.5px;font-weight:' + (active(p) ? '600' : '400') + ';cursor:pointer;color:' + (active(p) ? '#1E2A3A' : 'rgba(255,255,255,.72)') + ';background:' + (active(p) ? '#fff' : 'transparent')
     }));
 
-    const stepDefs = [['1', 'Datos generales', 'Cliente, tipo, destino'], ['2', 'Carga de archivos', 'Planos, IFC, contrato'], ['3', 'Consideraciones', 'Alcance y condiciones']];
+    const stepDefs = [['1', 'Datos generales', 'Cliente, tipo, clase'], ['2', 'Carga de archivos', 'Planos, IFC, contrato'], ['3', 'Consideraciones', 'Alcance y desviaciones'], ['4', 'Plan de montaje', 'Secuencia y ritmo de obra']];
     const steps = stepDefs.map((d, i) => {
       const n = i + 1, cur = n === s.step, done = n < s.step;
       return {
@@ -800,7 +1264,7 @@ class Component extends DCLogic {
       ['Leyendo planos', '48 páginas · 312 vistas indexadas', '00:41', 'done'],
       ['Construyendo geometría', '1,470 elementos · 28 marcas', '01:56', 'done'],
       ['Generando BOM', 'Perfiles y grados asignados · 734 t', '00:22', 'run'],
-      ['Validando', '22 reglas de validación', '—', 'wait']
+      ['Validando', 'Invariantes y validaciones de percepción', '—', 'wait']
     ];
     const stages = stgDefs.map(d => ({
       title: d[0], detail: d[1], time: d[2],
@@ -852,7 +1316,7 @@ class Component extends DCLogic {
     const scDefs = [
       ['E1 Conservador', '73,200', '$53.7M', '9 meses', '22%', 'Perfiles laminados de catálogo, holgura de montaje completa, sin empates de retal.', 42,
         ['Sin ingeniería de valor aplicada', 'Compra spot de material', 'Subcontrato de montaje completo']],
-      ['E2 Optimizado', '67,500', '$49.5M', '8 meses', '19%', 'Nesting optimizado con empates, conexiones empernadas en perímetro.', 70,
+      ['E2 Optimizado', '67,076', '$49.27M', '8 meses', '19%', 'Nesting optimizado con empates, conexiones empernadas en perímetro.', 70,
         ['Empates y aprovechamiento de retal (−2.1% desperdicio)', 'Conexiones empernadas en el anillo perimetral', 'Compra consolidada en 2 órdenes']],
       ['E3 Agresivo', '61,800', '$45.4M', '7 meses', '15%', 'Ingeniería de valor completa: armados en lugar de laminados pesados, montaje en dos frentes.', 96,
         ['Armados equivalentes en vigas de borde', 'Montaje en dos frentes simultáneos', 'Retención negociada a 3%']]
@@ -897,11 +1361,116 @@ class Component extends DCLogic {
       box: 'width:22px;height:22px;flex:none;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;' + (d[4] ? 'background:#1F9E91;color:#fff' : 'border:1px solid #CBD5E1;background:#fff')
     }));
 
-    const vcDefs = [['Tonelaje cobrable', '742.2 t', '734.0 t', '−8.2 t', 1], ['Elementos', '1,470', '1,470', '0', 0], ['Costo E2', '$50.9M', '$49.5M', '−$1.4M', 1], ['Plazo E2', '8.5 meses', '8 meses', '−0.5 m', 1], ['Alertas abiertas', '2', '3', '+1', -1]];
+    const vcDefs = [['Tonelaje cobrable', '742.2 t', '734.0 t', '−8.2 t', 1], ['Elementos', '1,470', '1,470', '0', 0], ['Costo E2', '$50.9M', '$49.27M', '−$1.63M', 1], ['Plazo E2', '8.5 meses', '8 meses', '−0.5 m', 1], ['Alertas abiertas', '2', '3', '+1', -1]];
     const vcmp = vcDefs.map(d => ({
       k: d[0], v1: d[1], v2: d[2], d: d[3],
       dStyle: 'font-family:\'JetBrains Mono\';font-size:13px;padding:10px 0;border-top:1px solid #F1F5F9;text-align:right;font-weight:600;color:' + (d[4] === 1 ? '#1F9E91' : d[4] === -1 ? '#B0392F' : '#94A3B8')
     }));
+
+    // ---- P3 paso 4 · plan de montaje (inv. 11) ----
+    const planDefs = [['Sem 1', '22'], ['Sem 2', '38'], ['Sem 3', '24'], ['Sem 4', '21'], ['Sem 5', '10']];
+    const plan = planDefs.map(d => ({ sem: d[0], t: d[1] }));
+    const rssDefs = [
+      ['Verde', 'Ingeniería para construcción o cercana', '6%', '#1F9E91', '#E8F6F4', '#CFE7E3'],
+      ['Ámbar', 'Diseño en desarrollo', '10%', '#F5A623', '#FEF7EA', '#F5D7A6'],
+      ['Rojo', 'Anteproyecto o alta incertidumbre', '15%', '#B0392F', '#FDF7F6', '#F0C9C4']
+    ];
+    const rssPhases = rssDefs.map((d, i) => {
+      const on = i === 1;
+      return {
+        name: d[0], sub: d[1], pct: d[2],
+        dot: 'width:10px;height:10px;border-radius:50%;flex:none;background:' + d[3],
+        cardStyle: 'border:1px solid ' + (on ? d[5] : '#E3E8EF') + ';border-radius:12px;padding:14px;cursor:pointer;background:' + (on ? d[4] : '#fff'),
+        pctStyle: 'font-family:\'JetBrains Mono\';font-size:13px;font-weight:600;margin-top:8px;color:' + (on ? d[3] : '#94A3B8')
+      };
+    });
+    // ---- P3 paso 3 · desviaciones de concurso (inv. 10) ----
+    const devDefs = [
+      ['Recubrimiento', 'C3 ISO 12944', 'C2 (zona no costera)', 'Concurso', '−$235,061'],
+      ['Tornillería', 'F3125 Gr. A325', 'A325 galvanizada', 'Concurso', '+$118,400'],
+      ['Tolerancia de peso', 'AISC ±5%', '±3% con retención', 'Concurso', '+$0'],
+      ['Correas Z375', 'Cold-formed §2.2 aparte', 'Incluidas en cubierta', 'Concurso', 'sin costear']
+    ];
+    const devs = devDefs.map(d => ({
+      concepto: d[0], norma: d[1], concurso: d[2], rige: d[3], impacto: d[4],
+      impactoStyle: 'font-family:\'JetBrains Mono\';font-size:12.5px;text-align:right;font-weight:600;color:' + (d[4] === 'sin costear' ? '#9A6408' : '#1E2A3A')
+    }));
+    // ---- P13 · gate de precios de MP (inv. 8) ----
+    const mpDefs = [
+      ['Perfil W (A992)', '$24.80/kg', 'Cotización molino', '2026-07-21', '9 días', 'ok'],
+      ['Placa (A572-50)', '$26.10/kg', 'Distribuidor', '2026-07-24', '12 días', 'ok'],
+      ['HSS (A500-C)', '$28.35/kg', 'Distribuidor', '2026-07-18', '6 días', 'warn'],
+      ['Soldadura FCAW E71T-1', '$118.00/kg dep.', 'Proveedor', '2026-07-15', '30 días', 'ok']
+    ];
+    const mpPrices = mpDefs.map(d => ({
+      material: d[0], precio: d[1], fuente: d[2], fecha: d[3], vig: d[4],
+      rowStyle: 'display:grid;grid-template-columns:1fr 108px 138px 100px 92px;align-items:center;padding:11px 22px;border-bottom:1px solid #F1F5F9;font-size:12.5px' + (d[5] === 'bad' ? ';background:#FDF7F6' : ''),
+      vigStyle: 'font-family:\'JetBrains Mono\';font-size:11px;font-weight:600;padding:3px 8px;border-radius:999px;justify-self:start;' + (d[5] === 'ok' ? 'background:#E8F6F4;color:#17786e' : d[5] === 'warn' ? 'background:#FEF7EA;color:#9A6408' : 'background:#FBE3E0;color:#B0392F')
+    }));
+    // ---- P14 · carga de planta y ocupación (inv. 12, 14) · cifras del golden test ----
+    const loadDefs = [['Sem 1', 67, 22, 89], ['Sem 2', 83, 38, 111], ['Sem 3', 60, 24, 80], ['Sem 4', 70, 21, 93], ['Sem 5', 45, 10, 60]];
+    const maxT = 90;
+    const load = loadDefs.map(d => {
+      const over = d[3] >= 100, warn = d[3] >= 85 && d[3] < 100;
+      return {
+        sem: d[0], total: d[1] + ' t', pct: d[3] + '%',
+        newStyle: 'width:100%;border-radius:4px 4px 0 0;background:#1F9E91;height:' + Math.round(d[2] / maxT * 190) + 'px',
+        curStyle: 'width:100%;border-radius:0 0 4px 4px;background:#BFDDD9;height:' + Math.round((d[1] - d[2]) / maxT * 190) + 'px',
+        occStyle: 'width:100%;border-radius:4px 4px 0 0;height:' + Math.round(d[3] / 120 * 100) + 'px;background:' + (over ? '#B0392F' : warn ? '#F5A623' : '#BFDDD9'),
+        pctStyle: 'font-family:\'JetBrains Mono\';font-size:12px;font-weight:600;color:' + (over ? '#B0392F' : warn ? '#9A6408' : '#64748B'),
+        pill: over ? '≥100%' : '',
+        pillStyle: over ? 'font-size:9.5px;font-weight:700;padding:2px 6px;border-radius:999px;background:#FBE3E0;color:#B0392F' : 'display:none'
+      };
+    });
+    // ---- P15 · escenarios de programa A/B/B*/C (inv. 14) ----
+    const progDefs = [
+      ['A', 'Cumplir ambos programas a fuerza de sobretiempo y subcontrato', '$145,521', '$751,082', '0 sem', '—', 'alt'],
+      ['B', 'Resolver el déficit con la mezcla estándar', '$115,025', '$781,578', '0 sem', '—', 'alt'],
+      ['B* optimizado', 'Sobretiempo y desplazar solo el excedente a la semana con holgura', '$64,148', '$832,455', '1 sem', '$81,373', 'rec'],
+      ['C', 'No entrar al contrato nuevo', '—', '—', '—', '—', 'no']
+    ];
+    const program = progDefs.map(d => ({
+      name: d[0], desc: d[1], costo: d[2], utilidad: d[3], retraso: d[4], pena: d[5],
+      tag: d[6] === 'rec' ? 'Recomendado' : d[6] === 'no' ? 'No recomendable' : 'Alternativa',
+      tagStyle: 'font-size:10px;font-weight:700;padding:3px 8px;border-radius:999px;' + (d[6] === 'rec' ? 'background:#E8F6F4;color:#17786e' : d[6] === 'no' ? 'background:#EEF2F6;color:#94A3B8' : 'background:#EEF2F6;color:#64748B'),
+      cardStyle: 'border:1px solid ' + (d[6] === 'rec' ? '#1F9E91' : '#E3E8EF') + ';border-radius:16px;background:#fff;padding:18px;display:flex;flex-direction:column;gap:4px' + (d[6] === 'rec' ? ';box-shadow:0 6px 20px rgba(31,158,145,.13)' : d[6] === 'no' ? ';opacity:.62' : ''),
+      costoStyle: 'font-family:\'JetBrains Mono\';font-size:20px;font-weight:600;letter-spacing:-.5px;color:' + (d[6] === 'rec' ? '#17786e' : '#1E2A3A'),
+      selLabel: d[6] === 'rec' ? 'Programa elegido' : 'Elegir',
+      selStyle: 'margin-top:14px;height:34px;border-radius:9px;font-size:12.5px;font-weight:600;display:flex;align-items:center;justify-content:center;cursor:pointer;' + (d[6] === 'rec' ? 'background:#1F9E91;color:#fff' : 'border:1px solid #CBD5E1;color:#475569')
+    }));
+    const progOpt = [['Sobretiempo', '1,000 HH'], ['Desplazar a Sem 5', '600 HH'], ['Retraso mínimo', '1 semana']].map(d => ({ k: d[0], v: d[1] }));
+    // ---- P14 panel · chequeos S11 (inv. 12, 13) ----
+    const s11 = [
+      { k: 'Pico del plan de montaje', v: '38 t/sem' }, { k: 'Velocidad base', v: '15 t/sem' }, { k: 'Velocidad con sobretiempo', v: '24 t/sem' }
+    ];
+    const equil = [
+      { k: 'Volumen contratado', v: '318 t/mes' }, { k: 'Punto de equilibrio', v: '490 t/mes' }, { k: 'Equilibrio con Lean', v: '368 t/mes' }
+    ];
+    const requi = [
+      { k: 'Requisición bruta', v: '121.55 t', strong: 0 }, { k: 'Inventario libre aplicable', v: '− 34.00 t', strong: 0 }, { k: 'Neta a comprar', v: '87.55 t', strong: 1 }
+    ].map(r => ({ k: r.k, v: r.v, vStyle: 'font-family:\'JetBrains Mono\';font-size:' + (r.strong ? '14px' : '12.5px') + ';font-weight:' + (r.strong ? '600' : '500') + ';color:' + (r.strong ? '#17786e' : '#1E2A3A') }));
+    // ---- P16 · interferencia de familias (inv. 3) ----
+    const famDefs = [
+      ['Clase (HH/ton)', '90', '24'], ['Tonelaje', '80 t', '320 t'],
+      ['Rentabilidad ($/HH de margen)', '$31', '$58'],
+      ['HH en conflicto', '210 HH/sem · sem 3–5', '—'],
+      ['Impacto estimado', '—', '−12% · +380 HH']
+    ];
+    const families = famDefs.map(d => ({ k: d[0], alta: d[1], afect: d[2] }));
+    const famOptDefs = [
+      ['Repriorizar', 'Mover los misceláneos a la ventana con holgura', 'Sin costo directo · retrasa misceláneos 2 sem'],
+      ['Partir el lote de misceláneos', 'Dos entregas escalonadas', '+$18,400 de logística'],
+      ['Subcontratar los misceláneos', 'Libera habilitado por completo', '+$96,200 all-in'],
+      ['Aceptar el impacto documentado', 'Se registra y se costea en el presupuesto', '+380 HH · +$46,660']
+    ];
+    const famOpts = famOptDefs.map((d, i) => ({
+      title: d[0], desc: d[1], cost: d[2],
+      cardStyle: 'display:flex;align-items:center;gap:14px;border:1px solid ' + (i === 3 ? '#F5E4C4' : '#E3E8EF') + ';border-radius:12px;padding:11px 16px;cursor:pointer;background:' + (i === 3 ? '#FEFBF5' : '#fff')
+    }));
+    const subprojects = [
+      { fam: 'Armaduras', clase: '24 HH/t', ton: '320 t', apu: '$52.10/kg' },
+      { fam: 'Misceláneos', clase: '90 HH/t', ton: '80 t', apu: '$94.80/kg' }
+    ];
 
     const railExtra = chatOverlay
       ? 'position:absolute;left:14px;top:14px;bottom:14px;z-index:20;border:1px solid #E3E8EF;border-right:1px solid #E3E8EF;border-radius:14px;box-shadow:0 18px 44px rgba(16,24,40,.18)'
@@ -913,8 +1482,23 @@ class Component extends DCLogic {
 
     return {
       nav, steps, files, stages, bom, alerts, tabs, scenarios, timeline, ve, vcmp, railExtra,
+      plan, rssPhases, devs, mpPrices, load, program, progOpt, s11, equil, requi, families, famOpts, subprojects,
       isP3: s.screen === 'p3', isP4: s.screen === 'p4', isWs, isP6: s.screen === 'p6', isP8: s.screen === 'p8', isP9: s.screen === 'p9',
-      isStep1: s.step === 1, isStep2: s.step === 2, isStep3: s.step === 3,
+      isP13: s.screen === 'p13', isP14: s.screen === 'p14', isP15: s.screen === 'p15', isP16: s.screen === 'p16',
+      isStep1: s.step === 1, isStep2: s.step === 2, isStep3: s.step === 3, isStep4: s.step === 4,
+      planTotal: '115 t', planPico: '38 t/sem', planSemanas: '5', planRitmo: '23 t/sem',
+      devTotal: '−$116,661',
+      exclusions: [
+        { t: 'Escaleras', n: 'No se cobran como acero estructural (AISC 303-22 §2.2); van como partida separada.' },
+        { t: 'Pernos de anclaje F1554', n: 'Suministro del contratista de cimentación.' },
+        { t: 'Nelson studs', n: 'Excluidos del alcance de fabricación.' },
+        { t: 'Steel deck y escaleras de concreto', n: 'Fuera del alcance de estructura metálica.' }
+      ],
+      reconc: [
+        { k: 'APU AISC', v: '$52.57/kg' }, { k: 'Más 6% a margen comparable', v: '$52.87/kg' },
+        { k: '% de crecimiento aplicado', v: '6% · fase ámbar' }
+      ],
+      leyenda: 'Este es el mejor precio calculable bajo las condiciones e información actuales de la compañía (planta, inventario, costos y precios confirmados a la fecha) y lo que exige la oferta. No es predicción del precio ganador del mercado; la decisión final de margen y la firma de la oferta son de la dirección.',
       isModeA: isWs && mode === 'a', isModeB: isWs && mode === 'b', isModeC: isWs && mode === 'c',
       showTabs: isWs && mode !== 'c',
       showChatThread: isWs && mode !== 'a',
@@ -957,10 +1541,23 @@ class Component extends DCLogic {
       ftCostStyle: 'color:' + (mode === 'b' ? '#6D5BD0' : '#1E2A3A') + ';font-weight:600',
       ftBadge: mode === 'b' ? (liveCosts ? 'recalculando…' : 'pendiente de regenerar') : 'actualizado',
       ftBadgeStyle: 'font-size:11px;font-weight:600;padding:3px 9px;border-radius:999px;' + (mode === 'b' ? (liveCosts ? 'background:#EEEAFB;color:#5847bd' : 'background:#FEF7EA;color:#9A6408') : 'background:#E8F6F4;color:#17786e'),
-      primaryCtaLabel: s.step === 3 ? 'Generar solución' : 'Continuar',
-      primaryCtaStyle: 'height:42px;padding:0 22px;border-radius:10px;background:' + (s.step === 3 ? '#1F9E91' : '#1E2A3A') + ';color:#fff;font-size:14px;font-weight:600;display:flex;align-items:center;cursor:pointer',
-      nextStep: () => (s.step === 3 ? this.go({ screen: 'p4' }) : this.go({ step: s.step + 1 })),
-      prevStep: () => this.go({ step: Math.max(1, s.step - 1) })
+      primaryCtaLabel: s.step === 4 ? 'Generar solución' : 'Continuar',
+      primaryCtaStyle: 'height:42px;padding:0 22px;border-radius:10px;background:' + (s.step === 4 ? '#1F9E91' : '#1E2A3A') + ';color:#fff;font-size:14px;font-weight:600;display:flex;align-items:center;cursor:pointer',
+      nextStep: () => (s.step === 4 ? this.go({ screen: 'p4' }) : this.go({ step: s.step + 1 })),
+      prevStep: () => this.go({ step: Math.max(1, s.step - 1) }),
+      goP13: () => this.go({ screen: 'p13' }),
+      goP14: () => this.go({ screen: 'p14' }),
+      goP15: () => this.go({ screen: 'p15' }),
+      goP16: () => this.go({ screen: 'p16' }),
+      // ---- chips de estado del workspace (inv. 4, 7, 8) ----
+      rssChip: 'RSS 9.3% · ámbar',
+      rssChipStyle: 'display:flex;align-items:center;gap:6px;font-family:\'JetBrains Mono\';font-size:11px;padding:4px 9px;border-radius:6px;background:rgba(255,255,255,.09);color:#F5A623',
+      weightChip: 'Peso ✓',
+      weightChipStyle: 'font-family:\'JetBrains Mono\';font-size:11px;padding:4px 9px;border-radius:6px;background:rgba(31,158,145,.16);color:#7FD8CE',
+      emissionChip: mode === 'c' ? 'Emisión bloqueada · precios sin confirmar' : '',
+      emissionChipStyle: mode === 'c'
+        ? 'font-size:11px;font-weight:600;padding:4px 9px;border-radius:6px;background:rgba(245,166,35,.18);color:#F5C77E;cursor:pointer'
+        : 'display:none'
     };
   }
 }
