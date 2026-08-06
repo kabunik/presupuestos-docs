@@ -1,0 +1,114 @@
+/* Plataforma de presupuestos de estructuras metálicas — design tokens v1
+   Extraídos de los mockups hi-fi. Producto nuevo: paleta funcional propia,
+   tipografía heredada del sistema Kabunik. */
+
+:root {
+  /* --- Superficies y estructura --- */
+  --bg:              #F4F6F9;
+  --bg-viewer:       #EDF1F5;
+  --surface:         #FFFFFF;
+  --surface-sunken:  #F8FAFC;
+  --surface-alt:     #EEF2F6;
+  --navy:            #1E2A3A;
+  --navy-viewer:     #16202D;
+  --line:            #E3E8EF;
+  --line-soft:       #F1F5F9;
+  --input-border:    #CBD5E1;
+
+  /* --- Texto --- */
+  --text:            #1E2A3A;
+  --text-2:          #475569;
+  --text-3:          #64748B;
+  --text-4:          #94A3B8;
+
+  /* --- Teal · cálculo y datos verificados --- */
+  --teal:            #1F9E91;
+  --teal-700:        #17786E;
+  --teal-200:        #BFDDD9;
+  --teal-050:        #E8F6F4;
+  --teal-border:     #CFE7E3;
+
+  /* --- Violeta · EXCLUSIVO de acciones del agente/IA --- */
+  --violet:          #6D5BD0;
+  --violet-700:      #5847BD;
+  --violet-050:      #EEEAFB;
+  --violet-border:   #DCD6F5;
+  --violet-row:      #FAF9FE;
+
+  /* --- Ámbar · calibración, umbrales, alertas medias --- */
+  --amber:           #F5A623;
+  --amber-700:       #9A6408;
+  --amber-800:       #7C5308;
+  --amber-050:       #FEF7EA;
+  --amber-025:       #FEFBF5;
+  --amber-100:       #FBE7C2;
+  --amber-border:    #F5D7A6;
+  --amber-border-2:  #F5E4C4;
+
+  /* --- Rojo · SOLO gates y alertas críticas --- */
+  --red:             #B0392F;
+  --red-hover:       #8F2E26;
+  --red-050:         #FDF7F6;
+  --red-100:         #FBE3E0;
+  --red-border:      #F0C9C4;
+
+  /* --- Marca --- */
+  --brand-cyan:      #6EC6D8;
+
+  /* --- Tipografía --- */
+  --font-display: 'Space Grotesk', system-ui, sans-serif;
+  --font-ui:      'DM Sans', system-ui, sans-serif;
+  --font-mono:    'JetBrains Mono', ui-monospace, monospace;
+
+  --fs-hero:      34px;  /* 600, ls -.4px, lh 1.12 */
+  --fs-kpi:       34px;  /* mono 600, ls -1px   */
+  --fs-kpi-md:    24px;
+  --fs-kpi-sm:    22px;
+  --fs-h1:        26px;
+  --fs-h2:        20px;
+  --fs-card:      17px;
+  --fs-title:     15px;
+  --fs-body:      14px;
+  --fs-body-sm:   13px;
+  --fs-cell:      12.5px;
+  --fs-label:     12px;   /* 600 */
+  --fs-eyebrow:   11px;   /* 700 uppercase, ls 1px */
+  --fs-badge:     10.5px; /* 700 */
+
+  /* --- Espaciado (grid 4px) --- */
+  --sp-1: 4px;  --sp-2: 8px;  --sp-3: 12px; --sp-4: 14px;
+  --sp-5: 16px; --sp-6: 20px; --sp-7: 24px; --sp-8: 28px;
+
+  /* --- Radios --- */
+  --r-chip:   6px;
+  --r-btn-sm: 9px;
+  --r-btn:    10px;
+  --r-input:  12px;
+  --r-card:   16px;
+  --r-pill:   999px;
+
+  /* --- Sombras --- */
+  --shadow-banner:  0 6px 20px rgba(16,24,40,.08);
+  --shadow-delta:   0 6px 18px rgba(109,91,208,.12);
+  --shadow-scen:    0 6px 20px rgba(31,158,145,.13);
+  --shadow-overlay: 0 18px 44px rgba(16,24,40,.18);
+
+  /* --- Medidas fijas del layout --- */
+  --h-topbar:  56px;
+  --h-statusbar: 40px;
+  --h-tabs:    44px;
+  --h-btn-bar: 34px;
+  --h-btn:     42px;
+  --w-rail:    320px;
+  --w-panel:   360px;
+  --w-panel-scenarios: 440px;
+
+  --transition: .15s ease;
+}
+
+/* Selección de fila en grillas: nunca cambiar el borde, usar inset */
+.row--selected { background: var(--teal-050); box-shadow: inset 3px 0 0 var(--teal); }
+.row--agent-edited { background: var(--violet-row); }
+
+@keyframes pulseDot { 0%,100% { opacity:.35 } 50% { opacity:1 } }
+@keyframes glowV    { 0%,100% { stroke-opacity:.55 } 50% { stroke-opacity:1 } }

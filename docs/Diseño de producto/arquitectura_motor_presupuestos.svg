@@ -1,0 +1,165 @@
+<svg viewBox="0 0 1440 900" xmlns="http://www.w3.org/2000/svg" font-family="'Segoe UI', system-ui, -apple-system, sans-serif">
+  <defs>
+    <marker id="arr" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L7,3 L0,6 Z" fill="#8893A0"/>
+    </marker>
+    <marker id="arrT" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L7,3 L0,6 Z" fill="#1F9E91"/>
+    </marker>
+    <filter id="sh" x="-10%" y="-10%" width="120%" height="125%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#1E2A3A" flood-opacity="0.12"/>
+    </filter>
+  </defs>
+
+  <rect x="0" y="0" width="1440" height="900" fill="#F4F6F9"/>
+
+  <!-- Title -->
+  <text x="50" y="52" font-size="26" font-weight="700" fill="#1E2A3A">Arquitectura de Plataforma — Motor de Presupuestos</text>
+  <text x="50" y="78" font-size="14" fill="#5A6675">Kabunik (plataforma SaaS)  ×  Baysa / METALITEC (know-how)   ·   Propuesta técnica</text>
+
+  <!-- ===== (1) Calibración band ===== -->
+  <rect x="50" y="110" width="1340" height="98" rx="12" fill="#FDF1DC" stroke="#F5A623" stroke-width="1.5"/>
+  <text x="70" y="138" font-size="16" font-weight="700" fill="#8A5D00">① Onboarding por fabricante — Calibración de parámetros (know-how de Daniel)</text>
+  <!-- chips -->
+  <g font-size="11" fill="#8A5D00" text-anchor="middle">
+    <rect x="70"  y="150" width="200" height="26" rx="13" fill="#FFFFFF" stroke="#F5A623"/><text x="170"  y="167">Layout planta &amp; equipos</text>
+    <rect x="286" y="150" width="200" height="26" rx="13" fill="#FFFFFF" stroke="#F5A623"/><text x="386"  y="167">Eficiencias / HH·ton</text>
+    <rect x="502" y="150" width="200" height="26" rx="13" fill="#FFFFFF" stroke="#F5A623"/><text x="602"  y="167">Capacidad instalada</text>
+    <rect x="718" y="150" width="200" height="26" rx="13" fill="#FFFFFF" stroke="#F5A623"/><text x="818"  y="167">Precios de acero (MX)</text>
+    <rect x="934" y="150" width="200" height="26" rx="13" fill="#FFFFFF" stroke="#F5A623"/><text x="1034" y="167">Catálogo de perfiles</text>
+    <rect x="1150" y="150" width="200" height="26" rx="13" fill="#FFFFFF" stroke="#F5A623"/><text x="1250" y="167">Umbrales de 22 alertas</text>
+  </g>
+  <text x="70" y="197" font-size="11.5" font-style="italic" fill="#8A5D00">Se calibra una vez por fabricante. El know-how se parametriza por tenant — no se expone a otros clientes.</text>
+
+  <!-- band -> store -->
+  <line x1="720" y1="208" x2="720" y2="232" stroke="#8893A0" stroke-width="2" marker-end="url(#arr)"/>
+
+  <!-- Tenant config store (cylinder) -->
+  <path d="M630,250 V286 A90,9 0 0 0 810,286 V250" fill="#F8D89A" stroke="#F5A623" stroke-width="1.5"/>
+  <ellipse cx="720" cy="250" rx="90" ry="9" fill="#FBE6BC" stroke="#F5A623" stroke-width="1.5"/>
+  <text x="720" y="268" font-size="11.5" font-weight="700" fill="#8A5D00" text-anchor="middle">Config del fabricante</text>
+  <text x="720" y="282" font-size="9.5" fill="#8A5D00" text-anchor="middle">(tenant)</text>
+  <!-- store -> C3 -->
+  <line x1="720" y1="295" x2="720" y2="326" stroke="#8893A0" stroke-width="2" marker-end="url(#arr)"/>
+
+  <!-- ===== (2) Pipeline label ===== -->
+  <text x="50" y="322" font-size="13" font-weight="700" fill="#1E2A3A">② Pipeline — del plano a la oferta</text>
+
+  <!-- ===== Pipeline cards ===== -->
+  <!-- helper: each card x, header path, body -->
+
+  <!-- C1 Ingesta (slate) -->
+  <rect x="50" y="330" width="240" height="250" rx="12" fill="#FFFFFF" stroke="#E1E6EC" filter="url(#sh)"/>
+  <path d="M50,380 V342 Q50,330 62,330 H278 Q290,330 290,342 V380 Z" fill="#5B6B7E"/>
+  <text x="66" y="354" font-size="14" font-weight="700" fill="#FFFFFF">INGESTA</text>
+  <text x="66" y="372" font-size="10.5" fill="#D6DCE3">Frontend · por tenant</text>
+  <g font-size="12.5" fill="#33414F">
+    <text x="66" y="408">• Landing + Web App</text>
+    <text x="66" y="434">• Carga: PDF / DXF / IFC</text>
+    <text x="66" y="460">• Contrato (PDF)</text>
+    <text x="66" y="486">• Wizard de proyecto (3 pasos)</text>
+  </g>
+  <rect x="62" y="546" width="216" height="22" rx="11" fill="#EAEEF2"/>
+  <text x="170" y="561" font-size="10.5" fill="#5B6B7E" text-anchor="middle">Captura del cliente</text>
+
+  <!-- C2 Percepción (violet / IA) -->
+  <rect x="325" y="330" width="240" height="250" rx="12" fill="#FFFFFF" stroke="#E1E6EC" filter="url(#sh)"/>
+  <path d="M325,380 V342 Q325,330 337,330 H553 Q565,330 565,342 V380 Z" fill="#6D5BD0"/>
+  <text x="341" y="354" font-size="14" font-weight="700" fill="#FFFFFF">CAPA A · PERCEPCIÓN</text>
+  <text x="341" y="372" font-size="10.5" fill="#E0DAF7">LLM — API Anthropic (Sonnet)</text>
+  <g font-size="12.5" fill="#33414F">
+    <text x="341" y="406">• Planos → IFC4 + BOM</text>
+    <text x="353" y="424" font-size="11" fill="#6A7686">proceso BIM de 8 pasos</text>
+    <text x="341" y="452">• Contrato → términos</text>
+    <text x="353" y="470" font-size="11" fill="#6A7686">anticipo, retención, multas</text>
+  </g>
+  <rect x="337" y="546" width="216" height="22" rx="11" fill="#EBE7FA"/>
+  <text x="445" y="561" font-size="10.5" fill="#6D5BD0" text-anchor="middle">Fase 0: manual · Fase 2: auto</text>
+
+  <!-- C3 Cálculo (teal / determinista) -->
+  <rect x="600" y="330" width="240" height="250" rx="12" fill="#FFFFFF" stroke="#E1E6EC" filter="url(#sh)"/>
+  <path d="M600,380 V342 Q600,330 612,330 H828 Q840,330 840,342 V380 Z" fill="#1F9E91"/>
+  <text x="616" y="354" font-size="14" font-weight="700" fill="#FFFFFF">CAPA B · CÁLCULO</text>
+  <text x="616" y="372" font-size="10.5" fill="#D4F0EC">Backend determinista (ex-.jsx)</text>
+  <g font-size="12.5" fill="#33414F">
+    <text x="616" y="406">• 22 alertas en tiempo real</text>
+    <text x="616" y="432">• Flujo de caja + 3 escenarios</text>
+    <text x="616" y="458">• Transporte (FFD · 30 t/viaje)</text>
+    <text x="616" y="484">• Recubrimientos + Ing. de Valor</text>
+  </g>
+  <rect x="612" y="546" width="216" height="22" rx="11" fill="#E2F5F2"/>
+  <text x="720" y="561" font-size="10.5" fill="#1F9E91" text-anchor="middle">Sin LLM · barato · testeable</text>
+
+  <!-- C4 Generación (blue) -->
+  <rect x="875" y="330" width="240" height="250" rx="12" fill="#FFFFFF" stroke="#E1E6EC" filter="url(#sh)"/>
+  <path d="M875,380 V342 Q875,330 887,330 H1103 Q1115,330 1115,342 V380 Z" fill="#2F73B8"/>
+  <text x="891" y="354" font-size="14" font-weight="700" fill="#FFFFFF">CAPA C · GENERACIÓN</text>
+  <text x="891" y="372" font-size="10.5" fill="#D6E5F4">Ensamblado determinista</text>
+  <g font-size="12.5" fill="#33414F">
+    <text x="891" y="406">• Oferta Word — 12 secciones</text>
+    <text x="891" y="432">• Export IFC4</text>
+    <text x="891" y="458">• python-docx (sin LLM)</text>
+  </g>
+  <rect x="887" y="546" width="216" height="22" rx="11" fill="#E4EEF8"/>
+  <text x="995" y="561" font-size="10.5" fill="#2F73B8" text-anchor="middle">Trazabilidad total</text>
+
+  <!-- C5 Salidas (navy) -->
+  <rect x="1150" y="330" width="240" height="250" rx="12" fill="#FFFFFF" stroke="#E1E6EC" filter="url(#sh)"/>
+  <path d="M1150,380 V342 Q1150,330 1162,330 H1378 Q1390,330 1390,342 V380 Z" fill="#1E2A3A"/>
+  <text x="1166" y="354" font-size="14" font-weight="700" fill="#FFFFFF">SALIDAS</text>
+  <text x="1166" y="372" font-size="10.5" fill="#B7C2CE">Entregables</text>
+  <g font-size="12.5" fill="#33414F">
+    <text x="1166" y="406">• Oferta técnico-comercial</text>
+    <text x="1166" y="432">• Modelo IFC4 (Tekla/Navis)</text>
+    <text x="1166" y="458">• Programa de fabricación</text>
+    <text x="1166" y="484" font-weight="600" fill="#8A5D00">→ Puente a Strumis</text>
+  </g>
+  <rect x="1162" y="546" width="216" height="22" rx="11" fill="#EEF1F4"/>
+  <text x="1270" y="561" font-size="10.5" fill="#1E2A3A" text-anchor="middle">aguas abajo (ERP)</text>
+
+  <!-- pipeline arrows -->
+  <g stroke="#8893A0" stroke-width="2.2" marker-end="url(#arr)">
+    <line x1="292" y1="455" x2="322" y2="455"/>
+    <line x1="567" y1="455" x2="597" y2="455"/>
+    <line x1="842" y1="455" x2="872" y2="455"/>
+    <line x1="1117" y1="455" x2="1147" y2="455"/>
+  </g>
+
+  <!-- feedback loop (learning) -->
+  <polyline points="1160,672 1160,604 720,604 720,584" fill="none" stroke="#1F9E91" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#arrT)"/>
+  <text x="900" y="599" font-size="11" font-weight="600" fill="#1F9E91" text-anchor="middle">Aprendizaje: el cierre real (cotizado vs. ejecutado) afina las 22 alertas y los benchmarks</text>
+
+  <!-- ===== (3) Multitenant band ===== -->
+  <rect x="50" y="624" width="1340" height="170" rx="12" fill="#1E2A3A"/>
+  <text x="70" y="656" font-size="16" font-weight="700" fill="#F5A623">③ Plataforma multi-tenant (Kabunik)</text>
+
+  <rect x="70" y="668" width="420" height="108" rx="10" fill="#29384C"/>
+  <text x="90" y="696" font-size="13.5" font-weight="700" fill="#FFFFFF">Aislamiento de datos por organización</text>
+  <text x="90" y="720" font-size="11" fill="#B7C2CE">Los datos de cada fabricante quedan privados y</text>
+  <text x="90" y="737" font-size="11" fill="#B7C2CE">separados — información competitiva protegida.</text>
+
+  <rect x="510" y="668" width="420" height="108" rx="10" fill="#29384C"/>
+  <text x="530" y="696" font-size="13.5" font-weight="700" fill="#FFFFFF">Sistema de Licencias Kabunik</text>
+  <text x="530" y="720" font-size="11" fill="#B7C2CE">Acceso por organización · suscripción SaaS ·</text>
+  <text x="530" y="737" font-size="11" fill="#B7C2CE">monitoreo de sesiones y dispositivos.</text>
+
+  <rect x="950" y="668" width="420" height="108" rx="10" fill="#29384C"/>
+  <text x="970" y="696" font-size="13.5" font-weight="700" fill="#FFFFFF">Benchmarks agregados (anonimizados)</text>
+  <text x="970" y="720" font-size="11" fill="#B7C2CE">El conjunto entrena referencias $/ton y win-rate</text>
+  <text x="970" y="737" font-size="11" fill="#B7C2CE">sin exponer datos de ningún cliente.</text>
+  <rect x="970" y="748" width="118" height="20" rx="10" fill="#F5A623"/>
+  <text x="1029" y="762" font-size="10" font-weight="700" fill="#1E2A3A" text-anchor="middle">moat de Kabunik</text>
+
+  <!-- ===== Footer ===== -->
+  <text x="50" y="822" font-size="12" font-style="italic" fill="#1E2A3A">Frontera ERP (Hoja de Ruta): el sistema decide y planifica (aguas arriba). NO administra ni contabiliza — eso vive en Strumis/SAP. El puente exporta el proyecto ya planificado.</text>
+
+  <!-- legend -->
+  <g font-size="11.5" fill="#5A6675">
+    <circle cx="56" cy="850" r="6" fill="#5B6B7E"/><text x="68" y="854">Frontend</text>
+    <circle cx="176" cy="850" r="6" fill="#6D5BD0"/><text x="188" y="854">IA / LLM (API Anthropic)</text>
+    <circle cx="392" cy="850" r="6" fill="#1F9E91"/><text x="404" y="854">Cálculo determinista</text>
+    <circle cx="588" cy="850" r="6" fill="#2F73B8"/><text x="600" y="854">Generación</text>
+    <circle cx="720" cy="850" r="6" fill="#F5A623"/><text x="732" y="854">Calibración / moat</text>
+  </g>
+  <text x="1390" y="854" font-size="11" fill="#9AA5B1" text-anchor="end">Propuesta técnica · Kabunik × Baysa/METALITEC · 2026</text>
+</svg>
