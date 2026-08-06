@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/kabunik-design-system-f5519471-4456-42fc-bcbc-6e7f2dfa3cd0/tokens/fonts.css">
+<link rel="stylesheet" href="_ds/kabunik-design-system-f5519471-4456-42fc-bcbc-6e7f2dfa3cd0/tokens/colors.css">
+<link rel="stylesheet" href="_ds/kabunik-design-system-f5519471-4456-42fc-bcbc-6e7f2dfa3cd0/styles.css">
+<script src="_ds/kabunik-design-system-f5519471-4456-42fc-bcbc-6e7f2dfa3cd0/_ds_bundle.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&amp;family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#E9ECF1;font-family:'DM Sans',system-ui,sans-serif;color:#1E2A3A;-webkit-font-smoothing:antialiased}
+a{color:#1F9E91;text-decoration:none}a:hover{color:#17786e;text-decoration:underline}
+*{box-sizing:border-box}
+::-webkit-scrollbar{width:10px;height:10px}::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:8px;border:3px solid transparent;background-clip:content-box}
+@keyframes pulseDot{0%,100%{opacity:.35}50%{opacity:1}}
+@keyframes sweep{0%{transform:translateX(-100%)}100%{transform:translateX(320%)}}
+@keyframes glowV{0%,100%{stroke-opacity:.55}50%{stroke-opacity:1}}
+</style>
+</helmet>
+
+<div style="padding:28px 0 96px;display:flex;flex-direction:column;align-items:center;gap:28px">
+
+<sc-if value="{{ isP3 }}" hint-placeholder-val="{{ true }}">
+<div data-screen-label="P3 Intake" style="width:1440px;height:900px;background:#F4F6F9;border-radius:14px;overflow:hidden;box-shadow:0 24px 60px rgba(16,24,40,.16);display:flex;flex-direction:column">
+  <div style="height:56px;flex:none;background:#1E2A3A;display:flex;align-items:center;padding:0 20px;gap:16px">
+    <div style="display:flex;align-items:center;gap:9px"><div style="width:9px;height:9px;background:#6EC6D8;border-radius:2px"></div><span style="font-family:'Space Grotesk';font-weight:600;font-size:14px;color:#fff;letter-spacing:-.2px">Kabunik Bid</span></div>
+    <div style="width:1px;height:20px;background:rgba(255,255,255,.16)"></div>
+    <span style="font-size:12.5px;color:rgba(255,255,255,.55)">METALITEC · capacidad 200 t/mes</span>
+    <div style="margin-left:auto;display:flex;align-items:center;gap:10px"><span style="font-size:11px;color:#6EC6D8;background:rgba(110,198,216,.14);padding:4px 9px;border-radius:999px">Calibrado</span><div style="width:26px;height:26px;border-radius:50%;background:#334155;color:#fff;font-size:11px;display:flex;align-items:center;justify-content:center">JP</div></div>
+  </div>
+
+  <div style="flex:1;display:flex;overflow:hidden">
+    <div style="width:300px;flex:none;background:#fff;border-right:1px solid #E3E8EF;padding:28px 24px;display:flex;flex-direction:column;gap:28px">
+      <div>
+        <div style="font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#94A3B8;margin-bottom:6px">Nuevo proyecto</div>
+        <div style="font-family:'Space Grotesk';font-size:22px;font-weight:600;line-height:1.15">Intake de licitación</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:2px">
+        <sc-for list="{{ steps }}" as="s" hint-placeholder-count="3">
+          <div onClick="{{ s.go }}" style="{{ s.style }}">
+            <div style="{{ s.dotStyle }}">{{ s.n }}</div>
+            <div style="display:flex;flex-direction:column;gap:2px">
+              <span style="font-size:13.5px;font-weight:500">{{ s.title }}</span>
+              <span style="font-size:11.5px;color:#94A3B8">{{ s.sub }}</span>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+      <div style="margin-top:auto;border:1px solid #E3E8EF;border-radius:12px;padding:14px;background:#F8FAFC">
+        <div style="font-size:11.5px;font-weight:700;color:#1E2A3A;margin-bottom:6px">Calibración de planta activa</div>
+        <div style="font-size:11.5px;line-height:1.5;color:#64748B">HH/ton, catálogo de perfiles y precios de material se toman de la calibración de METALITEC (v4, 02/07).</div>
+      </div>
+    </div>
+
+    <div style="flex:1;overflow:auto;padding:36px 44px">
+      <sc-if value="{{ isStep1 }}" hint-placeholder-val="{{ true }}">
+      <div style="max-width:760px;display:flex;flex-direction:column;gap:22px">
+        <div><div style="font-family:'Space Grotesk';font-size:26px;font-weight:600">Datos generales</div><div style="font-size:14px;color:#64748B;margin-top:6px">Identifican el proyecto y determinan el transporte y las condiciones de sitio.</div></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px">
+          <div style="display:flex;flex-direction:column;gap:6px"><label style="font-size:12px;font-weight:600;color:#475569">Nombre del proyecto</label><div style="height:42px;border:1px solid #CBD5E1;border-radius:10px;background:#fff;display:flex;align-items:center;padding:0 12px;font-size:14px">CNARCCS — Domo</div></div>
+          <div style="display:flex;flex-direction:column;gap:6px"><label style="font-size:12px;font-weight:600;color:#475569">Cliente</label><div style="height:42px;border:1px solid #CBD5E1;border-radius:10px;background:#fff;display:flex;align-items:center;padding:0 12px;font-size:14px">CNARCCS</div></div>
+          <div style="display:flex;flex-direction:column;gap:6px"><label style="font-size:12px;font-weight:600;color:#475569">Tipo de estructura</label><div style="height:42px;border:1px solid #CBD5E1;border-radius:10px;background:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 12px;font-size:14px">Domo / cubierta especial<span style="color:#94A3B8">›</span></div></div>
+          <div style="display:flex;flex-direction:column;gap:6px"><label style="font-size:12px;font-weight:600;color:#475569">Destino (transporte)</label><div style="height:42px;border:1px solid #CBD5E1;border-radius:10px;background:#fff;display:flex;align-items:center;padding:0 12px;font-size:14px">Monterrey, N.L. · 312 km</div></div>
+        </div>
+      </div>
+      </sc-if>
+
+      <sc-if value="{{ isStep2 }}" hint-placeholder-val="{{ true }}">
+      <div style="max-width:820px;display:flex;flex-direction:column;gap:22px">
+        <div><div style="font-family:'Space Grotesk';font-size:26px;font-weight:600">Carga de archivos</div><div style="font-size:14px;color:#64748B;margin-top:6px">Planos PDF/DXF obligatorios. IFC opcional acelera la construcción de geometría; el contrato alimenta las condiciones comerciales.</div></div>
+        <div style="border:2px dashed #A8C6D6;border-radius:16px;background:#F1F8FA;padding:34px;display:flex;flex-direction:column;align-items:center;gap:10px">
+          <div style="width:44px;height:44px;border-radius:12px;background:#fff;border:1px solid #CBD5E1;display:flex;align-items:center;justify-content:center;font-size:20px;color:#1F9E91">+</div>
+          <div style="font-size:15px;font-weight:600">Arrastra planos aquí o selecciona archivos</div>
+          <div style="font-size:12.5px;color:#64748B">PDF · DXF · IFC · máx. 250 MB por archivo</div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <sc-for list="{{ files }}" as="f" hint-placeholder-count="4">
+            <div style="display:flex;align-items:center;gap:14px;background:#fff;border:1px solid #E3E8EF;border-radius:12px;padding:12px 14px">
+              <div style="width:34px;height:34px;flex:none;border-radius:8px;background:#EEF2F6;display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono';font-size:10px;font-weight:600;color:#475569">{{ f.ext }}</div>
+              <div style="flex:1;min-width:0"><div style="font-size:13.5px;font-weight:500">{{ f.name }}</div><div style="font-size:11.5px;color:#94A3B8">{{ f.meta }}</div></div>
+              <span style="{{ f.badgeStyle }}">{{ f.status }}</span>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+      </sc-if>
+
+      <sc-if value="{{ isStep3 }}" hint-placeholder-val="{{ true }}">
+      <div style="max-width:820px;display:flex;flex-direction:column;gap:22px">
+        <div><div style="font-family:'Space Grotesk';font-size:26px;font-weight:600">Opciones y consideraciones</div><div style="font-size:14px;color:#64748B;margin-top:6px">Alcance y condiciones particulares que el agente debe respetar al construir la solución.</div></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px">
+          <div style="display:flex;flex-direction:column;gap:6px"><label style="font-size:12px;font-weight:600;color:#475569">Alcance</label><div style="height:42px;border:1px solid #CBD5E1;border-radius:10px;background:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 12px;font-size:14px">Suministro + montaje<span style="color:#94A3B8">›</span></div></div>
+          <div style="display:flex;flex-direction:column;gap:6px"><label style="font-size:12px;font-weight:600;color:#475569">Grado preferente</label><div style="height:42px;border:1px solid #CBD5E1;border-radius:10px;background:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 12px;font-size:14px">A992 / A572 Gr.50<span style="color:#94A3B8">›</span></div></div>
+          <div style="display:flex;flex-direction:column;gap:6px"><label style="font-size:12px;font-weight:600;color:#475569">Tipo de conexión</label><div style="height:42px;border:1px solid #CBD5E1;border-radius:10px;background:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 12px;font-size:14px">Empernada en obra<span style="color:#94A3B8">›</span></div></div>
+          <div style="display:flex;flex-direction:column;gap:6px"><label style="font-size:12px;font-weight:600;color:#475569">Acabado</label><div style="height:42px;border:1px solid #CBD5E1;border-radius:10px;background:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 12px;font-size:14px">Galvanizado en caliente<span style="color:#94A3B8">›</span></div></div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <label style="font-size:12px;font-weight:600;color:#475569">Consideraciones libres</label>
+          <div style="min-height:120px;border:1px solid #CBD5E1;border-radius:12px;background:#fff;padding:12px 14px;font-size:14px;line-height:1.6;color:#334155">Montaje nocturno restringido. Grúa máxima disponible en sitio: 80 t. Cliente exige perfiles nacionales cuando exista equivalencia. Entrega parcial del anillo perimetral antes de la semana 14.</div>
+        </div>
+      </div>
+      </sc-if>
+    </div>
+  </div>
+
+  <div style="height:70px;flex:none;background:#fff;border-top:1px solid #E3E8EF;display:flex;align-items:center;padding:0 44px;gap:14px">
+    <span style="font-size:12.5px;color:#94A3B8">Borrador guardado automáticamente · 14:32</span>
+    <div style="margin-left:auto;display:flex;gap:10px">
+      <div onClick="{{ prevStep }}" style="height:42px;padding:0 18px;border:1px solid #CBD5E1;border-radius:10px;background:#fff;display:flex;align-items:center;font-size:14px;font-weight:500;cursor:pointer" style-hover="background:#F1F5F9">Atrás</div>
+      <div onClick="{{ nextStep }}" style="{{ primaryCtaStyle }}" style-hover="background:#16352a">{{ primaryCtaLabel }}</div>
+    </div>
+  </div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isP4 }}" hint-placeholder-val="{{ true }}">
+<div data-screen-label="P4 Generación" style="width:1440px;height:900px;background:#1E2A3A;border-radius:14px;overflow:hidden;box-shadow:0 24px 60px rgba(16,24,40,.16);display:flex;flex-direction:column;color:#fff">
+  <div style="height:56px;flex:none;display:flex;align-items:center;padding:0 20px;gap:16px;border-bottom:1px solid rgba(255,255,255,.09)">
+    <div style="display:flex;align-items:center;gap:9px"><div style="width:9px;height:9px;background:#6EC6D8;border-radius:2px"></div><span style="font-family:'Space Grotesk';font-weight:600;font-size:14px">Kabunik Bid</span></div>
+    <span style="font-size:12.5px;color:rgba(255,255,255,.5)">CNARCCS — Domo · generando solución</span>
+    <div style="margin-left:auto;font-size:12.5px;color:rgba(255,255,255,.5)">Puedes salir: te avisamos al terminar</div>
+  </div>
+  <div style="flex:1;display:flex;align-items:center;justify-content:center;padding:0 80px">
+    <div style="display:grid;grid-template-columns:520px 1fr;gap:80px;align-items:center;width:100%;max-width:1180px">
+      <div style="display:flex;flex-direction:column;gap:26px">
+        <div>
+          <div style="font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#6EC6D8;margin-bottom:10px">Agente estructural · en curso</div>
+          <div style="font-family:'Space Grotesk';font-size:34px;font-weight:600;line-height:1.12;letter-spacing:-.4px">Construyendo la solución estructural</div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:0">
+          <sc-for list="{{ stages }}" as="st" hint-placeholder-count="4">
+            <div style="display:flex;gap:14px;align-items:flex-start;padding:14px 0;border-bottom:1px solid rgba(255,255,255,.07)">
+              <div style="{{ st.dot }}"></div>
+              <div style="flex:1">
+                <div style="{{ st.titleStyle }}">{{ st.title }}</div>
+                <div style="font-size:12.5px;color:rgba(255,255,255,.45);margin-top:3px;font-family:'JetBrains Mono'">{{ st.detail }}</div>
+              </div>
+              <span style="font-size:11.5px;color:rgba(255,255,255,.4);font-family:'JetBrains Mono'">{{ st.time }}</span>
+            </div>
+          </sc-for>
+        </div>
+        <div style="height:4px;background:rgba(255,255,255,.1);border-radius:99px;overflow:hidden;position:relative"><div style="position:absolute;inset:0;width:64%;background:#6EC6D8;border-radius:99px"></div></div>
+      </div>
+      <div style="border:1px solid rgba(255,255,255,.12);border-radius:16px;background:rgba(255,255,255,.03);padding:22px;display:flex;flex-direction:column;gap:14px">
+        <div style="font-size:12px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:rgba(255,255,255,.5)">Vista previa de geometría</div>
+        <div style="height:360px;border-radius:12px;background:#16202D;display:flex;align-items:center;justify-content:center;overflow:hidden">{{ viewerDark }}</div>
+        <div style="display:flex;gap:26px;font-family:'JetBrains Mono';font-size:12.5px">
+          <div><div style="color:rgba(255,255,255,.45);font-size:11px">Elementos</div><div style="font-size:17px;font-weight:600">1,470</div></div>
+          <div><div style="color:rgba(255,255,255,.45);font-size:11px">Tonelaje</div><div style="font-size:17px;font-weight:600">734 t</div></div>
+          <div><div style="color:rgba(255,255,255,.45);font-size:11px">Alertas</div><div style="font-size:17px;font-weight:600;color:#F5A623">3</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isWs }}" hint-placeholder-val="{{ true }}">
+<div data-screen-label="P5 Workspace" style="width:1440px;height:900px;background:#F4F6F9;border-radius:14px;overflow:hidden;box-shadow:0 24px 60px rgba(16,24,40,.16);display:flex;flex-direction:column;position:relative">
+
+  <div style="height:56px;flex:none;background:#1E2A3A;display:flex;align-items:center;padding:0 16px;gap:14px">
+    <div style="display:flex;align-items:center;gap:9px"><div style="width:9px;height:9px;background:#6EC6D8;border-radius:2px"></div><span style="font-family:'Space Grotesk';font-weight:600;font-size:14px;color:#fff;letter-spacing:-.2px">Bid platform</span></div>
+    <span style="color:rgba(255,255,255,.28)">/</span>
+    <span style="font-size:13.5px;color:#fff;font-weight:500">CNARCCS — Domo</span>
+    <span style="font-family:'JetBrains Mono';font-size:11px;color:#6EC6D8;border:1px solid rgba(110,198,216,.4);padding:2px 7px;border-radius:6px">{{ modelVersion }}</span>
+    <span style="{{ sessionChipStyle }}"><span style="width:6px;height:6px;border-radius:50%;background:currentColor;animation:pulseDot 1.6s infinite"></span>{{ sessionLabel }}</span>
+    <div style="margin-left:auto;display:flex;align-items:center;gap:10px">
+      <div style="height:34px;padding:0 14px;border:1px solid rgba(255,255,255,.18);border-radius:9px;color:rgba(255,255,255,.8);font-size:13px;display:flex;align-items:center;cursor:pointer" style-hover="background:rgba(255,255,255,.08)">Historial</div>
+      <div style="{{ topCtaStyle }}">{{ topCtaLabel }}</div>
+    </div>
+  </div>
+
+  <div style="flex:1;display:flex;overflow:hidden;position:relative">
+
+    <div style="width:320px;flex:none;background:#fff;display:flex;flex-direction:column;overflow:hidden;border-right:1px solid #E3E8EF;{{ railExtra }}">
+      <div style="height:44px;flex:none;display:flex;align-items:center;padding:0 14px;border-bottom:1px solid #E3E8EF;gap:8px">
+        <span style="font-size:12px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:#475569">Edición conversacional</span>
+        <span style="margin-left:auto;font-size:16px;color:#94A3B8;cursor:pointer">‹</span>
+      </div>
+      <div style="flex:1;overflow:auto;padding:14px;display:flex;flex-direction:column;gap:12px">
+        <sc-if value="{{ isModeA }}" hint-placeholder-val="{{ true }}">
+          <div style="border:1px solid #E3E8EF;border-radius:12px;background:#F8FAFC;padding:14px">
+            <div style="font-size:12.5px;font-weight:700;margin-bottom:6px">El modelo está listo para revisión</div>
+            <div style="font-size:12.5px;line-height:1.55;color:#64748B">Pide cambios en lenguaje natural: perfiles, grados, tipo de conexión, arriostramiento. Cada cambio se aplica al modelo y se registra aquí.</div>
+          </div>
+          <div style="font-size:11px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:#94A3B8;margin-top:4px">Sugerencias</div>
+          <sc-for list="{{ suggestions }}" as="sg" hint-placeholder-count="3">
+            <div style="border:1px solid #E3E8EF;border-radius:10px;background:#fff;padding:10px 12px;font-size:12.5px;color:#334155;cursor:pointer" style-hover="background:#F1F5F9">{{ sg.t }}</div>
+          </sc-for>
+        </sc-if>
+        <sc-if value="{{ showChatThread }}" hint-placeholder-val="{{ true }}">
+          {{ chatThread }}
+        </sc-if>
+      </div>
+      <div style="flex:none;border-top:1px solid #E3E8EF;padding:12px">
+        <div style="border:1px solid #CBD5E1;border-radius:12px;background:#fff;padding:10px 12px;min-height:66px;display:flex;flex-direction:column;gap:8px">
+          <span style="font-size:13px;color:#94A3B8">Describe el cambio…</span>
+          <div style="display:flex;align-items:center;gap:8px;margin-top:auto">
+            <span style="font-size:11px;color:#94A3B8;font-family:'JetBrains Mono'">⌘↵</span>
+            <div style="margin-left:auto;width:30px;height:30px;border-radius:8px;background:#6D5BD0;color:#fff;display:flex;align-items:center;justify-content:center;font-size:14px">↑</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="flex:1;position:relative;background:#EDF1F5;overflow:hidden;display:flex;align-items:center;justify-content:center">
+      {{ viewer }}
+      <sc-if value="{{ isModeA }}" hint-placeholder-val="{{ true }}">
+        <div style="position:absolute;top:14px;left:16px;right:16px;background:#fff;border:1px solid #F0C9C4;border-left:4px solid #B0392F;border-radius:12px;padding:14px 16px;display:flex;align-items:center;gap:16px;box-shadow:0 6px 20px rgba(16,24,40,.08)">
+          <div style="flex:1">
+            <div style="font-size:14px;font-weight:700;color:#B0392F">Revisa el BOM antes de cotizar</div>
+            <div style="font-size:12.5px;color:#64748B;margin-top:3px">Ningún escenario ni oferta se calcula sobre un BOM sin aprobar. 3 alertas de validación abiertas.</div>
+          </div>
+          <div style="height:38px;padding:0 18px;border-radius:10px;background:#B0392F;color:#fff;font-size:13.5px;font-weight:600;display:flex;align-items:center;cursor:pointer" style-hover="background:#8f2e26">Aprobar BOM</div>
+        </div>
+      </sc-if>
+      <div style="position:absolute;top:14px;right:16px;display:flex;flex-direction:column;gap:6px">
+        <sc-for list="{{ viewerTools }}" as="vt" hint-placeholder-count="4">
+          <div style="{{ vt.style }}" title="{{ vt.label }}">{{ vt.icon }}</div>
+        </sc-for>
+      </div>
+      <div style="position:absolute;left:16px;bottom:14px;display:flex;align-items:center;gap:10px">
+        <div style="background:rgba(255,255,255,.92);border:1px solid #E3E8EF;border-radius:9px;padding:7px 11px;font-family:'JetBrains Mono';font-size:11px;color:#475569">Isométrica NE · 1:180</div>
+        <div style="background:rgba(255,255,255,.92);border:1px solid #E3E8EF;border-radius:9px;padding:7px 11px;font-family:'JetBrains Mono';font-size:11px;color:#475569">|——| 10 m</div>
+      </div>
+      <sc-if value="{{ isModeB }}" hint-placeholder-val="{{ true }}">
+        <div style="position:absolute;right:16px;bottom:14px;background:#6D5BD0;color:#fff;border-radius:10px;padding:9px 13px;font-size:12.5px;font-weight:600;display:flex;align-items:center;gap:8px;box-shadow:0 8px 22px rgba(109,91,208,.35)"><span style="width:7px;height:7px;border-radius:50%;background:#fff;animation:pulseDot 1.2s infinite"></span>24 elementos afectados · reconstruyendo</div>
+      </sc-if>
+      <sc-if value="{{ hasSelection }}" hint-placeholder-val="{{ true }}">
+        <div style="position:absolute;left:50%;top:52%;transform:translate(-50%,0);background:#1F9E91;color:#fff;font-family:'JetBrains Mono';font-size:11px;padding:4px 8px;border-radius:6px;box-shadow:0 4px 12px rgba(31,158,145,.4)">{{ selectedTag }}</div>
+      </sc-if>
+    </div>
+
+    <div style="{{ panelStyle }}">
+      <sc-if value="{{ isModeC }}" hint-placeholder-val="{{ true }}">
+        <div style="flex:1;display:flex;flex-direction:column;overflow:hidden">
+          <div style="height:44px;flex:none;display:flex;align-items:center;gap:10px;padding:0 16px;border-bottom:1px solid #E3E8EF">
+            <span style="font-size:12px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:#475569">Escenarios</span>
+            <span style="font-size:11px;background:#E8F6F4;color:#17786e;padding:3px 8px;border-radius:999px;font-weight:600">Vigentes · v2</span>
+            <div style="margin-left:auto;display:flex;border:1px solid #E3E8EF;border-radius:8px;overflow:hidden">
+              <span style="font-size:11.5px;padding:5px 10px;color:#64748B;cursor:pointer">v1</span>
+              <span style="font-size:11.5px;padding:5px 10px;background:#1E2A3A;color:#fff;font-weight:600">v2</span>
+            </div>
+          </div>
+          <div style="flex:1;overflow:auto;padding:16px;display:flex;flex-direction:column;gap:12px">
+            <sc-for list="{{ scenarios }}" as="e" hint-placeholder-count="3">
+              <div style="{{ e.cardStyle }}">
+                <div style="display:flex;align-items:baseline;gap:8px">
+                  <span style="font-family:'Space Grotesk';font-size:15px;font-weight:600">{{ e.name }}</span>
+                  <span style="{{ e.tagStyle }}">{{ e.tag }}</span>
+                  <span style="margin-left:auto;font-family:'JetBrains Mono';font-size:12px;color:#64748B">{{ e.plazo }}</span>
+                </div>
+                <div style="display:flex;align-items:baseline;gap:10px;margin-top:10px">
+                  <span style="font-family:'JetBrains Mono';font-size:24px;font-weight:600;letter-spacing:-.5px">{{ e.ton }}</span>
+                  <span style="font-size:11.5px;color:#94A3B8">$/ton</span>
+                  <span style="margin-left:auto;font-family:'JetBrains Mono';font-size:14px;font-weight:600;color:#1F9E91">{{ e.total }}</span>
+                </div>
+                <div style="height:6px;border-radius:99px;background:#EEF2F6;margin:12px 0 10px;overflow:hidden"><div style="{{ e.barStyle }}"></div></div>
+                <div style="font-size:12px;line-height:1.5;color:#64748B">{{ e.assum }}</div>
+              </div>
+            </sc-for>
+            <div style="border:1px solid #E3E8EF;border-radius:14px;background:#fff;padding:14px">
+              <div style="font-size:12px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:#475569;margin-bottom:12px">Flujo de caja · E2</div>
+              <div style="display:flex;align-items:flex-end;gap:6px;height:96px">
+                <div style="flex:1;height:88%;background:#1F9E91;border-radius:4px 4px 0 0"></div>
+                <div style="flex:1;height:34%;background:#BFDDD9;border-radius:4px 4px 0 0"></div>
+                <div style="flex:1;height:46%;background:#BFDDD9;border-radius:4px 4px 0 0"></div>
+                <div style="flex:1;height:58%;background:#BFDDD9;border-radius:4px 4px 0 0"></div>
+                <div style="flex:1;height:62%;background:#BFDDD9;border-radius:4px 4px 0 0"></div>
+                <div style="flex:1;height:55%;background:#BFDDD9;border-radius:4px 4px 0 0"></div>
+                <div style="flex:1;height:44%;background:#BFDDD9;border-radius:4px 4px 0 0"></div>
+                <div style="flex:1;height:30%;background:#BFDDD9;border-radius:4px 4px 0 0"></div>
+                <div style="flex:1;height:18%;background:#F5A623;border-radius:4px 4px 0 0"></div>
+              </div>
+              <div style="display:flex;justify-content:space-between;font-family:'JetBrains Mono';font-size:10px;color:#94A3B8;margin-top:6px"><span>Anticipo 30%</span><span>Avances mensuales</span><span>Retención 5%</span></div>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ showTabs }}" hint-placeholder-val="{{ true }}">
+        <div style="flex:1;display:flex;flex-direction:column;overflow:hidden">
+          <div style="height:44px;flex:none;display:flex;align-items:stretch;border-bottom:1px solid #E3E8EF;padding:0 6px">
+            <sc-for list="{{ tabs }}" as="tb" hint-placeholder-count="3">
+              <div onClick="{{ tb.go }}" style="{{ tb.style }}">{{ tb.label }}<span style="{{ tb.badgeStyle }}">{{ tb.count }}</span></div>
+            </sc-for>
+          </div>
+
+          <sc-if value="{{ isTabBom }}" hint-placeholder-val="{{ true }}">
+            <div style="flex:none;padding:12px 14px;border-bottom:1px solid #E3E8EF;background:#F8FAFC;display:flex;flex-direction:column;gap:8px">
+              <div style="display:flex;align-items:center;gap:8px"><span style="font-size:12.5px;font-weight:700">BOM · 1,470 elementos</span><span style="{{ bomStateStyle }}">{{ bomStateLabel }}</span></div>
+              <div style="font-size:11.5px;color:#64748B;line-height:1.45">{{ bomStateNote }}</div>
+            </div>
+            <div style="flex:1;overflow:auto">
+              <div style="display:grid;grid-template-columns:64px 1fr 52px 44px 52px;gap:0;position:sticky;top:0;background:#fff;border-bottom:1px solid #E3E8EF;font-size:10.5px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;color:#94A3B8;padding:8px 12px">
+                <span>Marca</span><span>Perfil</span><span style="text-align:right">Cant.</span><span style="text-align:right">t</span><span style="text-align:right">Origen</span>
+              </div>
+              <sc-for list="{{ bom }}" as="r" hint-placeholder-count="8">
+                <div onClick="{{ r.go }}" style="{{ r.rowStyle }}">
+                  <span style="font-family:'JetBrains Mono';font-size:11.5px;color:#475569">{{ r.marca }}</span>
+                  <span style="font-size:12.5px">{{ r.perfil }} <span style="color:#94A3B8;font-size:11px">{{ r.grado }}</span></span>
+                  <span style="font-family:'JetBrains Mono';font-size:11.5px;text-align:right">{{ r.cant }}</span>
+                  <span style="font-family:'JetBrains Mono';font-size:11.5px;text-align:right;font-weight:600">{{ r.peso }}</span>
+                  <span style="text-align:right"><span style="font-size:9.5px;background:#E8F6F4;color:#17786e;padding:2px 5px;border-radius:5px;font-weight:600">tool ✓</span></span>
+                </div>
+              </sc-for>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ isTabAlerts }}" hint-placeholder-val="{{ true }}">
+            <div style="flex:1;overflow:auto;padding:14px;display:flex;flex-direction:column;gap:10px">
+              <sc-for list="{{ alerts }}" as="a" hint-placeholder-count="3">
+                <div style="{{ a.cardStyle }}">
+                  <div style="display:flex;align-items:center;gap:8px"><span style="{{ a.pillStyle }}">{{ a.sev }}</span><span style="margin-left:auto;font-family:'JetBrains Mono';font-size:10.5px;color:#94A3B8">{{ a.code }}</span></div>
+                  <div style="font-size:13px;font-weight:600;margin-top:8px;line-height:1.35">{{ a.title }}</div>
+                  <div style="font-size:12px;color:#64748B;margin-top:5px;line-height:1.5">{{ a.body }}</div>
+                  <div style="display:flex;gap:8px;margin-top:10px">
+                    <span style="font-size:11.5px;font-weight:600;color:#1F9E91;cursor:pointer">Ver en el modelo ›</span>
+                    <span style="font-size:11.5px;color:#94A3B8;cursor:pointer">Ignorar</span>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ isTabProps }}" hint-placeholder-val="{{ true }}">
+            <div style="flex:1;overflow:auto;padding:14px;display:flex;flex-direction:column;gap:14px">
+              <div style="border:1px solid #E3E8EF;border-radius:12px;background:#fff;overflow:hidden">
+                <div style="padding:12px 14px;border-bottom:1px solid #E3E8EF;display:flex;align-items:center;gap:8px"><span style="width:8px;height:8px;border-radius:2px;background:#1F9E91"></span><span style="font-family:'JetBrains Mono';font-size:12px;font-weight:600">{{ selectedTag }}</span></div>
+                <sc-for list="{{ props }}" as="p" hint-placeholder-count="8">
+                  <div style="display:flex;justify-content:space-between;padding:9px 14px;border-bottom:1px solid #F1F5F9;font-size:12.5px"><span style="color:#64748B">{{ p.k }}</span><span style="font-family:'JetBrains Mono';font-weight:500">{{ p.v }}</span></div>
+                </sc-for>
+              </div>
+              <div style="border:1px solid #E3E8EF;border-radius:12px;background:#F8FAFC;padding:13px">
+                <div style="font-size:11px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:#94A3B8;margin-bottom:7px">Trazabilidad</div>
+                <div style="font-size:12px;line-height:1.55;color:#475569">Peso calculado por <span style="font-family:'JetBrains Mono';font-size:11.5px;background:#E8F6F4;color:#17786e;padding:1px 5px;border-radius:4px">tool:weight_calc</span> sobre kg/m del catálogo METALITEC v4. Costo unitario de <span style="font-family:'JetBrains Mono';font-size:11.5px;background:#E8F6F4;color:#17786e;padding:1px 5px;border-radius:4px">tool:price_lookup</span>, lista 02/07.</div>
+              </div>
+            </div>
+          </sc-if>
+        </div>
+      </sc-if>
+    </div>
+  </div>
+
+  <div style="height:40px;flex:none;background:#fff;border-top:1px solid #E3E8EF;display:flex;align-items:center;padding:0 16px;gap:22px;font-family:'JetBrains Mono';font-size:12px">
+    <span style="color:#94A3B8">Tonelaje <span style="color:#1E2A3A;font-weight:600">{{ ftTon }}</span></span>
+    <span style="color:#94A3B8">Elementos <span style="color:#1E2A3A;font-weight:600">1,470</span></span>
+    <span style="color:#94A3B8">Alertas <span style="color:#F5A623;font-weight:600">{{ ftAlerts }}</span></span>
+    <span style="color:#94A3B8">Costo estimado <span style="{{ ftCostStyle }}">{{ ftCost }}</span></span>
+    <span style="{{ ftBadgeStyle }}">{{ ftBadge }}</span>
+    <span style="margin-left:auto;color:#94A3B8">Modelo {{ modelVersion }} · sincronizado 14:52</span>
+  </div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isP6 }}" hint-placeholder-val="{{ true }}">
+<div data-screen-label="P6 BOM" style="width:1440px;height:900px;background:#F4F6F9;border-radius:14px;overflow:hidden;box-shadow:0 24px 60px rgba(16,24,40,.16);display:flex;flex-direction:column">
+  <div style="height:56px;flex:none;background:#1E2A3A;display:flex;align-items:center;padding:0 16px;gap:14px">
+    <div style="display:flex;align-items:center;gap:9px"><div style="width:9px;height:9px;background:#6EC6D8;border-radius:2px"></div><span style="font-family:'Space Grotesk';font-weight:600;font-size:14px;color:#fff">Kabunik Bid</span></div>
+    <span style="color:rgba(255,255,255,.28)">/</span><span style="font-size:13.5px;color:#fff;font-weight:500">CNARCCS — Domo</span>
+    <span style="color:rgba(255,255,255,.28)">/</span><span style="font-size:13.5px;color:rgba(255,255,255,.75)">BOM</span>
+    <span style="font-family:'JetBrains Mono';font-size:11px;color:#6EC6D8;border:1px solid rgba(110,198,216,.4);padding:2px 7px;border-radius:6px">v2</span>
+    <div style="margin-left:auto;display:flex;align-items:center;gap:10px">
+      <div style="height:34px;padding:0 14px;border:1px solid rgba(255,255,255,.18);border-radius:9px;color:rgba(255,255,255,.8);font-size:13px;display:flex;align-items:center">Exportar CSV</div>
+      <div style="height:34px;padding:0 16px;border-radius:9px;background:#B0392F;color:#fff;font-size:13px;font-weight:600;display:flex;align-items:center">Re-aprobar BOM</div>
+    </div>
+  </div>
+
+  <div style="flex:none;background:#fff;border-bottom:1px solid #E3E8EF;padding:16px 20px;display:flex;align-items:center;gap:28px">
+    <div style="display:flex;flex-direction:column;gap:3px"><span style="font-size:11px;color:#94A3B8;text-transform:uppercase;letter-spacing:.6px;font-weight:700">Peso cobrable</span><span style="font-family:'JetBrains Mono';font-size:22px;font-weight:600">734.0 t</span></div>
+    <div style="width:1px;height:34px;background:#E3E8EF"></div>
+    <div style="display:flex;flex-direction:column;gap:3px"><span style="font-size:11px;color:#94A3B8;text-transform:uppercase;letter-spacing:.6px;font-weight:700">Elementos</span><span style="font-family:'JetBrains Mono';font-size:22px;font-weight:600">1,470</span></div>
+    <div style="width:1px;height:34px;background:#E3E8EF"></div>
+    <div style="display:flex;flex-direction:column;gap:3px"><span style="font-size:11px;color:#94A3B8;text-transform:uppercase;letter-spacing:.6px;font-weight:700">Marcas</span><span style="font-family:'JetBrains Mono';font-size:22px;font-weight:600">28</span></div>
+    <div style="margin-left:auto;display:flex;align-items:center;gap:12px;border:1px solid #F5D7A6;background:#FEF7EA;border-radius:12px;padding:10px 14px;max-width:520px">
+      <span style="font-size:11px;font-weight:700;color:#9A6408;background:#FBE7C2;padding:3px 8px;border-radius:999px;white-space:nowrap">Re-abierto</span>
+      <span style="font-size:12.5px;color:#7C5308;line-height:1.45">Aprobado por <b>J. Pérez · 12/07 14:05 · v1</b>. La edición “columnas N3 → HSS 10x10x½” invalidó la aprobación.</span>
+    </div>
+  </div>
+
+  <div style="flex:1;display:flex;overflow:hidden">
+    <div style="flex:1;overflow:auto;background:#fff">
+      <div style="display:grid;grid-template-columns:92px 168px 84px 70px 84px 82px 96px 108px;position:sticky;top:0;background:#F8FAFC;border-bottom:1px solid #E3E8EF;font-size:10.5px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;color:#94A3B8;padding:10px 20px;z-index:2">
+        <span>Marca</span><span>Perfil</span><span>Grado</span><span style="text-align:right">Cant.</span><span style="text-align:right">Long. (m)</span><span style="text-align:right">kg/m</span><span style="text-align:right">Peso (t)</span><span style="text-align:right">Origen</span>
+      </div>
+      <sc-for list="{{ bom }}" as="r" hint-placeholder-count="8">
+        <div onClick="{{ r.go }}" style="{{ r.wideRowStyle }}">
+          <span style="font-family:'JetBrains Mono';font-size:12px;color:#475569">{{ r.marca }}</span>
+          <span style="font-size:13px;font-weight:500">{{ r.perfil }}</span>
+          <span style="font-size:12.5px;color:#64748B">{{ r.grado }}</span>
+          <span style="font-family:'JetBrains Mono';font-size:12px;text-align:right">{{ r.cant }}</span>
+          <span style="font-family:'JetBrains Mono';font-size:12px;text-align:right;color:#475569">{{ r.long }}</span>
+          <span style="font-family:'JetBrains Mono';font-size:12px;text-align:right;color:#475569">{{ r.kgm }}</span>
+          <span style="font-family:'JetBrains Mono';font-size:12.5px;text-align:right;font-weight:600">{{ r.peso }}</span>
+          <span style="text-align:right"><span style="{{ r.originStyle }}">{{ r.origin }}</span></span>
+        </div>
+      </sc-for>
+      <div style="display:grid;grid-template-columns:92px 168px 84px 70px 84px 82px 96px 108px;padding:12px 20px;background:#F8FAFC;border-top:1px solid #E3E8EF;font-family:'JetBrains Mono';font-size:12.5px;font-weight:600">
+        <span style="grid-column:1 / 4;font-family:'DM Sans';font-size:12.5px;color:#64748B">Subtotal mostrado · 8 de 28 marcas</span><span style="text-align:right">1,318</span><span></span><span></span><span style="text-align:right">522.1</span><span></span>
+      </div>
+    </div>
+
+    <div style="width:400px;flex:none;border-left:1px solid #E3E8EF;background:#F8FAFC;display:flex;flex-direction:column">
+      <div style="height:280px;flex:none;background:#EDF1F5;border-bottom:1px solid #E3E8EF;position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden">
+        {{ viewerMini }}
+        <div style="position:absolute;left:12px;top:12px;background:#1F9E91;color:#fff;font-family:'JetBrains Mono';font-size:11px;padding:4px 9px;border-radius:6px">{{ selectedTag }} resaltado</div>
+      </div>
+      <div style="padding:16px;display:flex;flex-direction:column;gap:14px;overflow:auto">
+        <div style="font-size:12px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:#475569">Selección bidireccional</div>
+        <div style="font-size:12.5px;line-height:1.55;color:#64748B">Al seleccionar una fila el visor aísla y resalta esos elementos. Al hacer clic en el modelo se desplaza la grilla a la marca correspondiente.</div>
+        <div style="border:1px solid #E3E8EF;border-radius:12px;background:#fff;overflow:hidden">
+          <sc-for list="{{ props }}" as="p" hint-placeholder-count="6">
+            <div style="display:flex;justify-content:space-between;padding:9px 13px;border-bottom:1px solid #F1F5F9;font-size:12.5px"><span style="color:#64748B">{{ p.k }}</span><span style="font-family:'JetBrains Mono';font-weight:500">{{ p.v }}</span></div>
+          </sc-for>
+        </div>
+        <sc-if value="{{ approvalPartial }}" hint-placeholder-val="{{ true }}">
+          <div style="border:1px solid #E3E8EF;border-radius:12px;background:#fff;padding:13px">
+            <div style="font-size:12px;font-weight:700;margin-bottom:9px">Aprobación por grupos</div>
+            <div style="display:flex;flex-direction:column;gap:7px;font-size:12.5px;color:#475569">
+              <label style="display:flex;align-items:center;gap:8px"><input type="checkbox" checked="">Columnas (96)</label>
+              <label style="display:flex;align-items:center;gap:8px"><input type="checkbox" checked="">Vigas principales (330)</label>
+              <label style="display:flex;align-items:center;gap:8px"><input type="checkbox">Arriostres (440)</label>
+              <label style="display:flex;align-items:center;gap:8px"><input type="checkbox">Placas y conexiones (604)</label>
+            </div>
+          </div>
+        </sc-if>
+      </div>
+    </div>
+  </div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isP8 }}" hint-placeholder-val="{{ true }}">
+<div data-screen-label="P8 Chat e historial" style="width:1440px;height:900px;background:#F4F6F9;border-radius:14px;overflow:hidden;box-shadow:0 24px 60px rgba(16,24,40,.16);display:flex;flex-direction:column">
+  <div style="height:56px;flex:none;background:#1E2A3A;display:flex;align-items:center;padding:0 16px;gap:14px">
+    <div style="display:flex;align-items:center;gap:9px"><div style="width:9px;height:9px;background:#6EC6D8;border-radius:2px"></div><span style="font-family:'Space Grotesk';font-weight:600;font-size:14px;color:#fff">Kabunik Bid</span></div>
+    <span style="color:rgba(255,255,255,.28)">/</span><span style="font-size:13.5px;color:#fff;font-weight:500">CNARCCS — Domo</span>
+    <span style="color:rgba(255,255,255,.28)">/</span><span style="font-size:13.5px;color:rgba(255,255,255,.75)">Edición e historial</span>
+    <div style="margin-left:auto;font-size:12.5px;color:rgba(255,255,255,.5)">Detalle del rail izquierdo del workspace</div>
+  </div>
+  <div style="flex:1;display:flex;overflow:hidden">
+    <div style="width:560px;flex:none;background:#fff;border-right:1px solid #E3E8EF;display:flex;flex-direction:column">
+      <div style="height:44px;flex:none;display:flex;align-items:center;padding:0 18px;border-bottom:1px solid #E3E8EF"><span style="font-size:12px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:#475569">Conversación estructurada</span></div>
+      <div style="flex:1;overflow:auto;padding:18px;display:flex;flex-direction:column;gap:14px">{{ chatThreadFull }}</div>
+      <div style="flex:none;border-top:1px solid #E3E8EF;padding:14px 18px">
+        <div style="border:1px solid #CBD5E1;border-radius:12px;background:#fff;padding:12px 14px;min-height:72px;display:flex;flex-direction:column;gap:10px">
+          <span style="font-size:13.5px;color:#94A3B8">Describe el cambio…</span>
+          <div style="display:flex;align-items:center;gap:8px">
+            <span style="font-size:11px;color:#64748B;border:1px solid #E3E8EF;border-radius:6px;padding:3px 7px;cursor:pointer">@marca</span>
+            <span style="font-size:11px;color:#64748B;border:1px solid #E3E8EF;border-radius:6px;padding:3px 7px;cursor:pointer">#nivel</span>
+            <span style="font-size:11px;color:#64748B;border:1px solid #E3E8EF;border-radius:6px;padding:3px 7px;cursor:pointer">catálogo</span>
+            <div style="margin-left:auto;width:32px;height:32px;border-radius:8px;background:#6D5BD0;color:#fff;display:flex;align-items:center;justify-content:center">↑</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div style="flex:1;display:flex;flex-direction:column;overflow:hidden">
+      <div style="height:44px;flex:none;display:flex;align-items:center;padding:0 20px;border-bottom:1px solid #E3E8EF;background:#fff;gap:10px">
+        <span style="font-size:12px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:#475569">Historial de cambios</span>
+        <span style="font-size:11px;background:#EEF2F6;color:#475569;padding:3px 8px;border-radius:999px;font-weight:600">v1 → v2</span>
+        <span style="margin-left:auto;font-size:12.5px;color:#94A3B8">Cada entrada es revertible; revertir crea una nueva versión</span>
+      </div>
+      <div style="flex:1;overflow:auto;padding:22px 26px">
+        <sc-for list="{{ timeline }}" as="tl" hint-placeholder-count="6">
+          <div style="display:grid;grid-template-columns:104px 24px 1fr;gap:0;align-items:stretch">
+            <div style="text-align:right;padding:14px 12px 0 0;font-family:'JetBrains Mono';font-size:11.5px;color:#94A3B8">{{ tl.time }}</div>
+            <div style="position:relative;display:flex;justify-content:center"><div style="width:1px;background:#E3E8EF;height:100%"></div><div style="{{ tl.dot }}"></div></div>
+            <div style="padding:8px 0 14px 16px">
+              <div style="{{ tl.cardStyle }}">
+                <div style="display:flex;align-items:center;gap:8px"><span style="{{ tl.pill }}">{{ tl.state }}</span><span style="font-family:'JetBrains Mono';font-size:11px;color:#94A3B8">{{ tl.ver }}</span><span style="margin-left:auto;font-size:11.5px;color:#94A3B8">{{ tl.who }}</span></div>
+                <div style="font-size:13.5px;font-weight:600;margin-top:8px;line-height:1.35">{{ tl.title }}</div>
+                <div style="font-size:12.5px;color:#64748B;margin-top:5px;line-height:1.5">{{ tl.delta }}</div>
+                <div style="display:flex;gap:14px;margin-top:10px"><span style="font-size:11.5px;font-weight:600;color:#1F9E91;cursor:pointer">Ver diff ›</span><span style="{{ tl.revertStyle }}">Revertir</span></div>
+              </div>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isP9 }}" hint-placeholder-val="{{ true }}">
+<div data-screen-label="P9 Escenarios" style="width:1440px;height:1080px;background:#F4F6F9;border-radius:14px;overflow:hidden;box-shadow:0 24px 60px rgba(16,24,40,.16);display:flex;flex-direction:column">
+  <div style="height:56px;flex:none;background:#1E2A3A;display:flex;align-items:center;padding:0 16px;gap:14px">
+    <div style="display:flex;align-items:center;gap:9px"><div style="width:9px;height:9px;background:#6EC6D8;border-radius:2px"></div><span style="font-family:'Space Grotesk';font-weight:600;font-size:14px;color:#fff">Kabunik Bid</span></div>
+    <span style="color:rgba(255,255,255,.28)">/</span><span style="font-size:13.5px;color:#fff;font-weight:500">CNARCCS — Domo</span>
+    <span style="color:rgba(255,255,255,.28)">/</span><span style="font-size:13.5px;color:rgba(255,255,255,.75)">Escenarios</span>
+    <div style="margin-left:auto;display:flex;align-items:center;gap:10px">
+      <div style="display:flex;border:1px solid rgba(255,255,255,.18);border-radius:9px;overflow:hidden;height:34px">
+        <span style="font-size:12.5px;padding:0 12px;display:flex;align-items:center;color:rgba(255,255,255,.6);cursor:pointer">Modelo v1</span>
+        <span style="font-size:12.5px;padding:0 12px;display:flex;align-items:center;background:rgba(255,255,255,.14);color:#fff;font-weight:600">v2</span>
+      </div>
+      <div style="height:34px;padding:0 16px;border-radius:9px;background:#1F9E91;color:#fff;font-size:13px;font-weight:600;display:flex;align-items:center">Emitir oferta</div>
+    </div>
+  </div>
+
+  <div style="flex:1;overflow:auto;padding:24px 26px;display:flex;flex-direction:column;gap:20px">
+    <div style="display:flex;align-items:center;gap:12px">
+      <div style="font-family:'Space Grotesk';font-size:20px;font-weight:600">Comparación de escenarios</div>
+      <span style="font-size:11px;background:#E8F6F4;color:#17786e;padding:4px 9px;border-radius:999px;font-weight:600">Vigentes · generados sobre v2 · 14:58</span>
+      <span style="margin-left:auto;font-size:12.5px;color:#64748B">Base: 734 t cobrables · calibración METALITEC v4</span>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px">
+      <sc-for list="{{ scenarios }}" as="e" hint-placeholder-count="3">
+        <div style="{{ e.bigCardStyle }}">
+          <div style="display:flex;align-items:center;gap:8px">
+            <span style="font-family:'Space Grotesk';font-size:17px;font-weight:600">{{ e.name }}</span>
+            <span style="{{ e.tagStyle }}">{{ e.tag }}</span>
+            <span style="{{ e.selStyle }}">{{ e.selLabel }}</span>
+          </div>
+          <div style="display:flex;align-items:baseline;gap:8px;margin-top:16px">
+            <span style="font-family:'JetBrains Mono';font-size:34px;font-weight:600;letter-spacing:-1px">{{ e.ton }}</span>
+            <span style="font-size:12.5px;color:#94A3B8">$/ton</span>
+          </div>
+          <div style="display:flex;gap:20px;margin-top:14px;padding-top:14px;border-top:1px solid #E3E8EF">
+            <div><div style="font-size:11px;color:#94A3B8;text-transform:uppercase;letter-spacing:.5px;font-weight:700">Total</div><div style="font-family:'JetBrains Mono';font-size:16px;font-weight:600;margin-top:3px">{{ e.total }}</div></div>
+            <div><div style="font-size:11px;color:#94A3B8;text-transform:uppercase;letter-spacing:.5px;font-weight:700">Plazo</div><div style="font-family:'JetBrains Mono';font-size:16px;font-weight:600;margin-top:3px">{{ e.plazo }}</div></div>
+            <div><div style="font-size:11px;color:#94A3B8;text-transform:uppercase;letter-spacing:.5px;font-weight:700">Margen</div><div style="font-family:'JetBrains Mono';font-size:16px;font-weight:600;margin-top:3px">{{ e.margen }}</div></div>
+          </div>
+          <div style="margin-top:14px;display:flex;flex-direction:column;gap:7px">
+            <sc-for list="{{ e.bullets }}" as="b" hint-placeholder-count="3">
+              <div style="display:flex;gap:8px;font-size:12.5px;line-height:1.45;color:#475569"><span style="color:#94A3B8">—</span><span>{{ b.t }}</span></div>
+            </sc-for>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 460px;gap:16px">
+      <div style="background:#fff;border:1px solid #E3E8EF;border-radius:16px;padding:20px">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:18px">
+          <span style="font-size:12px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:#475569">Flujo de caja por hitos · E2 Optimizado</span>
+          <span style="margin-left:auto;display:flex;gap:14px;font-size:11.5px;color:#64748B">
+            <span style="display:flex;align-items:center;gap:5px"><span style="width:9px;height:9px;border-radius:2px;background:#1F9E91"></span>Anticipo 30%</span>
+            <span style="display:flex;align-items:center;gap:5px"><span style="width:9px;height:9px;border-radius:2px;background:#BFDDD9"></span>Avance contra entrega</span>
+            <span style="display:flex;align-items:center;gap:5px"><span style="width:9px;height:9px;border-radius:2px;background:#F5A623"></span>Liberación de retención 5%</span>
+          </span>
+        </div>
+        <div style="display:flex;align-items:flex-end;gap:14px;height:190px;border-bottom:1px solid #E3E8EF;padding-bottom:2px">
+          <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;height:100%;justify-content:flex-end"><span style="font-family:'JetBrains Mono';font-size:11px;font-weight:600">14.9M</span><div style="width:100%;height:92%;background:#1F9E91;border-radius:5px 5px 0 0"></div></div>
+          <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;height:100%;justify-content:flex-end"><span style="font-family:'JetBrains Mono';font-size:11px;font-weight:600">3.2M</span><div style="width:100%;height:22%;background:#BFDDD9;border-radius:5px 5px 0 0"></div></div>
+          <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;height:100%;justify-content:flex-end"><span style="font-family:'JetBrains Mono';font-size:11px;font-weight:600">5.1M</span><div style="width:100%;height:35%;background:#BFDDD9;border-radius:5px 5px 0 0"></div></div>
+          <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;height:100%;justify-content:flex-end"><span style="font-family:'JetBrains Mono';font-size:11px;font-weight:600">6.4M</span><div style="width:100%;height:44%;background:#BFDDD9;border-radius:5px 5px 0 0"></div></div>
+          <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;height:100%;justify-content:flex-end"><span style="font-family:'JetBrains Mono';font-size:11px;font-weight:600">7.8M</span><div style="width:100%;height:54%;background:#BFDDD9;border-radius:5px 5px 0 0"></div></div>
+          <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;height:100%;justify-content:flex-end"><span style="font-family:'JetBrains Mono';font-size:11px;font-weight:600">6.9M</span><div style="width:100%;height:48%;background:#BFDDD9;border-radius:5px 5px 0 0"></div></div>
+          <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;height:100%;justify-content:flex-end"><span style="font-family:'JetBrains Mono';font-size:11px;font-weight:600">4.6M</span><div style="width:100%;height:32%;background:#BFDDD9;border-radius:5px 5px 0 0"></div></div>
+          <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;height:100%;justify-content:flex-end"><span style="font-family:'JetBrains Mono';font-size:11px;font-weight:600">2.5M</span><div style="width:100%;height:17%;background:#BFDDD9;border-radius:5px 5px 0 0"></div></div>
+          <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;height:100%;justify-content:flex-end"><span style="font-family:'JetBrains Mono';font-size:11px;font-weight:600">2.5M</span><div style="width:100%;height:17%;background:#F5A623;border-radius:5px 5px 0 0"></div></div>
+        </div>
+        <div style="display:flex;gap:14px;margin-top:8px">
+          <span style="flex:1;text-align:center;font-family:'JetBrains Mono';font-size:11px;color:#94A3B8">M0</span>
+          <span style="flex:1;text-align:center;font-family:'JetBrains Mono';font-size:11px;color:#94A3B8">M1</span>
+          <span style="flex:1;text-align:center;font-family:'JetBrains Mono';font-size:11px;color:#94A3B8">M2</span>
+          <span style="flex:1;text-align:center;font-family:'JetBrains Mono';font-size:11px;color:#94A3B8">M3</span>
+          <span style="flex:1;text-align:center;font-family:'JetBrains Mono';font-size:11px;color:#94A3B8">M4</span>
+          <span style="flex:1;text-align:center;font-family:'JetBrains Mono';font-size:11px;color:#94A3B8">M5</span>
+          <span style="flex:1;text-align:center;font-family:'JetBrains Mono';font-size:11px;color:#94A3B8">M6</span>
+          <span style="flex:1;text-align:center;font-family:'JetBrains Mono';font-size:11px;color:#94A3B8">M7</span>
+          <span style="flex:1;text-align:center;font-family:'JetBrains Mono';font-size:11px;color:#94A3B8">M8+</span>
+        </div>
+      </div>
+
+      <div style="background:#fff;border:1px solid #E3E8EF;border-radius:16px;padding:20px;display:flex;flex-direction:column;gap:12px">
+        <div style="font-size:12px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:#475569">Ingeniería de valor cuantificada</div>
+        <sc-for list="{{ ve }}" as="v" hint-placeholder-count="4">
+          <div style="display:flex;align-items:center;gap:12px;padding:11px 12px;border:1px solid #E3E8EF;border-radius:11px">
+            <div style="{{ v.box }}">{{ v.mark }}</div>
+            <div style="flex:1"><div style="font-size:13px;font-weight:500;line-height:1.3">{{ v.t }}</div><div style="font-size:11.5px;color:#94A3B8;margin-top:2px">{{ v.note }}</div></div>
+            <span style="font-family:'JetBrains Mono';font-size:13px;font-weight:600;color:#1F9E91">{{ v.save }}</span>
+          </div>
+        </sc-for>
+        <div style="margin-top:auto;display:flex;align-items:center;gap:10px;padding-top:12px;border-top:1px solid #E3E8EF">
+          <span style="font-size:12.5px;color:#64748B">Ahorro aplicado en E3</span>
+          <span style="margin-left:auto;font-family:'JetBrains Mono';font-size:17px;font-weight:600">$8.37M</span>
+        </div>
+      </div>
+    </div>
+
+    <div style="background:#fff;border:1px solid #E3E8EF;border-radius:16px;padding:20px">
+      <div style="font-size:12px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:#475569;margin-bottom:14px">Comparación entre versiones del modelo</div>
+      <div style="display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:0">
+        <div style="font-size:11px;color:#94A3B8;text-transform:uppercase;letter-spacing:.5px;font-weight:700;padding:0 0 10px">Métrica</div>
+        <div style="font-size:11px;color:#94A3B8;text-transform:uppercase;letter-spacing:.5px;font-weight:700;padding:0 0 10px;text-align:right">v1 · 12/07</div>
+        <div style="font-size:11px;color:#94A3B8;text-transform:uppercase;letter-spacing:.5px;font-weight:700;padding:0 0 10px;text-align:right">v2 · hoy</div>
+        <div style="font-size:11px;color:#94A3B8;text-transform:uppercase;letter-spacing:.5px;font-weight:700;padding:0 0 10px;text-align:right">Δ</div>
+        <sc-for list="{{ vcmp }}" as="c" hint-placeholder-count="4">
+          <div style="font-size:13px;padding:10px 0;border-top:1px solid #F1F5F9">{{ c.k }}</div>
+          <div style="font-family:'JetBrains Mono';font-size:13px;padding:10px 0;border-top:1px solid #F1F5F9;text-align:right;color:#64748B">{{ c.v1 }}</div>
+          <div style="font-family:'JetBrains Mono';font-size:13px;padding:10px 0;border-top:1px solid #F1F5F9;text-align:right;font-weight:600">{{ c.v2 }}</div>
+          <div style="{{ c.dStyle }}">{{ c.d }}</div>
+        </sc-for>
+      </div>
+    </div>
+  </div>
+</div>
+</sc-if>
+
+</div>
+
+<div style="position:fixed;left:50%;bottom:18px;transform:translateX(-50%);display:flex;align-items:center;gap:4px;background:rgba(30,42,58,.96);backdrop-filter:blur(8px);border-radius:12px;padding:6px;box-shadow:0 12px 34px rgba(16,24,40,.3);z-index:50">
+  <sc-for list="{{ nav }}" as="n" hint-placeholder-count="7">
+    <div onClick="{{ n.go }}" style="{{ n.style }}">{{ n.label }}</div>
+  </sc-for>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1500,&quot;height&quot;:1000},&quot;chatMode&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;panel&quot;,&quot;overlay&quot;],&quot;default&quot;:&quot;panel&quot;,&quot;tsType&quot;:&quot;'panel'|'overlay'&quot;,&quot;section&quot;:&quot;Supuestos abiertos&quot;},&quot;bomApproval&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;global&quot;,&quot;parcial&quot;],&quot;default&quot;:&quot;global&quot;,&quot;tsType&quot;:&quot;'global'|'parcial'&quot;,&quot;section&quot;:&quot;Supuestos abiertos&quot;},&quot;costUpdate&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;vivo&quot;,&quot;tras-regenerar&quot;],&quot;default&quot;:&quot;vivo&quot;,&quot;tsType&quot;:&quot;'vivo'|'tras-regenerar'&quot;,&quot;section&quot;:&quot;Supuestos abiertos&quot;}}">
+class Component extends DCLogic {
+  state = { screen: 'ws', mode: 'a', step: 2, tab: 'bom', sel: 1 };
+
+  go(patch) { this.setState(patch); }
+
+  dome(opts) {
+    const o = Object.assign({ w: 860, h: 620, dark: false, highlight: false, scale: 1 }, opts || {});
+    const R = 250, H = 178, GH = 96, a = Math.PI / 6;
+    const rot = 0.55;
+    const P = (r, ang, y) => {
+      const x = r * Math.cos(ang + rot), z = r * Math.sin(ang + rot);
+      return [(x - z) * Math.cos(a), (x + z) * Math.sin(a) * 0.62 - y];
+    };
+    const base = o.dark ? '#6EC6D8' : '#7F98AD';
+    const strong = o.dark ? '#9FE0EC' : '#4A6178';
+    const els = [];
+    let k = 0;
+    const line = (p1, p2, stroke, w, op, extra) => {
+      els.push(React.createElement('line', Object.assign({
+        key: 'l' + (k++), x1: p1[0], y1: p1[1], x2: p2[0], y2: p2[1],
+        stroke: stroke, strokeWidth: w, strokeOpacity: op, strokeLinecap: 'round'
+      }, extra || {})));
+    };
+    const M = 18, RINGS = 5;
+    const lat = i => (i / RINGS) * (Math.PI / 2);
+    // ground grid
+    for (let g = 1; g <= 3; g++) {
+      const rr = R * (0.4 + g * 0.28);
+      const pts = [];
+      for (let i = 0; i <= 48; i++) pts.push(P(rr, (i / 48) * Math.PI * 2, -GH).join(','));
+      els.push(React.createElement('polyline', { key: 'g' + g, points: pts.join(' '), fill: 'none', stroke: base, strokeWidth: 1, strokeOpacity: .16 }));
+    }
+    // dome rings
+    for (let i = 0; i <= RINGS; i++) {
+      const t = lat(i), r = R * Math.cos(t), y = H * Math.sin(t);
+      const pts = [];
+      for (let j = 0; j <= 72; j++) pts.push(P(r, (j / 72) * Math.PI * 2, y).join(','));
+      els.push(React.createElement('polyline', { key: 'r' + i, points: pts.join(' '), fill: 'none', stroke: i === 0 ? strong : base, strokeWidth: i === 0 ? 2 : 1.3, strokeOpacity: i === 0 ? .85 : .5 }));
+    }
+    // meridians
+    for (let m = 0; m < M; m++) {
+      const ang = (m / M) * Math.PI * 2;
+      const pts = [];
+      for (let i = 0; i <= RINGS * 4; i++) {
+        const t = (i / (RINGS * 4)) * (Math.PI / 2);
+        pts.push(P(R * Math.cos(t), ang, H * Math.sin(t)).join(','));
+      }
+      const isSel = (m === 4 && o.sel);
+      els.push(React.createElement('polyline', { key: 'm' + m, points: pts.join(' '), fill: 'none', stroke: isSel ? '#1F9E91' : base, strokeWidth: isSel ? 3 : 1.2, strokeOpacity: isSel ? 1 : .42 }));
+    }
+    // perimeter columns
+    for (let m = 0; m < M; m++) {
+      const ang = (m / M) * Math.PI * 2;
+      const hi = o.highlight && (m % 3 === 0 || m % 7 === 0);
+      line(P(R, ang, 0), P(R, ang, -GH), hi ? '#6D5BD0' : strong, hi ? 4 : 2.2, hi ? 1 : .7, hi ? { style: { animation: 'glowV 1.4s infinite' } } : null);
+      if (hi) els.push(React.createElement('circle', { key: 'c' + m, cx: P(R, ang, 0)[0], cy: P(R, ang, 0)[1], r: 4.5, fill: '#6D5BD0', fillOpacity: .9 }));
+    }
+    // radial ground braces
+    for (let m = 0; m < M; m += 2) {
+      const ang = (m / M) * Math.PI * 2, ang2 = ((m + 1) / M) * Math.PI * 2;
+      line(P(R, ang, -GH), P(R, ang2, 0), base, 1, .28);
+    }
+    return React.createElement('svg', {
+      viewBox: '-420 -320 840 560', width: o.w, height: o.h,
+      style: { maxWidth: '100%', maxHeight: '100%', overflow: 'visible' }
+    }, els);
+  }
+
+  chatCards(full) {
+    const c = [];
+    const card = (children, style) => React.createElement('div', { key: 'k' + c.length, style: Object.assign({ border: '1px solid #E3E8EF', borderRadius: 12, background: '#fff', padding: 14 }, style) }, children);
+    const label = (t, col) => React.createElement('div', { style: { fontSize: 10.5, fontWeight: 700, letterSpacing: '.6px', textTransform: 'uppercase', color: col } }, t);
+    const user = t => React.createElement('div', { key: 'u' + c.length, style: { alignSelf: 'flex-end', maxWidth: '86%', background: '#1E2A3A', color: '#fff', borderRadius: '12px 12px 4px 12px', padding: '10px 13px', fontSize: 13, lineHeight: 1.45 } }, t);
+
+    c.push(user('Cambia las columnas del nivel 3 a HSS 10x10x½'));
+    c.push(card([
+      React.createElement('div', { key: 'h', style: { display: 'flex', alignItems: 'center', gap: 8 } }, [
+        React.createElement('span', { key: 'd', style: { width: 7, height: 7, borderRadius: 2, background: '#6D5BD0' } }),
+        label('Delta propuesto', '#6D5BD0'),
+        React.createElement('span', { key: 't', style: { marginLeft: 'auto', fontFamily: "'JetBrains Mono'", fontSize: 10.5, color: '#94A3B8' } }, '14:51')
+      ]),
+      React.createElement('div', { key: 'b', style: { fontSize: 13, fontWeight: 600, marginTop: 9, lineHeight: 1.4 } }, '24 columnas del N3: W12x40 → HSS 10x10x½'),
+      React.createElement('div', { key: 'g', style: { display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 8, marginTop: 12 } }, [
+        ['Tonelaje', '−8.2 t', '#1E2A3A'], ['Costo', '−$14,300', '#1F9E91'], ['Alertas', '+1', '#F5A623']
+      ].map((x, i) => React.createElement('div', { key: i, style: { border: '1px solid #EEF2F6', borderRadius: 9, padding: '8px 9px', background: '#F8FAFC' } }, [
+        React.createElement('div', { key: 'a', style: { fontSize: 10, color: '#94A3B8', textTransform: 'uppercase', letterSpacing: '.4px', fontWeight: 700 } }, x[0]),
+        React.createElement('div', { key: 'b', style: { fontFamily: "'JetBrains Mono'", fontSize: 13, fontWeight: 600, color: x[2], marginTop: 3 } }, x[1])
+      ]))),
+      React.createElement('div', { key: 'n', style: { fontSize: 11.5, color: '#64748B', marginTop: 10, lineHeight: 1.5 } }, 'Requiere recálculo de 48 placas base y revisión de la alerta de esbeltez en el anillo 3.'),
+      React.createElement('div', { key: 'x', style: { display: 'flex', gap: 8, marginTop: 12 } }, [
+        React.createElement('div', { key: 'ap', style: { height: 34, padding: '0 15px', borderRadius: 9, background: '#6D5BD0', color: '#fff', fontSize: 13, fontWeight: 600, display: 'flex', alignItems: 'center', cursor: 'pointer' } }, 'Aplicar'),
+        React.createElement('div', { key: 'ca', style: { height: 34, padding: '0 15px', borderRadius: 9, border: '1px solid #CBD5E1', fontSize: 13, display: 'flex', alignItems: 'center', cursor: 'pointer' } }, 'Cancelar'),
+        React.createElement('div', { key: 'st', style: { marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 6, fontSize: 11.5, color: '#6D5BD0', fontWeight: 600 } }, [
+          React.createElement('span', { key: 'p', style: { width: 6, height: 6, borderRadius: '50%', background: '#6D5BD0', animation: 'pulseDot 1.2s infinite' } }), 'Aplicando…'
+        ])
+      ])
+    ], { borderColor: '#DCD6F5', boxShadow: '0 6px 18px rgba(109,91,208,.12)' }));
+
+    c.push(user('Usa W21x132 en las vigas de borde'));
+    c.push(card([
+      React.createElement('div', { key: 'h', style: { display: 'flex', alignItems: 'center', gap: 8 } }, [
+        React.createElement('span', { key: 'd', style: { width: 7, height: 7, borderRadius: 2, background: '#B0392F' } }),
+        label('Rechazado por guardarraíl', '#B0392F'),
+        React.createElement('span', { key: 't', style: { marginLeft: 'auto', fontFamily: "'JetBrains Mono'", fontSize: 10.5, color: '#94A3B8' } }, '14:54')
+      ]),
+      React.createElement('div', { key: 'b', style: { fontSize: 13, fontWeight: 600, marginTop: 9, lineHeight: 1.4 } }, 'W21x132 no está en tu catálogo calibrado'),
+      React.createElement('div', { key: 'n', style: { fontSize: 12, color: '#64748B', marginTop: 5, lineHeight: 1.5 } }, 'El catálogo METALITEC v4 no incluye ese perfil y no hay stock en los tres proveedores conectados. Alternativas equivalentes:'),
+      React.createElement('div', { key: 'alt', style: { display: 'flex', flexDirection: 'column', gap: 6, marginTop: 10 } }, [
+        ['Armado 900x14 A572', 'Ix equivalente 98% · +$2,140/t'],
+        ['W21x122 A992', 'En catálogo · −4.8% capacidad'],
+        ['W24x117 A992', 'En catálogo · +6 cm de peralte']
+      ].map((x, i) => React.createElement('div', { key: i, style: { display: 'flex', alignItems: 'center', gap: 10, border: '1px solid #E3E8EF', borderRadius: 9, padding: '8px 10px', cursor: 'pointer' } }, [
+        React.createElement('div', { key: 'a', style: { flex: 1 } }, [
+          React.createElement('div', { key: '1', style: { fontSize: 12.5, fontWeight: 500 } }, x[0]),
+          React.createElement('div', { key: '2', style: { fontSize: 11, color: '#94A3B8', marginTop: 2 } }, x[1])
+        ]),
+        React.createElement('span', { key: 'b', style: { fontSize: 11.5, fontWeight: 600, color: '#1F9E91' } }, 'Usar')
+      ])))
+    ], { borderColor: '#F0C9C4', background: '#FDF7F6' }));
+
+    if (full) {
+      c.push(user('Conexiones empernadas en vez de soldadas en el anillo perimetral'));
+      c.push(card([
+        React.createElement('div', { key: 'h', style: { display: 'flex', alignItems: 'center', gap: 8 } }, [
+          React.createElement('span', { key: 'd', style: { width: 7, height: 7, borderRadius: 2, background: '#1F9E91' } }),
+          label('Aplicado · v2', '#17786e'),
+          React.createElement('span', { key: 't', style: { marginLeft: 'auto', fontFamily: "'JetBrains Mono'", fontSize: 10.5, color: '#94A3B8' } }, '14:58')
+        ]),
+        React.createElement('div', { key: 'b', style: { fontSize: 13, fontWeight: 600, marginTop: 9, lineHeight: 1.4 } }, '186 conexiones del anillo perimetral pasan a empernadas'),
+        React.createElement('div', { key: 'n', style: { fontSize: 12, color: '#64748B', marginTop: 5, lineHeight: 1.5 } }, '−214 HH de taller, +$3,900 en tornillería. El BOM aprobado quedó re-abierto: requiere nueva aprobación antes de cotizar.'),
+        React.createElement('div', { key: 'x', style: { display: 'flex', gap: 14, marginTop: 11 } }, [
+          React.createElement('span', { key: '1', style: { fontSize: 11.5, fontWeight: 600, color: '#1F9E91', cursor: 'pointer' } }, 'Ver diff ›'),
+          React.createElement('span', { key: '2', style: { fontSize: 11.5, color: '#64748B', cursor: 'pointer' } }, 'Revertir')
+        ])
+      ], { borderColor: '#CFE7E3' }));
+    }
+    return React.createElement('div', { style: { display: 'flex', flexDirection: 'column', gap: 12 } }, c);
+  }
+
+  renderVals() {
+    const s = this.state;
+    const P = this.props;
+    const chatOverlay = (P.chatMode || 'panel') === 'overlay';
+    const liveCosts = (P.costUpdate || 'vivo') === 'vivo';
+    const partial = (P.bomApproval || 'global') === 'parcial';
+    const isWs = s.screen === 'ws';
+    const mode = s.mode;
+
+    const navDefs = [
+      ['P3 · Intake', { screen: 'p3' }], ['P4 · Generación', { screen: 'p4' }],
+      ['P5·A Revisión', { screen: 'ws', mode: 'a', tab: 'bom' }],
+      ['P5·B Edición', { screen: 'ws', mode: 'b', tab: 'alerts' }],
+      ['P5·C Escenarios', { screen: 'ws', mode: 'c' }],
+      ['P6 · BOM', { screen: 'p6' }], ['P8 · Chat', { screen: 'p8' }], ['P9 · Escenarios', { screen: 'p9' }]
+    ];
+    const active = (p) => p.screen === s.screen && (p.screen !== 'ws' || p.mode === mode);
+    const nav = navDefs.map(([label, p]) => ({
+      label, go: () => this.go(p),
+      style: 'height:32px;padding:0 13px;border-radius:8px;display:flex;align-items:center;font-size:12.5px;font-weight:' + (active(p) ? '600' : '400') + ';cursor:pointer;color:' + (active(p) ? '#1E2A3A' : 'rgba(255,255,255,.72)') + ';background:' + (active(p) ? '#fff' : 'transparent')
+    }));
+
+    const stepDefs = [['1', 'Datos generales', 'Cliente, tipo, destino'], ['2', 'Carga de archivos', 'Planos, IFC, contrato'], ['3', 'Consideraciones', 'Alcance y condiciones']];
+    const steps = stepDefs.map((d, i) => {
+      const n = i + 1, cur = n === s.step, done = n < s.step;
+      return {
+        n: done ? '✓' : d[0], title: d[1], sub: d[2], go: () => this.go({ step: n }),
+        style: 'display:flex;gap:12px;align-items:center;padding:11px 12px;border-radius:11px;cursor:pointer;background:' + (cur ? '#F1F8FA' : 'transparent'),
+        dotStyle: 'width:26px;height:26px;flex:none;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;font-family:\'JetBrains Mono\';' + (cur ? 'background:#1F9E91;color:#fff' : done ? 'background:#E8F6F4;color:#17786e' : 'background:#EEF2F6;color:#94A3B8')
+      };
+    });
+
+    const files = [
+      { ext: 'PDF', name: 'CNARCCS_Domo_Planos_Arq.pdf', meta: '48 páginas · 62 MB', status: 'Leído', ok: 1 },
+      { ext: 'DXF', name: 'Domo_Estructural_R3.dxf', meta: '14.2 MB', status: 'Leído', ok: 1 },
+      { ext: 'IFC', name: 'CNARCCS_arq.ifc', meta: '186 MB · IFC4', status: 'Procesando', ok: 2 },
+      { ext: 'PDF', name: 'Contrato_marco_CNARCCS.pdf', meta: '22 páginas · 3.1 MB', status: 'Leído', ok: 1 }
+    ].map(f => Object.assign(f, {
+      badgeStyle: 'font-size:11px;font-weight:600;padding:4px 9px;border-radius:999px;' + (f.ok === 1 ? 'background:#E8F6F4;color:#17786e' : 'background:#FEF7EA;color:#9A6408')
+    }));
+
+    const stgDefs = [
+      ['Leyendo planos', '48 páginas · 312 vistas indexadas', '00:41', 'done'],
+      ['Construyendo geometría', '1,470 elementos · 28 marcas', '01:56', 'done'],
+      ['Generando BOM', 'Perfiles y grados asignados · 734 t', '00:22', 'run'],
+      ['Validando', '22 reglas de validación', '—', 'wait']
+    ];
+    const stages = stgDefs.map(d => ({
+      title: d[0], detail: d[1], time: d[2],
+      titleStyle: 'font-size:14.5px;font-weight:' + (d[3] === 'wait' ? '400' : '600') + ';color:' + (d[3] === 'wait' ? 'rgba(255,255,255,.4)' : '#fff'),
+      dot: 'width:10px;height:10px;border-radius:50%;margin-top:5px;flex:none;background:' + (d[3] === 'done' ? '#1F9E91' : d[3] === 'run' ? '#6EC6D8' : 'rgba(255,255,255,.2)') + (d[3] === 'run' ? ';animation:pulseDot 1.2s infinite' : '')
+    }));
+
+    const bomDefs = [
+      ['C-101', 'W12x40', 'A992', '96', '5.80', '59.5', '33.1'],
+      ['C-115', 'HSS 10x10x½', 'A500', '24', '4.90', '92.3', '10.9'],
+      ['V-201', 'W18x50', 'A992', '210', '9.20', '74.4', '143.7'],
+      ['V-230', 'W21x62', 'A992', '120', '7.60', '92.3', '84.2'],
+      ['A-310', 'HSS 8x8x⅜', 'A500', '180', '4.40', '45.0', '35.6'],
+      ['A-330', 'HSS 6x6x¼', 'A500', '260', '3.20', '27.7', '23.1'],
+      ['AR-410', 'Armado 900x14', 'A572', '64', '12.00', '168.0', '129.0'],
+      ['PL-05', 'PL ½"', 'A36', '340', '—', '—', '12.4']
+    ];
+    const bom = bomDefs.map((d, i) => {
+      const selRow = i === s.sel;
+      const edited = i === 1;
+      return {
+        marca: d[0], perfil: d[1], grado: d[2], cant: d[3], long: d[4], kgm: d[5], peso: d[6],
+        go: () => this.go({ sel: i }),
+        origin: edited ? 'editado' : 'tool ✓',
+        originStyle: 'font-size:10px;padding:3px 7px;border-radius:6px;font-weight:600;' + (edited ? 'background:#EEEAFB;color:#5847bd' : 'background:#E8F6F4;color:#17786e'),
+        rowStyle: 'display:grid;grid-template-columns:64px 1fr 52px 44px 52px;align-items:center;padding:8px 12px;border-bottom:1px solid #F1F5F9;cursor:pointer;' + (selRow ? 'background:#E8F6F4;box-shadow:inset 3px 0 0 #1F9E91' : ''),
+        wideRowStyle: 'display:grid;grid-template-columns:92px 168px 84px 70px 84px 82px 96px 108px;align-items:center;padding:11px 20px;border-bottom:1px solid #F1F5F9;cursor:pointer;' + (selRow ? 'background:#E8F6F4;box-shadow:inset 3px 0 0 #1F9E91' : edited ? 'background:#FAF9FE' : '')
+      };
+    });
+
+    const alertDefs = [
+      ['Crítica', 'VAL-07', 'Desperdicio proyectado 8.4% supera el umbral 8%', 'Concentrado en el anillo 3 por longitudes de corte de 4.9 m sobre barra de 12 m. Sugerencia: empatar con el lote de arriostres A-330.', '#B0392F', '#FDF7F6', '#F0C9C4', '#FBE3E0'],
+      ['Media', 'VAL-12', 'Perfil W21x132 sin stock — sustituto sugerido: armado equivalente', 'Ningún proveedor conectado tiene disponibilidad en las próximas 6 semanas.', '#9A6408', '#FEFBF5', '#F5E4C4', '#FBE7C2'],
+      ['Media', 'VAL-19', 'HH/ton habilitado fuera del rango histórico de la planta', '17.4 HH/t frente a la banda histórica 12.1–15.8 de METALITEC. Revisa la calibración o el alcance de armado.', '#9A6408', '#FEFBF5', '#F5E4C4', '#FBE7C2']
+    ];
+    const alerts = alertDefs.map(d => ({
+      sev: d[0], code: d[1], title: d[2], body: d[3],
+      cardStyle: 'border:1px solid ' + d[6] + ';border-radius:12px;background:' + d[5] + ';padding:13px',
+      pillStyle: 'font-size:10.5px;font-weight:700;padding:3px 8px;border-radius:999px;background:' + d[7] + ';color:' + d[4]
+    }));
+
+    const tabDefs = [['bom', 'BOM', '1,470'], ['alerts', 'Alertas', '3'], ['props', 'Propiedades', '']];
+    const tabs = tabDefs.map(t => ({
+      label: t[1], count: t[2], go: () => this.go({ tab: t[0] }),
+      style: 'flex:1;display:flex;align-items:center;justify-content:center;gap:6px;font-size:12.5px;cursor:pointer;font-weight:' + (s.tab === t[0] ? '600' : '400') + ';color:' + (s.tab === t[0] ? '#1E2A3A' : '#64748B') + ';box-shadow:' + (s.tab === t[0] ? 'inset 0 -2px 0 #1F9E91' : 'none'),
+      badgeStyle: t[2] ? 'font-family:\'JetBrains Mono\';font-size:10px;background:#EEF2F6;color:#64748B;padding:2px 6px;border-radius:5px' : 'display:none'
+    }));
+
+    const scDefs = [
+      ['E1 Conservador', '73,200', '$53.7M', '9 meses', '22%', 'Perfiles laminados de catálogo, holgura de montaje completa, sin empates de retal.', 42,
+        ['Sin ingeniería de valor aplicada', 'Compra spot de material', 'Subcontrato de montaje completo']],
+      ['E2 Optimizado', '67,500', '$49.5M', '8 meses', '19%', 'Nesting optimizado con empates, conexiones empernadas en perímetro.', 70,
+        ['Empates y aprovechamiento de retal (−2.1% desperdicio)', 'Conexiones empernadas en el anillo perimetral', 'Compra consolidada en 2 órdenes']],
+      ['E3 Agresivo', '61,800', '$45.4M', '7 meses', '15%', 'Ingeniería de valor completa: armados en lugar de laminados pesados, montaje en dos frentes.', 96,
+        ['Armados equivalentes en vigas de borde', 'Montaje en dos frentes simultáneos', 'Retención negociada a 3%']]
+    ];
+    const scenarios = scDefs.map((d, i) => ({
+      name: d[0], ton: d[1], total: d[2], plazo: d[3], margen: d[4], assum: d[5],
+      bullets: d[7].map(t => ({ t })),
+      tag: i === 1 ? 'Recomendado' : (i === 2 ? 'Requiere aprobación' : 'Base'),
+      tagStyle: 'font-size:10.5px;font-weight:700;padding:3px 8px;border-radius:999px;' + (i === 1 ? 'background:#E8F6F4;color:#17786e' : i === 2 ? 'background:#FEF7EA;color:#9A6408' : 'background:#EEF2F6;color:#64748B'),
+      selLabel: i === 1 ? 'En la oferta' : 'Incluir',
+      selStyle: 'margin-left:auto;font-size:11.5px;font-weight:600;padding:5px 10px;border-radius:8px;cursor:pointer;' + (i === 1 ? 'background:#1F9E91;color:#fff' : 'border:1px solid #CBD5E1;color:#475569'),
+      cardStyle: 'border:1px solid ' + (i === 1 ? '#1F9E91' : '#E3E8EF') + ';border-radius:14px;background:#fff;padding:14px' + (i === 1 ? ';box-shadow:0 4px 14px rgba(31,158,145,.12)' : ''),
+      bigCardStyle: 'border:1px solid ' + (i === 1 ? '#1F9E91' : '#E3E8EF') + ';border-radius:16px;background:#fff;padding:20px;display:flex;flex-direction:column' + (i === 1 ? ';box-shadow:0 6px 20px rgba(31,158,145,.13)' : ''),
+      barStyle: 'height:100%;width:' + d[6] + '%;border-radius:99px;background:' + (i === 1 ? '#1F9E91' : '#94A3B8')
+    }));
+
+    const tlDefs = [
+      ['14:58', 'Aplicado', 'v2', 'J. Pérez', 'Conexiones empernadas en el anillo perimetral', '186 conexiones · −214 HH · +$3,900 tornillería', 'ok'],
+      ['14:54', 'Rechazado', '—', 'Guardarraíl', 'W21x132 en vigas de borde', 'Perfil fuera del catálogo calibrado METALITEC v4', 'no'],
+      ['14:51', 'Aplicando', 'v2', 'J. Pérez', 'Columnas N3 → HSS 10x10x½', '24 elementos · −8.2 t · −$14,300', 'run'],
+      ['14:22', 'Aplicado', 'v1', 'J. Pérez', 'Grado A572 Gr.50 en vigas principales', '330 elementos · +$6,100 · −0 t', 'ok'],
+      ['14:05', 'Gate', 'v1', 'J. Pérez', 'BOM aprobado', 'Aprobación global · 1,470 elementos · 734 t', 'gate'],
+      ['13:48', 'Generado', 'v1', 'Agente', 'Primer output del modelo', '1,470 elementos · 28 marcas · 3 alertas', 'ok']
+    ];
+    const colorOf = { ok: '#1F9E91', no: '#B0392F', run: '#6D5BD0', gate: '#1E2A3A' };
+    const timeline = tlDefs.map(d => ({
+      time: d[0], state: d[1], ver: d[2], who: d[3], title: d[4], delta: d[5],
+      dot: 'position:absolute;top:18px;width:11px;height:11px;border-radius:50%;background:' + colorOf[d[6]] + ';border:2px solid #F4F6F9',
+      pill: 'font-size:10.5px;font-weight:700;padding:3px 8px;border-radius:999px;color:#fff;background:' + colorOf[d[6]],
+      cardStyle: 'border:1px solid ' + (d[6] === 'run' ? '#DCD6F5' : '#E3E8EF') + ';border-radius:12px;background:#fff;padding:13px 15px;max-width:640px',
+      revertStyle: 'font-size:11.5px;cursor:pointer;color:' + (d[6] === 'ok' ? '#64748B' : '#CBD5E1')
+    }));
+
+    const veDefs = [
+      ['✓', 'Armados equivalentes en vigas de borde', '18 elementos · Ix 98%', '$3.10M', 1],
+      ['✓', 'Empates y aprovechamiento de retal', 'Desperdicio 8.4% → 6.3%', '$2.41M', 1],
+      ['✓', 'Conexiones empernadas en perímetro', '−214 HH de taller', '$1.68M', 1],
+      ['', 'Reducción de grado en arriostres secundarios', 'Pendiente de validación estructural', '$1.18M', 0]
+    ];
+    const ve = veDefs.map(d => ({
+      mark: d[0], t: d[1], note: d[2], save: d[3],
+      box: 'width:22px;height:22px;flex:none;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;' + (d[4] ? 'background:#1F9E91;color:#fff' : 'border:1px solid #CBD5E1;background:#fff')
+    }));
+
+    const vcDefs = [['Tonelaje cobrable', '742.2 t', '734.0 t', '−8.2 t', 1], ['Elementos', '1,470', '1,470', '0', 0], ['Costo E2', '$50.9M', '$49.5M', '−$1.4M', 1], ['Plazo E2', '8.5 meses', '8 meses', '−0.5 m', 1], ['Alertas abiertas', '2', '3', '+1', -1]];
+    const vcmp = vcDefs.map(d => ({
+      k: d[0], v1: d[1], v2: d[2], d: d[3],
+      dStyle: 'font-family:\'JetBrains Mono\';font-size:13px;padding:10px 0;border-top:1px solid #F1F5F9;text-align:right;font-weight:600;color:' + (d[4] === 1 ? '#1F9E91' : d[4] === -1 ? '#B0392F' : '#94A3B8')
+    }));
+
+    const railExtra = chatOverlay
+      ? 'position:absolute;left:14px;top:14px;bottom:14px;z-index:20;border:1px solid #E3E8EF;border-right:1px solid #E3E8EF;border-radius:14px;box-shadow:0 18px 44px rgba(16,24,40,.18)'
+      : '';
+
+    const ctaMap = { a: ['Aprobar BOM', '#B0392F'], b: ['Generar escenarios', '#1F9E91'], c: ['Emitir oferta', '#1F9E91'] };
+    const cta = ctaMap[mode];
+    const sess = { a: ['En revisión', '#F5A623'], b: ['Aplicando cambios', '#6D5BD0'], c: ['BOM aprobado', '#6EC6D8'] }[mode];
+
+    return {
+      nav, steps, files, stages, bom, alerts, tabs, scenarios, timeline, ve, vcmp, railExtra,
+      isP3: s.screen === 'p3', isP4: s.screen === 'p4', isWs, isP6: s.screen === 'p6', isP8: s.screen === 'p8', isP9: s.screen === 'p9',
+      isStep1: s.step === 1, isStep2: s.step === 2, isStep3: s.step === 3,
+      isModeA: isWs && mode === 'a', isModeB: isWs && mode === 'b', isModeC: isWs && mode === 'c',
+      showTabs: isWs && mode !== 'c',
+      showChatThread: isWs && mode !== 'a',
+      isTabBom: s.tab === 'bom', isTabAlerts: s.tab === 'alerts', isTabProps: s.tab === 'props',
+      approvalPartial: partial,
+      chatThread: this.chatCards(false),
+      chatThreadFull: this.chatCards(true),
+      viewer: this.dome({ w: 760, h: 560, highlight: mode === 'b', sel: s.tab === 'props' || mode === 'a' }),
+      viewerDark: this.dome({ w: 520, h: 340, dark: true }),
+      viewerMini: this.dome({ w: 380, h: 270, sel: true }),
+      hasSelection: isWs && mode !== 'b',
+      selectedTag: bom[s.sel] ? bom[s.sel].marca + ' · ' + bom[s.sel].perfil : 'C-101',
+      modelVersion: mode === 'a' ? 'v1' : 'v2',
+      sessionLabel: sess[0],
+      sessionChipStyle: 'display:flex;align-items:center;gap:6px;font-size:11.5px;font-weight:600;padding:4px 9px;border-radius:999px;background:rgba(255,255,255,.09);color:' + sess[1],
+      topCtaLabel: cta[0],
+      topCtaStyle: 'height:34px;padding:0 16px;border-radius:9px;background:' + cta[1] + ';color:#fff;font-size:13px;font-weight:600;display:flex;align-items:center;cursor:pointer',
+      panelStyle: 'width:' + (mode === 'c' ? '440px' : '360px') + ';flex:none;background:#fff;border-left:1px solid #E3E8EF;display:flex;flex-direction:column;overflow:hidden',
+      bomStateLabel: mode === 'a' ? 'Sin aprobar' : 'Re-abierto',
+      bomStateStyle: 'font-size:10.5px;font-weight:700;padding:3px 8px;border-radius:999px;' + (mode === 'a' ? 'background:#FBE3E0;color:#B0392F' : 'background:#FBE7C2;color:#9A6408'),
+      bomStateNote: mode === 'a'
+        ? (partial ? 'Aprobación por grupos habilitada: 0 de 4 grupos aprobados.' : 'La aprobación es global: cubre las 28 marcas del modelo.')
+        : 'Aprobado por J. Pérez · 12/07 · v1. La edición en curso invalidó la aprobación.',
+      props: [
+        { k: 'Marca', v: 'C-101' }, { k: 'Perfil', v: 'W12x40' }, { k: 'Grado', v: 'A992' },
+        { k: 'Longitud', v: '5.80 m' }, { k: 'kg/m', v: '59.5' }, { k: 'Peso unitario', v: '345.1 kg' },
+        { k: 'Nivel', v: 'N1–N2' }, { k: 'Conexión', v: 'Placa base 4 anclas' }, { k: 'Acabado', v: 'Galvanizado' }
+      ],
+      suggestions: [
+        { t: 'Cambia las columnas del nivel 3 a HSS' }, { t: 'Usa A572 Gr.50 en vigas principales' },
+        { t: 'Conexiones empernadas en vez de soldadas' }, { t: 'Reduce el desperdicio del anillo 3' }
+      ],
+      viewerTools: ['⟳', '＋', '−', '⤢'].map((ic, i) => ({
+        icon: ic, label: ['Orbitar', 'Acercar', 'Alejar', 'Encuadrar'][i],
+        style: 'width:34px;height:34px;border-radius:9px;background:rgba(255,255,255,.94);border:1px solid #E3E8EF;display:flex;align-items:center;justify-content:center;font-size:14px;color:#475569;cursor:pointer'
+      })),
+      ftTon: mode === 'a' ? '742.2 t' : '734.0 t',
+      ftAlerts: mode === 'a' ? '3' : '4',
+      ftCost: mode === 'b' && !liveCosts ? '$50.9M' : '$49.5M',
+      ftCostStyle: 'color:' + (mode === 'b' ? '#6D5BD0' : '#1E2A3A') + ';font-weight:600',
+      ftBadge: mode === 'b' ? (liveCosts ? 'recalculando…' : 'pendiente de regenerar') : 'actualizado',
+      ftBadgeStyle: 'font-size:11px;font-weight:600;padding:3px 9px;border-radius:999px;' + (mode === 'b' ? (liveCosts ? 'background:#EEEAFB;color:#5847bd' : 'background:#FEF7EA;color:#9A6408') : 'background:#E8F6F4;color:#17786e'),
+      primaryCtaLabel: s.step === 3 ? 'Generar solución' : 'Continuar',
+      primaryCtaStyle: 'height:42px;padding:0 22px;border-radius:10px;background:' + (s.step === 3 ? '#1F9E91' : '#1E2A3A') + ';color:#fff;font-size:14px;font-weight:600;display:flex;align-items:center;cursor:pointer',
+      nextStep: () => (s.step === 3 ? this.go({ screen: 'p4' }) : this.go({ step: s.step + 1 })),
+      prevStep: () => this.go({ step: Math.max(1, s.step - 1) })
+    };
+  }
+}
+</script>
+</body>
+</html>
