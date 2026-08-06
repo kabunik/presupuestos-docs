@@ -181,7 +181,7 @@ En todas las pantallas la **barra superior** es idéntica: 56 px de alto, fondo 
   1. Leyendo planos — 48 páginas · 312 vistas indexadas — 00:41 (completada)
   2. Construyendo geometría — 1,470 elementos · 28 marcas — 01:56 (completada)
   3. Generando BOM — Perfiles y grados asignados · 734 t — 00:22 (en curso)
-  4. Validando — 22 reglas de validación — — (pendiente)
+  4. Validando — Invariantes y validaciones de percepción — — (pendiente)
 - Barra de progreso 4 px, pista `rgba(255,255,255,.1)`, relleno 64 % `--brand-cyan`.
 - **Panel derecho:** vista previa de geometría sobre `--navy-viewer`, radio 12, alto 360 px; debajo tres cifras mono: Elementos 1,470 · Tonelaje 734 t · Alertas 3 (en `--amber`).
 - Copy de barra superior: "Puedes salir: te avisamos al terminar".
