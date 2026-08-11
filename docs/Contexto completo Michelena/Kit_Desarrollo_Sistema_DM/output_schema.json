@@ -1,0 +1,369 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "SistemaDM.Output",
+  "version": "1.7",
+  "type": "object",
+  "required": [
+    "version_parametros",
+    "boom",
+    "apu_aisc",
+    "mas6",
+    "opciones",
+    "flujo",
+    "capitulo_financiero",
+    "precio_licitacion",
+    "leyenda_alcance",
+    "requisicion_neta",
+    "secuencia_grua",
+    "lotes",
+    "s11_velocidad",
+    "s12_programa",
+    "rss",
+    "lean",
+    "confirmar_precios_mp",
+    "alerta_interferencia_familias"
+  ],
+  "properties": {
+    "version_parametros": {
+      "type": "string"
+    },
+    "boom": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "familia": {
+            "type": "string"
+          },
+          "facturable_t": {
+            "type": "number"
+          }
+        }
+      }
+    },
+    "peso": {
+      "type": "object",
+      "properties": {
+        "planos_t": {
+          "type": "number"
+        },
+        "facturable_t": {
+          "type": "number"
+        },
+        "comprar_t": {
+          "type": "number"
+        },
+        "factor": {
+          "type": "number"
+        },
+        "doble_chequeo": {
+          "enum": [
+            "ok",
+            "detener_emision"
+          ]
+        }
+      }
+    },
+    "apu_aisc": {
+      "type": "object",
+      "properties": {
+        "total": {
+          "type": "number"
+        },
+        "por_kg": {
+          "type": "number"
+        },
+        "partidas": {
+          "type": "array"
+        }
+      }
+    },
+    "mas6": {
+      "type": "object",
+      "properties": {
+        "crecimiento_aplicado": {
+          "type": "number"
+        },
+        "crecimiento_default_por_rss": {
+          "type": "number"
+        },
+        "justificacion_si_difiere": {
+          "type": "string"
+        },
+        "peso_propuesto_t": {
+          "type": "number"
+        },
+        "total": {
+          "type": "number"
+        },
+        "a_margen_comparable": {
+          "type": "number"
+        },
+        "reconciliacion_vs_apu": {
+          "type": "number"
+        }
+      },
+      "description": "v1.7 inv. 6: crecimiento atado al semáforo RSS (verde 6% / ámbar 10% / rojo 15%), siempre registrado"
+    },
+    "opciones": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 3
+    },
+    "flujo": {
+      "type": "object"
+    },
+    "capitulo_financiero": {
+      "type": "number"
+    },
+    "precio_licitacion": {
+      "type": "object",
+      "properties": {
+        "total": {
+          "type": "number"
+        },
+        "por_kg": {
+          "type": "number"
+        }
+      }
+    },
+    "leyenda_alcance": {
+      "type": "string",
+      "description": "v1.7 obligatoria: mejor precio bajo condiciones e información actuales de la compañía y lo que exige la oferta; no es predicción del precio ganador; margen final y firma son de dirección"
+    },
+    "requisicion_neta": {
+      "type": "object",
+      "properties": {
+        "bruta_t": {
+          "type": "number"
+        },
+        "inventario_libre_t": {
+          "type": "number"
+        },
+        "neta_t": {
+          "type": "number"
+        }
+      }
+    },
+    "secuencia_grua": {
+      "type": "object",
+      "properties": {
+        "piezas_criticas": {
+          "type": "integer"
+        },
+        "costo_partir": {
+          "type": "number"
+        }
+      }
+    },
+    "lotes": {
+      "type": "object",
+      "properties": {
+        "deficit_hh_por_semana": {
+          "type": "array"
+        },
+        "costo_resolucion": {
+          "type": "number"
+        }
+      }
+    },
+    "s11_velocidad": {
+      "type": "object",
+      "properties": {
+        "alerta_subcontrato_hh": {
+          "type": "number"
+        },
+        "advertencia_bajo_equilibrio": {
+          "type": "object",
+          "properties": {
+            "activa": {
+              "type": "boolean"
+            },
+            "deficit_t": {
+              "type": "number"
+            },
+            "deficit_con_lean_t": {
+              "type": "number"
+            }
+          },
+          "description": "NUNCA se suprime (inv. 12)"
+        }
+      }
+    },
+    "s12_programa": {
+      "type": "object",
+      "properties": {
+        "carga_combinada_t_sem": {
+          "type": "array"
+        },
+        "carga_hh_sem": {
+          "type": "array"
+        },
+        "ocupacion_habilitado_pct": {
+          "type": "array"
+        },
+        "alerta_ocupacion": {
+          "type": "array",
+          "items": {
+            "type": "boolean"
+          }
+        },
+        "escenarios": {
+          "type": "array"
+        },
+        "recomendacion": {
+          "enum": [
+            "escenario_a",
+            "escenario_b",
+            "escenario_b_optimizado",
+            "escenario_c"
+          ]
+        },
+        "retraso_semanas": {
+          "type": "integer"
+        },
+        "pena_maxima_soportable": {
+          "type": "number"
+        },
+        "advertencia_comunicacion_cliente": {
+          "type": "boolean",
+          "description": "Obligatoria si hay retraso: acordar con el cliente afectado ANTES de comprometer (inv. 14)"
+        }
+      }
+    },
+    "alerta_interferencia_familias": {
+      "type": "object",
+      "description": "v1.7 inv. 3. NUNCA se suprime; decisión humana.",
+      "properties": {
+        "estado": {
+          "enum": [
+            "no_aplica",
+            "activa"
+          ]
+        },
+        "detalle": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "familia_alta_hh": {
+                "type": "string"
+              },
+              "familia_afectada": {
+                "type": "string"
+              },
+              "tonelaje_alta_t": {
+                "type": "number"
+              },
+              "tonelaje_afectada_t": {
+                "type": "number"
+              },
+              "hh_ton_alta": {
+                "type": "number"
+              },
+              "hh_ton_afectada": {
+                "type": "number"
+              },
+              "hh_conflicto_sem": {
+                "type": "number"
+              },
+              "rentabilidad_alta_por_hh": {
+                "type": "number"
+              },
+              "rentabilidad_afectada_por_hh": {
+                "type": "number"
+              },
+              "impacto_estimado": {
+                "type": "string"
+              },
+              "opciones": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "confirmar_precios_mp": {
+      "type": "object",
+      "description": "v1.7 inv. 8: compuerta de emisión. Sin confirmado=true NO se emite precio_licitacion.",
+      "properties": {
+        "lista_precios": {
+          "type": "array"
+        },
+        "confirmado": {
+          "type": "boolean"
+        },
+        "por": {
+          "type": "string"
+        },
+        "fecha": {
+          "type": "string"
+        },
+        "estado_emision": {
+          "enum": [
+            "habilitada",
+            "bloqueada"
+          ]
+        }
+      }
+    },
+    "rss": {
+      "type": "object",
+      "properties": {
+        "valor": {
+          "type": "number"
+        },
+        "fase": {
+          "enum": [
+            "verde",
+            "ambar",
+            "rojo"
+          ]
+        },
+        "componentes": {
+          "type": "array"
+        }
+      }
+    },
+    "lean": {
+      "type": "object",
+      "properties": {
+        "ahorro": {
+          "type": "number"
+        },
+        "pct": {
+          "type": "number"
+        }
+      }
+    },
+    "propuesta_recalibracion": {
+      "type": "object",
+      "description": "v1.7 inv. 16: se genera al cierre si desviación > tolerancia (±5% default). Nunca se aplica sola: aprobación de dirección + nueva versión de parámetros.",
+      "properties": {
+        "parametros_afectados": {
+          "type": "array"
+        },
+        "evidencia": {
+          "type": "array"
+        },
+        "estado": {
+          "enum": [
+            "pendiente_aprobacion",
+            "aprobada",
+            "rechazada"
+          ]
+        },
+        "nueva_version_propuesta": {
+          "type": "string"
+        }
+      }
+    },
+    "memoria_descriptiva": {
+      "type": "string"
+    }
+  }
+}
