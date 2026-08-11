@@ -2,6 +2,12 @@
 ### Proyecto: Plataforma de Presupuestos de Estructuras Metálicas (Kabunik × dcode)
 **Destinatario:** Claude Code · **Autor:** Juan (Kabunik) · **Objetivo:** crear el plan de alto nivel del proyecto en GitHub Projects
 
+> **Registro histórico.** Este plan ya se materializó en el GitHub Project. Se conserva como
+> evidencia de lo que se pidió, **no como fuente de verdad vigente**. Superado en dos puntos:
+> la cifra «22 alertas» que aparece más abajo no tenía fuente (catálogo real en
+> `docs/00-Fundamentos/CATALOGO_ALERTAS.md`), y el alcance de la v1 se amplió por la decisión D2
+> (ver `docs/00-Fundamentos/ALCANCE_v1.md`).
+
 ---
 
 ## 0. Instrucciones para Claude Code

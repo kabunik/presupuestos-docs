@@ -23,12 +23,15 @@ vocabulario. Esta carpeta resuelve ese desencaje y fija el punto de partida para
 | 1 | [MAPA_DOCUMENTAL.md](MAPA_DOCUMENTAL.md) | Inventario de todas las fuentes del repo y **quién manda en qué dominio** |
 | 2 | [RECONCILIACION_SistemaDM_x_Plataforma.md](RECONCILIACION_SistemaDM_x_Plataforma.md) | Las 10 tensiones detectadas y su resolución |
 | 3 | [INVARIANTES_Y_COMPUERTAS.md](INVARIANTES_Y_COMPUERTAS.md) | Los 16 invariantes traducidos a requisitos de producto y UI |
-| 4 | [CONTRATO_INTEGRACION_v0.md](CONTRATO_INTEGRACION_v0.md) | Borrador del mapeo de esquemas E1–E7 ↔ `Model`/`BOM`/`Scenario` (insumo de C1) |
+| 4 | [CONTRATO_INTEGRACION_v0.md](CONTRATO_INTEGRACION_v0.md) | Borrador del mapeo de esquemas E1–E7 ↔ `Model`/`BOM`/`Offer` (insumo de C1) |
 | 5 | [ACTIVOS_REUTILIZABLES.md](ACTIVOS_REUTILIZABLES.md) | Qué del material entregado se usa tal cual, y en qué ítem del backlog |
 | 6 | [ALCANCE_v1.md](ALCANCE_v1.md) | Qué entra en la v1 y su inventario de pantallas |
 | 7 | [GLOSARIO.md](GLOSARIO.md) | Vocabulario común (resuelve la ambigüedad «3 escenarios») |
+| 8 | [CATALOGO_ALERTAS.md](CATALOGO_ALERTAS.md) | Catálogo de alertas y esquema `Alert`. Sustituye la cifra «22 alertas», que no tenía fuente |
+| 9 | [PLAN_DE_MONTAJE.md](PLAN_DE_MONTAJE.md) | El plan de montaje como entrada obligatoria y **qué hace el sistema cuando el cliente no lo entrega** |
 
-Léelos en ese orden la primera vez.
+Léelos en ese orden la primera vez. Los documentos 8 y 9 se añadieron el **11-ago** para desbloquear
+el congelamiento del contrato v0: eran los dos huecos que cambiaban la forma del payload.
 
 ## Decisiones de dirección — 2026-08-06
 

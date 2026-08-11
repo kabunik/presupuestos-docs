@@ -56,7 +56,7 @@ La plataforma **no se percibe como un chat**: es un taller de ingeniería. El **
 
 1. **Workspace** con layout de tres zonas: **visor 3D central** (navegable: orbitar, zoom, seleccionar elemento) · panel derecho contextual · barra inferior/lateral de estado.
 2. Panel de **BOM en grilla editable**: perfiles, grados, longitudes, pesos; selección bidireccional (clic en fila ⇄ resalta en 3D).
-3. Panel de **alertas de validación** (las 22): cada alerta enlaza al elemento afectado en el visor.
+3. Panel de **alertas de validación**: cada alerta enlaza al elemento afectado en el visor.
 4. Usuario corrige lo necesario (editar fila del BOM o pedir cambio por chat) → **"Aprobar BOM"**.
 5. La aprobación dispara el cómputo de costos → habilita escenarios.
 
