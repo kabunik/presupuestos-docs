@@ -255,7 +255,7 @@ procedencia no es `cliente`.
 | Ítem | Issue | Estado |
 |---|---|---|
 | C1.1 Esquemas compartidos versionados | #2 | **Replantear**: es mapeo, no diseño. Base en §1, §2, §7 y §8 |
-| C1.2 Formato de `model_delta` | #3 | **Abierto — es el único hueco de forma que queda.** Con la restricción de §3 ya fijada: opera sobre `Model`, E2 se deriva |
+| C1.2 Formato de `model_delta` | #3 | **Propuesta en [MODEL_DELTA_propuesta.md](MODEL_DELTA_propuesta.md)** (11-ago), pendiente de validar con dcode. Es el único hueco de forma que queda |
 | C1.3 API de sesión | #4 | Base en §4 y §8; añadir los 2 endpoints de compuerta |
 | C1.4 Eventos de streaming | #5 | Base en §4; añadir los 4 eventos nuevos + el motivo `ritmo_no_confirmado` |
 | C1.5 Servicios de datos | #6 | Base en §5; añadir los 2 servicios nuevos y el parámetro `version` |
