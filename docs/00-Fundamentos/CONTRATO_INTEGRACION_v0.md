@@ -126,7 +126,7 @@ POST /session/{id}/bom-approval          gate 1 — BOM aprobado/editado
 POST /session/{id}/price-confirmation    gate 2 — inv. 8 · NUEVO
                                          { confirmado, por, fecha, referencia_oferta }
                                          sin esto: estado_emision = bloqueada
-POST /session/{id}/program-decision      inv. 14 · NUEVO
+POST /session/{id}/program-decision      inv. 14 · NUEVO · ocurre en B2, ANTES del precio
                                          decisión sobre escenarios de programa +
                                          acuse de advertencia_comunicacion_cliente
 ```
@@ -154,21 +154,35 @@ El de la Segmentación v2 era:
 perceiving → awaiting_bom_review → computing → ready → editing → …
 ```
 
-Con los invariantes:
+Con los invariantes, y **en el orden que impone la cadena de dependencias del motor** (ver
+[FLUJO_v1.md](FLUJO_v1.md)):
 
 ```
 perceiving
-  → awaiting_bom_review                  (gate 1)
-  → computing
-  → awaiting_price_confirmation          (gate 2, inv. 8)
-  → awaiting_program_decision            (inv. 14, si hay retraso o interferencia)
+  → awaiting_bom_review            gate 1 · fin del bloque B1 modelo y peso
+  → computing_plant                bloque B2 · §4.7–§4.12
+  → awaiting_family_decision       gate 4 · solo si INV-03 activa
+  → awaiting_program_decision      gate 3 · solo si hay retraso
+  → computing_price                bloque B3 · §4.3–§4.6, §4.13, §4.14
+  → ready_to_confirm
+  → awaiting_price_confirmation    gate 2 · fin del bloque B4 emisión
   → ready
   → emitted
-  → awaiting_closure                     (inv. 16)
+  → awaiting_closure               bloque B5 · inv. 16
   → closed
-       ↳ recalibration_proposed → approved | rejected
-  ↺ editing  (desde ready o emitted; reabre gate 1 si altera el takeoff)
+       ↳ recalibration_proposed → approved | rejected      gate 5
+  ⟲ editing  desde cualquier estado posterior a B1
 ```
+
+**Corrección respecto al borrador anterior:** tenía `awaiting_price_confirmation` **antes** de
+`awaiting_program_decision`. Está invertido. La confirmación de precios es la última compuerta antes
+de emitir; la decisión de programa ocurre en B2, mucho antes, porque el APU necesita el pico de S11
+(§4.3) y S11 necesita la planta cargada (§4.7).
+
+**Regla de invalidación en cascada.** Una edición que altere el takeoff no solo reabre el gate 1:
+**invalida B2 y B3 completos**. Lotes, S11, S12 y APU se calcularon sobre un peso que ya no es el
+vigente. El evento `model.updated` debe indicar qué bloques quedan invalidados, para que la UI marque
+como desactualizados no solo los escenarios sino también la decisión de programa.
 
 Estados terminales que antes no existían: `emitted`, `closed`. El invariante 16 convierte el cierre
 en parte del ciclo de vida del proyecto, no en un apéndice.

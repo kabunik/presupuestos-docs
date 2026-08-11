@@ -5,6 +5,11 @@
 > autoridad de tokens, medidas y copy de las pantallas que ya cubre.
 > **2026-08-06** · issue #80
 
+> **Actualización del 11-ago (#85).** Este documento especificó las pantallas nuevas pero no las
+> insertó en la secuencia del flujo. Resuelto en
+> `docs/00-Fundamentos/FLUJO_v1.md`: el orden lo impone la cadena de dependencias del motor, y
+> **P9 va al final**, después del bloque de planta, porque el APU necesita el pico de S11.
+
 ## Punto de partida
 
 El mockup cubre **P3, P4, P5·A/B/C, P6, P8, P9** y es sólido en lo que cubre: el gate de BOM, la

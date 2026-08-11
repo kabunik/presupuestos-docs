@@ -29,6 +29,7 @@ vocabulario. Esta carpeta resuelve ese desencaje y fija el punto de partida para
 | 7 | [GLOSARIO.md](GLOSARIO.md) | Vocabulario común (resuelve la ambigüedad «3 escenarios») |
 | 8 | [CATALOGO_ALERTAS.md](CATALOGO_ALERTAS.md) | Catálogo de alertas y esquema `Alert`. Sustituye la cifra «22 alertas», que no tenía fuente |
 | 9 | [PLAN_DE_MONTAJE.md](PLAN_DE_MONTAJE.md) | El plan de montaje como entrada obligatoria y **qué hace el sistema cuando el cliente no lo entrega** |
+| 10 | [FLUJO_v1.md](FLUJO_v1.md) | **El orden del flujo, derivado de la cadena de dependencias del motor.** Los 5 bloques, las 5 compuertas en orden de ejecución y el ciclo de vida |
 
 Léelos en ese orden la primera vez. Los documentos 8 y 9 se añadieron el **11-ago** para desbloquear
 el congelamiento del contrato v0: eran los dos huecos que cambiaban la forma del payload.

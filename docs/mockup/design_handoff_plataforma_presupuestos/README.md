@@ -299,7 +299,13 @@ Alto 1080 px con scroll; padding 24/26; `gap:20px`.
 - **Generación (P4):** etapas en streaming; el usuario puede salir y volver (el job sigue). Al terminar → Workspace con el primer output.
 - **Selección bidireccional:** clic en fila de BOM → aísla y resalta en 3D (teal) y actualiza la tab Propiedades; clic en elemento del visor → desplaza la grilla a esa marca. Es el comportamiento central de P6 y del panel derecho de P5.
 - **Edición conversacional:** `interpretando → delta propuesto (Aplicar/Cancelar) → aplicando → aplicado`, o `rechazado por guardarraíl` con alternativas del catálogo. Durante "aplicando" el visor **no** se recarga: solo cambian los elementos afectados (highlight violeta con pulso) y el resto sigue navegable.
-- **Gate de BOM:** sin aprobación no hay cómputo de costos ni escenarios. Aprobar registra autor + fecha + versión. Cualquier edición posterior que altere el takeoff pasa el BOM a **re-abierto** y marca los escenarios como **desactualizados**.
+- **Orden del flujo — no es preferencia, lo impone el motor.** Las pantallas se recorren por bloques:
+  **B1** modelo y peso (P5·A, P6, P5·B, P8) → **B2** planta y programa (P14, P16, P15) → **B3** costo y
+  precio (P5·C, P9) → **B4** emisión (P13, P10) → **B5** cierre (P17). La razón es que §4.3 del motor
+  calcula el APU con el **pico de S11**, y S11 se calcula sobre la planta cargada: **no hay precio
+  antes de resolver la planta.** Detalle en `docs/00-Fundamentos/FLUJO_v1.md`.
+- **Gate de BOM:** sin aprobación no hay bloque de planta, ni costeo, ni opciones. Aprobar registra autor + fecha + versión. Cualquier edición posterior que altere el takeoff pasa el BOM a **re-abierto**, marca las opciones como **desactualizadas** y **también invalida la decisión de programa** — lotes, S11, S12 y APU se calcularon sobre un peso que ya no es el vigente.
+- **Costo antes de B3:** mientras el bloque de costo y precio no haya corrido, el total de la barra inferior va en `—` con badge «pendiente de planta y costeo». No se muestra una cifra que no existe.
 - **Versionado:** cada aplicación de delta incrementa la versión del modelo (v1 → v2…). Revertir crea una versión nueva, no borra historial.
 - **Animaciones** (mínimas y funcionales): `pulseDot` 1.2–1.6 s (opacidad .35 → 1) en puntos de estado; `glowV` 1.4 s en los trazos de elementos afectados; `transition .15s ease` en color de fondo para hover. Sin bounce, sin parallax, sin animaciones de entrada.
 - **Hover:** superficies neutras → `#F1F5F9`; botón rojo → `#8F2E26`; teal → `#17786E`; filas de grilla → fondo `--surface-sunken` (sin cambiar el borde).
