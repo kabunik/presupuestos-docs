@@ -106,6 +106,6 @@ Una «pantalla de ajustes» que edita valores en sitio **viola el inv. 16**.
 |---|---|---|
 | **Sistema DM** | El sistema de costeo y decisión del consultor (v1.7). «DM» = Daniel Michelena | Nombre del consultor, estable |
 | **Plataforma de Presupuestos de Estructuras Metálicas** | Nuestro producto | Descriptivo, no comercial |
-| **«Kabunik Bid»** | Wordmark que aparece en los mockups | **Provisional** — así lo declara el handoff |
+| **«Bid»** | Wordmark que aparece en los mockups. Se retiró «Kabunik» el 11-ago | Nombre de trabajo, no la marca definitiva |
 | **METALITEC / Grupo Baysa** | Cliente ancla y planta de referencia | — |
 | **`baysa_presupuesto_v4.jsx`** | Motor original citado en la Segmentación v2 | Antecedente. La especificación vigente es `motor_calculo_spec.md` v1.7 |

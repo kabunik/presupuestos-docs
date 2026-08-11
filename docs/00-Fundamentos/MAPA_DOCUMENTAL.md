@@ -19,7 +19,7 @@ Entrega del consultor del **2026-08-01**. Es la fuente normativa de toda la arit
 
 | Archivo | Naturaleza | Autoridad | Uso |
 |---|---|---|---|
-| `Kit_Desarrollo_Sistema_DM.zip` | 7 archivos: `motor_calculo_spec.md`, `input_schema.json`, `output_schema.json`, `golden_test.json`, `ejemplo_input.json`, `ejemplo_output.json`, `README.md` | **Normativa — máxima** | Contrato técnico del motor. Base de C1.1 y de la CI de D3 |
+| `Kit_Desarrollo_Sistema_DM.zip` + `Kit_Desarrollo_Sistema_DM/` | 7 archivos: `motor_calculo_spec.md`, `input_schema.json`, `output_schema.json`, `golden_test.json`, `ejemplo_input.json`, `ejemplo_output.json`, `README.md`. **Se conservan también sueltos** (11-ago) para que los esquemas y el golden test sean diffeables y la CI pueda leerlos sin descomprimir | **Normativa — máxima** | Contrato técnico del motor. Base de C1.1 y de la CI de D3 |
 | `Sistema_DM_Documento_Maestro.pdf` | Narrativa 18 secciones + anexo Lean, 9 pág. | Normativa (narrativa) | Explica el *por qué* de cada invariante. Última autoridad en conflictos |
 | `Guia_Ejemplos_y_Evaluacion_Experta.pdf` | Recorrido del golden test, casos límite v1.7, **rúbrica de 13 criterios** | Normativa | La rúbrica es el checklist de auditoría de toda oferta emitida |
 | `Ejemplo_Presupuesto_Sistema_DM.xlsx` | 28 hojas (E1–E7, S1–S12, LEAN, Rentabilidad, VE, Bitacora_Precios, Interferencia_Familias, Cierre_Proyecto, Parametros_Version) | Normativa (oráculo) | Oráculo hoja por hoja para implementar y verificar las tools |

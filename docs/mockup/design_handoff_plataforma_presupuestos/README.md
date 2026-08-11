@@ -154,7 +154,7 @@ Idioma y tono del copy: imperativo + beneficio, frases cortas, sentence case en 
 
 ## 5. Screens / Views
 
-En todas las pantallas la **barra superior** es idéntica: 56 px de alto, fondo `--navy`, padding lateral 16 px, `gap:14px`; a la izquierda cuadrado `9×9 px` `--brand-cyan` con radio 2 px + wordmark "Kabunik Bid" (Space Grotesk 14/600, blanco); breadcrumb con separador `/` en `rgba(255,255,255,.28)`; a la derecha acciones. El nombre de producto **"Kabunik Bid" es provisional**.
+En todas las pantallas la **barra superior** es idéntica: 56 px de alto, fondo `--navy`, padding lateral 16 px, `gap:14px`; a la izquierda cuadrado `9×9 px` `--brand-cyan` con radio 2 px + wordmark **"Bid"** (Space Grotesk 14/600, blanco); breadcrumb con separador `/` en `rgba(255,255,255,.28)`; a la derecha acciones. **Decisión del 11-ago:** el producto se llama **"Bid"** en los mockups — se retira "Kabunik" del wordmark. Sigue siendo un nombre de trabajo, no la marca definitiva.
 
 ### P3 · Wizard de intake
 
