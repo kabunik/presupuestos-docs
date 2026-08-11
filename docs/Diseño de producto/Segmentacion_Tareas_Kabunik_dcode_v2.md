@@ -44,7 +44,7 @@ dcode construye la percepción propia: el agente lee planos PDF/DXF con visión 
 ## 4. Workstream A — dcode · Agente + Herramientas
 
 ### A.1 · Agente orquestador (con estado de modelo)
-- "Cerebro / casuística": system prompt + skills que codifican el proceso de cómputo, la lógica de las 22 alertas, la interpretación de contrato y la lógica de escenarios.
+- "Cerebro / casuística": system prompt + skills que codifican el proceso de cómputo, la lógica del catálogo de alertas, la interpretación de contrato y la lógica de escenarios.
 - **Playbook con compuertas** (secuencia obligatoria; no cotizar antes de validar BOM) y guardarraíles duros: **"ninguna cifra sin tool"** y **compuerta humana** en la validación de BOM.
 - **Agente iterativo/stateful:** mantiene coherencia con el modelo canónico, interpreta peticiones de edición en lenguaje natural, aplica *deltas* al modelo vía herramientas y **acota el recálculo a lo afectado** (no re-lee todos los planos en cada cambio).
 - Orquestación por tool-use / function-calling; modelo Sonnet; manejo de errores y reintentos.
@@ -64,7 +64,7 @@ dcode construye la percepción propia: el agente lee planos PDF/DXF con visión 
 ### A.4 · Herramientas deterministas (Python, con esquema de I/O validado)
 | Grupo | Herramientas |
 |---|---|
-| Cómputo & validación | `kgm_perfil`, `longitud_3d`, `validar_bom`, `motor_alertas_22` |
+| Cómputo & validación | `kgm_perfil`, `longitud_3d`, `validar_bom`, `motor_alertas` |
 | Costo & comercial | `pricer_3_escenarios`, `flujo_caja`, `optimizador_transporte`, `selector_recubrimiento`, `disponibilidad_perfiles`, `ingenieria_valor` |
 | Generación | `generar_oferta_docx`, `exportar_ifc` |
 | Estado (consumen datos de la plataforma) | `get_config_tenant`, `get_benchmarks`, `registrar_cierre` |
@@ -82,7 +82,7 @@ dcode construye la percepción propia: el agente lee planos PDF/DXF con visión 
 
 ### B.1 · Diseño y experiencia
 - Sistema de diseño "de plataforma" (no chat-first). El agente es infraestructura invisible; el **visor 3D es el protagonista**.
-- Superficies manipulables: workspace de proyecto, **visor 3D**, grilla editable de BOM/takeoff, panel de validación (22 alertas), tarjetas comparativas de escenarios, gráficos de flujo de caja, checklist de ingeniería de valor, preview/descarga de oferta.
+- Superficies manipulables: workspace de proyecto, **visor 3D**, grilla editable de BOM/takeoff, panel de validación de alertas, tarjetas comparativas de escenarios, gráficos de flujo de caja, checklist de ingeniería de valor, preview/descarga de oferta.
 
 ### B.2 · Visor 3D y edición en tiempo real (núcleo)
 - **Visor 3D / IFC** navegable como primer output.

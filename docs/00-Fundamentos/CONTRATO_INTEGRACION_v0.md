@@ -196,25 +196,59 @@ presupuesto histórico con los parámetros con los que se calculó**, no con los
 
 ---
 
-## 6 · Tool a renombrar antes de congelar
+## 6 · Tool renombrada
 
-`motor_alertas_22` → **`motor_alertas`**. La cifra 22 no tiene fuente (ver T4 en la reconciliación) y
-congelar un nombre de tool con un número inventado lo vuelve permanente.
+`motor_alertas_22` → **`motor_alertas`**. Aplicado en la Segmentación v2 §A.4. La cifra 22 no tenía
+fuente (ver T4 en la reconciliación) y congelar un nombre de tool con un número inventado lo habría
+vuelto permanente.
 
 ---
 
-## 7 · Checklist para C1
+## 7 · Esquema `Alert` — cerrado
 
-Lo que este borrador deja resuelto y lo que sigue abierto:
+Definido en **[CATALOGO_ALERTAS.md](CATALOGO_ALERTAS.md)** (cierra #68). Lo que el contrato congela:
+
+- La **forma** de `Alert`: `codigo`, `familia`, `severidad`, `bloquea_emision`, `supresible`,
+  `titulo`, `detalle`, `invariante`, `dueno`, `elementos_afectados`, `payload`.
+- Los **dos ejes independientes**: `bloquea_emision` —lo único que cambia qué puede hacer el
+  usuario— y `severidad` en 4 niveles, para orden y filtrado. Se adopta la taxonomía del consultor
+  (crítica/alta/media/baja), no la de 3 niveles del mockup.
+- Las **19 alertas de familia A** (motor), derivadas de los invariantes y de la rúbrica de 13
+  criterios. Son las que tienen comportamiento contractual: 2 compuertas con estado propio en el
+  esquema, 5 advertencias no suprimibles, 6 verificaciones de evidencia y 6 avisos.
+
+Lo que **no** congela, y por eso no bloquea: los códigos `VAL-nn` (validaciones de percepción) y
+`GRD-nn` (guardarraíles de edición). Añadir un código a esas dos familias **no es un cambio de
+contrato**.
+
+---
+
+## 8 · Ritmo de demanda y plan de montaje — cerrado
+
+Definido en **[PLAN_DE_MONTAJE.md](PLAN_DE_MONTAJE.md)** (cierra #70).
+
+`plan_montaje_t_sem` **sigue siendo *required***: el invariante no se relaja. Se añade
+`plan_montaje_meta` con la **procedencia** del ritmo — `cliente` | `despacho` |
+`derivado_de_plazo` — más `fuente`, `confirmado_por` y `fecha`. Todo aditivo.
+
+Motivo nuevo de `emission.blocked`: **`ritmo_no_confirmado`**, cuando falta `confirmado_por` y la
+procedencia no es `cliente`.
+
+---
+
+## 9 · Checklist para C1
 
 | Ítem | Issue | Estado |
 |---|---|---|
-| C1.1 Esquemas compartidos versionados | #2 | **Replantear**: es mapeo, no diseño. Base en §1 y §2 de este documento |
-| C1.2 Formato de `model_delta` | #3 | **Abierto** — pero con la restricción de §3 fijada: opera sobre `Model`, E2 se deriva |
-| C1.3 API de sesión | #4 | Base en §4; añadir los 2 endpoints de compuerta |
-| C1.4 Eventos de streaming | #5 | Base en §4; añadir los 4 eventos nuevos |
+| C1.1 Esquemas compartidos versionados | #2 | **Replantear**: es mapeo, no diseño. Base en §1, §2, §7 y §8 |
+| C1.2 Formato de `model_delta` | #3 | **Abierto — es el único hueco de forma que queda.** Con la restricción de §3 ya fijada: opera sobre `Model`, E2 se deriva |
+| C1.3 API de sesión | #4 | Base en §4 y §8; añadir los 2 endpoints de compuerta |
+| C1.4 Eventos de streaming | #5 | Base en §4; añadir los 4 eventos nuevos + el motivo `ritmo_no_confirmado` |
 | C1.5 Servicios de datos | #6 | Base en §5; añadir los 2 servicios nuevos y el parámetro `version` |
-| C1.6 Congelar v0 + versionado | #7 | Bloqueado por los anteriores |
+| C1.6 Congelar v0 + versionado | #7 | **Desbloqueado respecto a #68 y #70.** Depende ahora solo de C1.2 |
 
-**No congelar el contrato sin haber resuelto** el catálogo de alertas (T4) y el comportamiento
-cuando no hay plan de montaje (T6): ambos cambian la forma del payload.
+Los dos huecos que impedían congelar —catálogo de alertas y comportamiento sin plan de montaje— están
+resueltos, y **ninguna de las dos resoluciones cambia la forma del payload de manera no aditiva**.
+
+Queda **C1.2 (`model_delta`)** como último elemento de forma pendiente. Es el riesgo #1 declarado en
+la Segmentación v2 §9: si su formato no se acuerda, visor y agente se desincronizan.

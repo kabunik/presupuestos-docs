@@ -41,7 +41,7 @@ El 14-ago está a 8 días y **hay dos huecos que cambian la forma del payload**,
 de resolverlos produciría un contrato que hay que reabrir:
 
 - **#68 · catálogo real de alertas.** Afecta al esquema de `Alert` y al nombre de la tool
-  `motor_alertas_22`. Congelar un nombre con una cifra sin fuente lo vuelve permanente.
+  `motor_alertas_22`. **Resuelto el 11-ago** (#68): catálogo cerrado y tool renombrada a `motor_alertas`.
 - **#70 · plan de montaje en el intake.** `plan_montaje_t_sem` es *required* en E6; falta decidir el
   comportamiento cuando **no** hay plan de montaje (caso real y frecuente: CNARCCS cotiza con montaje
   excluido). Afecta a la firma de `/generate` y al ciclo de vida.

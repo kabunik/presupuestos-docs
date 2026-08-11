@@ -13,7 +13,7 @@ Los dos cuerpos documentales describen el mismo producto desde ángulos incompat
 | Autor | Ing. Daniel Michelena (consultor) | Kabunik + dcode |
 | Fecha | 2026-08-01 | 2026-07 |
 | Contrato de datos | `input_schema.json` E1–E7 + `output_schema.json` — **existen** | `TenantConfig, Model, BOM, Alert, Scenario, Offer, Benchmark` — **por definir** (C1.1, #2) |
-| Reglas | 16 invariantes + rúbrica de 13 criterios (6 bloquean emisión) | «las 22 alertas» |
+| Reglas | 16 invariantes + rúbrica de 13 criterios (8 bloquean emisión) | «las 22 alertas» |
 | Aceptación | `golden_test.json`, tolerancia cero, en CI | Eval harness pendiente (D4) |
 | Plan | 5 fases / 18 semanas | F0 Toyota → F3 Ferrari |
 | Primer entregable | Peso AISC + doble chequeo (F1 del consultor) | Visor 3D navegable (F0) |
@@ -129,7 +129,8 @@ Más los issues #26 y #46, cuyos títulos la incorporan.
 **Lo que sí existe y está numerado en el paquete del consultor:**
 
 - **16 invariantes** (reglas de negocio inviolables).
-- **Rúbrica de 13 criterios** de auditoría, de los cuales **6 marcados `*` invalidan la emisión**.
+- **Rúbrica de 13 criterios** de auditoría, de los cuales **8 marcados `*` invalidan la emisión**
+  (criterios 1, 2, 3, 5, 6, 8, 9 y 11).
 - Un conjunto de **alertas nombradas** en el `output_schema`: `alerta_interferencia_familias`,
   `advertencia_bajo_equilibrio`, `alerta_ocupacion`, `alerta_subcontrato_hh`,
   `advertencia_comunicacion_cliente`, `confirmar_precios_mp`, `doble_chequeo → detener_emision`.
@@ -145,8 +146,10 @@ define como trabajo explícito, distinguiendo tres familias con dueños distinto
 | Validación de percepción | Lectura de planos → modelo | dcode (D2) | No, pero condiciona el gate de BOM |
 | Guardarraíles de edición | Catálogo del tenant, disponibilidad | dcode (D1) + `TenantConfig` | Rechaza el delta, no la oferta |
 
-**Acción:** issue `needs-definition` para el catálogo de alertas y validaciones, y renombrar la tool
-`motor_alertas_22` → `motor_alertas` en el contrato antes de congelarlo.
+**RESUELTO el 11-ago (#68).** Catálogo cerrado en [CATALOGO_ALERTAS.md](CATALOGO_ALERTAS.md): 17
+alertas de familia A con comportamiento contractual, más semillas extensibles de percepción (`VAL`) y
+guardarraíles (`GRD`). Tool renombrada a `motor_alertas`. La cifra 22 retirada de los documentos de
+alcance.
 
 ---
 
@@ -195,8 +198,10 @@ Consideración de diseño: el plan de montaje puede llegar como tabla, como arch
 llegar en absoluto (proyecto sin montaje contratado, como el caso CNARCCS, donde el montaje se
 cotiza aparte). El comportamiento cuando **no hay** plan de montaje está sin definir.
 
-**Acción:** issue `needs-definition` — captura del plan de montaje en el intake y comportamiento
-cuando no existe.
+**RESUELTO el 11-ago (#70).** Ver [PLAN_DE_MONTAJE.md](PLAN_DE_MONTAJE.md). `plan_montaje_t_sem`
+sigue siendo *required*; se añade la **procedencia** del ritmo (`cliente` | `despacho` |
+`derivado_de_plazo`). Queda una pregunta de dominio para Daniel —si un calendario de despacho
+satisface el inv. 11— que **no cambia la forma del payload**.
 
 ---
 
