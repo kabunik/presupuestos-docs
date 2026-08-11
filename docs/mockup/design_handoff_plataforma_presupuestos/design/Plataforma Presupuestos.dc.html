@@ -280,7 +280,7 @@ a{color:#1F9E91;text-decoration:none}a:hover{color:#17786e;text-decoration:under
     <span onClick="{{ goP13 }}" style="{{ emissionChipStyle }}">{{ emissionChip }}</span>
     <div style="margin-left:auto;display:flex;align-items:center;gap:10px">
       <div style="height:34px;padding:0 14px;border:1px solid rgba(255,255,255,.18);border-radius:9px;color:rgba(255,255,255,.8);font-size:13px;display:flex;align-items:center;cursor:pointer" style-hover="background:rgba(255,255,255,.08)">Historial</div>
-      <div style="{{ topCtaStyle }}">{{ topCtaLabel }}</div>
+      <div onClick="{{ topCtaGo }}" style="{{ topCtaStyle }}">{{ topCtaLabel }}</div>
     </div>
   </div>
 
@@ -323,7 +323,7 @@ a{color:#1F9E91;text-decoration:none}a:hover{color:#17786e;text-decoration:under
         <div style="position:absolute;top:14px;left:16px;right:16px;background:#fff;border:1px solid #F0C9C4;border-left:4px solid #B0392F;border-radius:12px;padding:14px 16px;display:flex;align-items:center;gap:16px;box-shadow:0 6px 20px rgba(16,24,40,.08)">
           <div style="flex:1">
             <div style="font-size:14px;font-weight:700;color:#B0392F">Revisa el BOM antes de cotizar</div>
-            <div style="font-size:12.5px;color:#64748B;margin-top:3px">Ningún escenario ni oferta se calcula sobre un BOM sin aprobar. 3 alertas de validación abiertas.</div>
+            <div style="font-size:12.5px;color:#64748B;margin-top:3px">Ninguna opción de oferta se calcula sobre un BOM sin aprobar. 3 alertas de validación abiertas.</div>
           </div>
           <div style="height:38px;padding:0 18px;border-radius:10px;background:#B0392F;color:#fff;font-size:13.5px;font-weight:600;display:flex;align-items:center;cursor:pointer" style-hover="background:#8f2e26">Aprobar BOM</div>
         </div>
@@ -1226,14 +1226,21 @@ class Component extends DCLogic {
     const isWs = s.screen === 'ws';
     const mode = s.mode;
 
+    // Orden del flujo real, no de numeración: lo impone la cadena de dependencias
+    // del motor (§4.3 APU necesita el pico de S11 → §4.9 → §4.7 planta cargada).
+    // Ver docs/00-Fundamentos/FLUJO_v1.md
     const navDefs = [
       ['P3 · Intake', { screen: 'p3' }], ['P4 · Generación', { screen: 'p4' }],
-      ['P5·A Revisión', { screen: 'ws', mode: 'a', tab: 'bom' }],
-      ['P5·B Edición', { screen: 'ws', mode: 'b', tab: 'alerts' }],
-      ['P5·C Escenarios', { screen: 'ws', mode: 'c' }],
-      ['P6 · BOM', { screen: 'p6' }], ['P8 · Chat', { screen: 'p8' }], ['P9 · Opciones', { screen: 'p9' }],
-      ['P13 · Precios MP', { screen: 'p13' }], ['P14 · Carga de planta', { screen: 'p14' }],
-      ['P15 · Programa', { screen: 'p15' }], ['P16 · Familias', { screen: 'p16' }]
+      ['B1 · P5·A Revisión', { screen: 'ws', mode: 'a', tab: 'bom' }],
+      ['B1 · P6 BOM', { screen: 'p6' }],
+      ['B1 · P5·B Edición', { screen: 'ws', mode: 'b', tab: 'alerts' }],
+      ['B1 · P8 Chat', { screen: 'p8' }],
+      ['B2 · P14 Planta', { screen: 'p14' }],
+      ['B2 · P16 Familias', { screen: 'p16' }],
+      ['B2 · P15 Programa', { screen: 'p15' }],
+      ['B3 · P5·C Opciones', { screen: 'ws', mode: 'c' }],
+      ['B3 · P9 Opciones', { screen: 'p9' }],
+      ['B4 · P13 Precios MP', { screen: 'p13' }]
     ];
     const active = (p) => p.screen === s.screen && (p.screen !== 'ws' || p.mode === mode);
     const nav = navDefs.map(([label, p]) => ({
@@ -1476,9 +1483,11 @@ class Component extends DCLogic {
       ? 'position:absolute;left:14px;top:14px;bottom:14px;z-index:20;border:1px solid #E3E8EF;border-right:1px solid #E3E8EF;border-radius:14px;box-shadow:0 18px 44px rgba(16,24,40,.18)'
       : '';
 
-    const ctaMap = { a: ['Aprobar BOM', '#B0392F'], b: ['Generar escenarios', '#1F9E91'], c: ['Emitir oferta', '#1F9E91'] };
+    // El CTA del modo B ya no es «Generar escenarios»: entre el gate de BOM y el
+    // precio va todo el bloque B2 de planta. Y el modo C no emite: confirma precios.
+    const ctaMap = { a: ['Aprobar BOM', '#B0392F'], b: ['Analizar planta', '#1E2A3A'], c: ['Confirmar precios', '#B0392F'] };
     const cta = ctaMap[mode];
-    const sess = { a: ['En revisión', '#F5A623'], b: ['Aplicando cambios', '#6D5BD0'], c: ['BOM aprobado', '#6EC6D8'] }[mode];
+    const sess = { a: ['B1 · En revisión', '#F5A623'], b: ['B1 · Aplicando cambios', '#6D5BD0'], c: ['B3 · Opciones vigentes', '#6EC6D8'] }[mode];
 
     return {
       nav, steps, files, stages, bom, alerts, tabs, scenarios, timeline, ve, vcmp, railExtra,
@@ -1515,6 +1524,7 @@ class Component extends DCLogic {
       sessionLabel: sess[0],
       sessionChipStyle: 'display:flex;align-items:center;gap:6px;font-size:11.5px;font-weight:600;padding:4px 9px;border-radius:999px;background:rgba(255,255,255,.09);color:' + sess[1],
       topCtaLabel: cta[0],
+      topCtaGo: () => this.go(mode === 'c' ? { screen: 'p13' } : { screen: 'p14' }),
       topCtaStyle: 'height:34px;padding:0 16px;border-radius:9px;background:' + cta[1] + ';color:#fff;font-size:13px;font-weight:600;display:flex;align-items:center;cursor:pointer',
       panelStyle: 'width:' + (mode === 'c' ? '440px' : '360px') + ';flex:none;background:#fff;border-left:1px solid #E3E8EF;display:flex;flex-direction:column;overflow:hidden',
       bomStateLabel: mode === 'a' ? 'Sin aprobar' : 'Re-abierto',
@@ -1537,10 +1547,12 @@ class Component extends DCLogic {
       })),
       ftTon: mode === 'a' ? '742.2 t' : '734.0 t',
       ftAlerts: mode === 'a' ? '3' : '4',
-      ftCost: mode === 'b' && !liveCosts ? '$50.9M' : '$49.5M',
-      ftCostStyle: 'color:' + (mode === 'b' ? '#6D5BD0' : '#1E2A3A') + ';font-weight:600',
-      ftBadge: mode === 'b' ? (liveCosts ? 'recalculando…' : 'pendiente de regenerar') : 'actualizado',
-      ftBadgeStyle: 'font-size:11px;font-weight:600;padding:3px 9px;border-radius:999px;' + (mode === 'b' ? (liveCosts ? 'background:#EEEAFB;color:#5847bd' : 'background:#FEF7EA;color:#9A6408') : 'background:#E8F6F4;color:#17786e'),
+      // En B1 no hay costo: el bloque B3 no ha corrido. El modo B sí lo tiene porque
+      // representa la edición iterativa, posterior a una pasada completa.
+      ftCost: mode === 'a' ? '—' : (mode === 'b' && !liveCosts ? '$50.9M' : '$49.27M'),
+      ftCostStyle: 'color:' + (mode === 'a' ? '#94A3B8' : mode === 'b' ? '#6D5BD0' : '#1E2A3A') + ';font-weight:600',
+      ftBadge: mode === 'a' ? 'pendiente de planta y costeo' : (mode === 'b' ? (liveCosts ? 'recalculando…' : 'pendiente de regenerar') : 'actualizado'),
+      ftBadgeStyle: 'font-size:11px;font-weight:600;padding:3px 9px;border-radius:999px;' + (mode === 'a' ? 'background:#EEF2F6;color:#64748B' : mode === 'b' ? (liveCosts ? 'background:#EEEAFB;color:#5847bd' : 'background:#FEF7EA;color:#9A6408') : 'background:#E8F6F4;color:#17786e'),
       primaryCtaLabel: s.step === 4 ? 'Generar solución' : 'Continuar',
       primaryCtaStyle: 'height:42px;padding:0 22px;border-radius:10px;background:' + (s.step === 4 ? '#1F9E91' : '#1E2A3A') + ';color:#fff;font-size:14px;font-weight:600;display:flex;align-items:center;cursor:pointer',
       nextStep: () => (s.step === 4 ? this.go({ screen: 'p4' }) : this.go({ step: s.step + 1 })),
