@@ -346,9 +346,9 @@ Formato natural: pantalla con tres tarjetas apiladas, o tabs de una pantalla «F
 | **P14 · carga de planta y ocupación** | Alta | ✓ | ✓ |
 | **P15 · escenarios de programa** | Alta | ✓ | ✓ |
 | **P16 · interferencia de familias** | Alta | ✓ | ✓ |
-| P17 · cierre y recalibración | Media | ✓ | pendiente |
-| P18 · desviaciones como panel del workspace | Media | ✓ | pendiente |
-| P19 · requisición, lotes y grúa | Media | ✓ | pendiente |
+| P17 · cierre y recalibración | Media | ✓ | ✓ #98 |
+| P18 · desviaciones como panel del workspace | Media | ✓ | ✓ #98 — cuarta tab «Concurso» |
+| P19 · requisición, lotes y grúa | Media | ✓ | ✓ #98 |
 | **P11 · definición de planta** (flujo paralelo) | **Alta** | ✓ #94 | ✓ #97 |
 | **P20 · ingesta asistida de planos** | **Alta** | ✓ #94, #97 | ✓ #97 |
 
@@ -358,8 +358,10 @@ compuerta humana de la percepción, donde el usuario confirma sobre el plano lo 
 interpretó. Ambos son de prioridad Alta y ninguno está mockeado. Estructura del flujo de planta en
 `docs/00-Fundamentos/FLUJO_v1.md`.
 
-Las tres pendientes son de prioridad Media y su especificación está completa: se pueden mockear en
-la siguiente ronda sin más decisiones de diseño.
+**Todas las pantallas especificadas están mockeadas** (14 marcos en el prototipo). Lo que queda
+pendiente de diseño no es una pantalla suelta sino el **detalle del flujo paralelo de planta**
+(P11·A–E: identidad, calibración por clase, financieros y publicación de versión) y el detalle de la
+ingesta asistida (P20). El prototipo cubre hoy el paso B de la planta y el estado principal de P20.
 
 ---
 
