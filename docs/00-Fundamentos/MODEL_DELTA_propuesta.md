@@ -92,12 +92,18 @@ programa entero:
 |---|---|---|---|
 | `perfil` | Sí | Sí | B1, B2, B3 |
 | `grado` | No | No | **B3** (cambia el precio del material, no el peso) |
-| `conexion` | No | **Sí** | **B2, B3** (mueve HH de taller y el programa) |
+| `conexion` | **Sí** | **Sí** | **B1, B2, B3** |
 | `acabado` | No | No | **B3** |
 
-El caso de `conexion` es el que más fácil se implementa mal: *«186 conexiones del anillo perimetral
-pasan a empernadas — −214 HH de taller»* no toca el tonelaje, pero **sí** mueve S11 y S12. Si se
-tratara como cambio solo de costo, el programa quedaría calculado sobre HH que ya no son.
+**Corregido el 12-ago.** `conexion` figuraba como «no cambia el peso» y es falso: según la hoja 7 del
+informe de factores, las **conexiones apernadas pesan 8%–16% del peso AISC frente a 5%–11% las
+soldadas** —más placas, atiesadores y splice—, y el factor de tornillería también se mueve. Cambiar el
+tipo de conexión invalida los tres bloques.
+
+Es la propiedad que más fácil se implementa mal. El ejemplo del mockup —*«186 conexiones del anillo
+perimetral pasan a empernadas — −214 HH de taller, +$3,900 en tornillería»*— ya muestra las dos
+mitades: bajan las HH de soldadura y sube la tornillería. Lo que faltaba ver es que el **peso de las
+placas de conexión también cambia**.
 
 ## Selector: siempre IDs resueltos
 

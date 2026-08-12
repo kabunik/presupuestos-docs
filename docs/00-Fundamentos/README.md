@@ -3,7 +3,7 @@
 > Base documental y referencial de la Plataforma de Presupuestos de Estructuras Metálicas.
 > Estos documentos son la **capa de reconciliación** entre el sistema del consultor
 > (Sistema DM v1.7) y la arquitectura de plataforma Kabunik × dcode.
-> Última revisión: **2026-08-06**.
+> Última revisión: **2026-08-12**.
 
 ## Por qué existe esta carpeta
 
@@ -31,9 +31,15 @@ vocabulario. Esta carpeta resuelve ese desencaje y fija el punto de partida para
 | 9 | [PLAN_DE_MONTAJE.md](PLAN_DE_MONTAJE.md) | El plan de montaje como entrada obligatoria y **qué hace el sistema cuando el cliente no lo entrega** |
 | 10 | [FLUJO_v1.md](FLUJO_v1.md) | **El orden del flujo, derivado de la cadena de dependencias del motor.** Los 5 bloques, las 5 compuertas en orden de ejecución y el ciclo de vida |
 | 11 | [MODEL_DELTA_propuesta.md](MODEL_DELTA_propuesta.md) | **Propuesta** de formato de `model_delta` para C1.2. Pendiente de validar con dcode |
+| 12 | [CAPA_MODELO.md](CAPA_MODELO.md) | **Frente abierto de la capa del modelo.** Lo decidido, la arquitectura de proyecciones y las decisiones pendientes |
 
-Léelos en ese orden la primera vez. Los documentos 8 y 9 se añadieron el **11-ago** para desbloquear
-el congelamiento del contrato v0: eran los dos huecos que cambiaban la forma del payload.
+Léelos en ese orden la primera vez.
+
+- **8 y 9** (11-ago) desbloquearon el congelamiento del contrato v0: eran los dos huecos que cambiaban
+  la forma del payload.
+- **10** (11-ago) corrigió el orden del flujo, que violaba la cadena de dependencias del motor.
+- **11 y 12** (11 y 12-ago) cubren el último hueco de forma del contrato y declaran el frente abierto
+  de la capa del modelo.
 
 ## Decisiones de dirección — 2026-08-06
 
@@ -81,7 +87,9 @@ si el conflicto no se resuelve con esta tabla, márcalo como issue `needs-defini
 | **Cifras del caso de referencia** | `golden_test.json` (ley, tolerancia cero) |
 | **Reparto de trabajo y arquitectura** | `Segmentacion_Tareas_Kabunik_dcode_v2.md` |
 | **Contrato de integración** | El contrato v0 congelado (pendiente, C1.6) → [CONTRATO_INTEGRACION_v0.md](CONTRATO_INTEGRACION_v0.md) como borrador |
-| **Alcance y plan de la v1** | [ALCANCE_v1.md](ALCANCE_v1.md) → GitHub Project [kabunik/projects/2](https://github.com/orgs/kabunik/projects/2) |
+| **Alcance de la v1** | [ALCANCE_v1.md](ALCANCE_v1.md) → GitHub Project [kabunik/projects/2](https://github.com/orgs/kabunik/projects/2) |
+| **Orden del flujo** | [FLUJO_v1.md](FLUJO_v1.md) — derivado del motor, no de preferencia de diseño |
+| **Capa del modelo** | [CAPA_MODELO.md](CAPA_MODELO.md) — decidido vs. abierto |
 | **Diseño visual y comportamiento de UI** | `docs/mockup/.../README.md` (hi-fi, medidas y copy finales) → `tokens.css` |
 
 Nota: el consultor define su propio orden interno (*rector → kit → Excel → narrativa*). El
