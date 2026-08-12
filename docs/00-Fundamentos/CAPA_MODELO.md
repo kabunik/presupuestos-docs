@@ -34,6 +34,8 @@ Tres cosas la volvieron urgente en la última semana:
 | **Ninguna cifra sin tool.** El agente orquesta e interpreta; las tools calculan | Guardarraíl de producto |
 | **Multitenancy y autenticación son de Kabunik** (K7.1, K7.2, K7.3) | `Segmentacion_Tareas_Kabunik_dcode_v2.md` §5 |
 | **Un solo agente orquestador**, con varios puntos de interacción en el userflow. Varios agentes en el futuro son viables sin cambiar la arquitectura | Aclaración de dirección, 12-ago |
+| **La planta es entidad de primera clase y un tenant puede tener varias.** Se configura en un flujo paralelo, se versiona, y el proyecto se asocia a `(plant_id, config_version)` en el intake. **`version_parametros` es por planta, no por tenant** | Decisión de dirección, 12-ago · `FLUJO_v1.md` · #94 |
+| **El gate de precios de MP va al arranque de B3**, no al final: los precios son entrada de §4.3. En B4 queda una revalidación de vigencia | Decisión de dirección, 12-ago · #94 |
 
 ---
 
@@ -186,7 +188,21 @@ Si no, es una validación del intake y hay que declararla, no descubrirla con un
 CNARCCS son 48 páginas y 62 MB, probablemente vectoriales — pero eso no dice nada del resto del
 mercado.
 
-### 7 · `model_delta.origen`
+### 7 · La ingesta asistida de planos
+
+**Abierto, y relevante justo esta semana** porque dcode está trabajando en la interpretación de PDFs.
+
+Falta la superficie donde **el humano confirma sobre el plano** lo que el agente interpretó:
+clasificación de páginas —planta, elevación, detalle, isométrico—, grilla de ejes, niveles con su cota,
+marcas de perfil, cotas y **simbología de soldadura**.
+
+No es una pantalla de comodidad. **Es la compuerta humana de la fusión del punto 2**: la simbología de
+soldadura solo vive en el plano, ninguna máquina la lee perfecta al primer intento, y hasta 8.5% del
+peso depende de ella. Que el usuario la confirme sobre el plano es el diseño correcto, no un parche.
+
+Declarada como **P20** en `FLUJO_v1.md`, entre la generación y el bloque B1. Sin mockear.
+
+### 8 · `model_delta.origen`
 
 **Menor y cerrable ya.** Hoy el enum es `agente | usuario | reversion`. Con la aclaración de que se
 interactúa con el agente en varios puntos del flujo, conviene que `origen` identifique **en qué punto
@@ -223,6 +239,8 @@ del consultor.
 | 3 | **Confirmar que la base de datos del modelo la construye Kabunik** (K3.2, K7.3), y qué necesita dcode de ella | Ambos |
 | 4 | **Alcance de PDF escaneado en v1**: sí o no | Producto |
 | 5 | **Prioridad de los planos PDF de CNARCCS** por encima del resto de insumos de Daniel | Juan → Daniel |
+| 6 | **¿`e5_financieros` ($/HH) va en `PlantConfig`, en `TenantConfig` o partido?** La nómina es de la planta; el overhead puede ser corporativo | Dirección + Daniel |
+| 7 | **Confirmar con Daniel la reubicación del gate de precios** al arranque de B3. Él escribió «compuerta final»; el requisito se cumple igual, pero es su invariante | Juan → Daniel |
 
-Los puntos 5, 6 y 7 del frente (secciones sin peso, PDF escaneado, `origen` del delta) no necesitan
-la reunión: se resuelven con los issues abiertos.
+Los puntos 5, 6 y 8 del frente (secciones sin peso, PDF escaneado, `origen` del delta) no necesitan
+la reunión: se resuelven con los issues abiertos. El 7 (ingesta asistida) necesita diseño, no decisión.
