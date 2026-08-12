@@ -25,12 +25,18 @@ Este paquete cubre las pantallas de **prioridad alta/crítica** de la primera et
 | **P14** | **Carga de planta y ocupación de habilitado** | — | carga combinada + chequeos S11 |
 | **P15** | **Decisión de programa (A/B/B\*/C)** | — | 4 escenarios + compuerta de comunicación |
 | **P16** | **Interferencia de familias y subproyectos** | — | alerta no suprimible + 4 opciones |
+| **P20** | **Ingesta asistida de planos** | — | páginas con estado, capas, lectura del agente en prosa |
+| **P11** | **Definición de planta** (flujo paralelo) | — | capacidad y VSM + versionado inmutable |
 
-Las cuatro últimas se añadieron en la **reconciliación con el Sistema DM v1.7** (issue #80). Su
-especificación completa —junto con la de P17, P18 y P19, aún sin mockear— está en
-`docs/Diseño de producto/RECONCILIACION_DISENO_Mockup.md`.
+Las seis últimas se añadieron reconciliando con el Sistema DM v1.7 (#80), resecuenciando el flujo
+(#85) y tras la revisión del 12-ago (#94, #97). Su especificación —junto con la de P17, P18 y P19,
+aún sin mockear— está en `docs/Diseño de producto/RECONCILIACION_DISENO_Mockup.md`.
 
-Fuera de alcance en esta etapa: P1 login, P2 dashboard, P7 aislado, P10 emisión de oferta, P11 calibración, P12 admin, P17 cierre, P18 desviaciones como panel, P19 requisición.
+**P20 y P11 toman como referencia de flujo el recorrido de Steel Genie**, extraído en
+`docs/Diseño de producto/REFERENCIA_SteelGenie.md` con las 16 capturas en `docs/steel genie/`. Es
+referencia de **flujo**, no de aspecto: la paleta y la tipografía siguen siendo las de `tokens.css`.
+
+Fuera de alcance en esta etapa: P1 login, P2 dashboard, P7 aislado, P10 emisión de oferta, P12 admin, P17 cierre, P18 desviaciones como panel, P19 requisición.
 
 ---
 

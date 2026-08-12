@@ -1068,6 +1068,252 @@ a{color:#1F9E91;text-decoration:none}a:hover{color:#17786e;text-decoration:under
 </div>
 </sc-if>
 
+<sc-if value="{{ isP20 }}" hint-placeholder-val="{{ true }}">
+<div data-screen-label="P20 Ingesta asistida" style="width:1440px;height:900px;background:#F4F6F9;border-radius:14px;overflow:hidden;box-shadow:0 24px 60px rgba(16,24,40,.16);display:flex;flex-direction:column">
+  <div style="height:56px;flex:none;background:#1E2A3A;display:flex;align-items:center;padding:0 16px;gap:14px">
+    <div style="display:flex;align-items:center;gap:9px"><div style="width:9px;height:9px;background:#6EC6D8;border-radius:2px"></div><span style="font-family:'Space Grotesk';font-weight:600;font-size:14px;color:#fff;letter-spacing:-.2px">Bid</span></div>
+    <span style="color:rgba(255,255,255,.28)">/</span><span style="font-size:13.5px;color:#fff">CNARCCS — Domo</span>
+    <span style="color:rgba(255,255,255,.28)">/</span><span style="font-size:13.5px;color:rgba(255,255,255,.7)">Ingesta de planos</span>
+    <span style="font-family:'JetBrains Mono';font-size:11px;padding:4px 9px;border-radius:6px;background:rgba(245,166,35,.18);color:#F5C77E">3 de 7 páginas confirmadas</span>
+    <div style="margin-left:auto;display:flex;gap:10px">
+      <div style="height:34px;padding:0 14px;border-radius:9px;border:1px solid rgba(255,255,255,.18);color:#fff;font-size:13px;display:flex;align-items:center;cursor:pointer">Ver en 3D</div>
+      <div style="height:34px;padding:0 16px;border-radius:9px;background:rgba(255,255,255,.14);color:rgba(255,255,255,.5);font-size:13px;font-weight:600;display:flex;align-items:center">Construir modelo</div>
+    </div>
+  </div>
+
+  <div style="flex:1;display:flex;overflow:hidden">
+
+    <div style="width:300px;flex:none;background:#fff;border-right:1px solid #E3E8EF;display:flex;flex-direction:column;overflow:hidden">
+      <div style="height:44px;flex:none;border-bottom:1px solid #E3E8EF;display:flex;align-items:center;padding:0 14px;gap:8px">
+        <span style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:#475569">Páginas</span>
+        <span style="font-family:'JetBrains Mono';font-size:10px;background:#EEF2F6;color:#64748B;padding:2px 6px;border-radius:5px">7</span>
+      </div>
+      <div style="flex:1;overflow:auto;padding:12px;display:flex;flex-direction:column;gap:9px">
+        <sc-for list="{{ pages }}" as="pg" hint-placeholder-count="7">
+          <div onClick="{{ pg.go }}" style="{{ pg.cardStyle }}" style-hover="background:#F8FAFC">
+            <div style="display:flex;align-items:center;gap:8px">
+              <span style="font-family:'JetBrains Mono';font-size:11.5px;font-weight:600;color:#1E2A3A">{{ pg.code }}</span>
+              <span style="font-size:10px;color:#94A3B8;text-transform:uppercase;letter-spacing:.5px;font-weight:700">{{ pg.tipo }}</span>
+              <span style="margin-left:auto;{{ pg.pillStyle }}">{{ pg.estado }}</span>
+            </div>
+            <div style="font-size:12.5px;color:#475569;margin-top:5px;line-height:1.35">{{ pg.title }}</div>
+            <div style="display:flex;gap:12px;margin-top:7px;padding-top:7px;border-top:1px solid #F1F5F9">
+              <span style="{{ pg.cotaStyle }}">cota {{ pg.cota }}</span>
+              <span style="{{ pg.escalaStyle }}">esc {{ pg.escala }}</span>
+              <span style="margin-left:auto;font-family:'JetBrains Mono';font-size:11px;color:#94A3B8">{{ pg.elems }} el.</span>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+
+    <div style="flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0">
+      <div style="height:48px;flex:none;background:#fff;border-bottom:1px solid #E3E8EF;display:flex;align-items:center;padding:0 16px;gap:10px">
+        <span style="font-family:'JetBrains Mono';font-size:12px;font-weight:600">E-12</span>
+        <span style="font-size:13px;color:#475569">Planta de cubierta · domo</span>
+        <div style="width:1px;height:20px;background:#E3E8EF;margin:0 4px"></div>
+        <div style="display:flex;flex-direction:column;gap:1px"><span style="font-size:9.5px;color:#94A3B8;text-transform:uppercase;letter-spacing:.5px;font-weight:700">Cota de nivel</span><span style="font-family:'JetBrains Mono';font-size:12px;font-weight:600">+24.60 m</span></div>
+        <div style="display:flex;flex-direction:column;gap:1px;margin-left:14px"><span style="font-size:9.5px;color:#94A3B8;text-transform:uppercase;letter-spacing:.5px;font-weight:700">Escala</span><span style="font-family:'JetBrains Mono';font-size:12px;font-weight:600">1:100</span></div>
+        <div style="margin-left:auto;display:flex;gap:7px">
+          <div style="height:32px;padding:0 12px;border:1px solid #CBD5E1;border-radius:9px;display:flex;align-items:center;gap:7px;font-size:12.5px;cursor:pointer;background:#fff" style-hover="background:#F1F5F9">⧉ Recortar región</div>
+          <div style="height:32px;padding:0 12px;border:1px solid #CBD5E1;border-radius:9px;display:flex;align-items:center;gap:7px;font-size:12.5px;cursor:pointer;background:#fff" style-hover="background:#F1F5F9">◫ Capas</div>
+        </div>
+      </div>
+
+      <div style="flex:1;background:#EDF1F5;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center">
+        {{ viewerPlan }}
+        <div style="position:absolute;left:16px;top:16px;width:212px;background:#fff;border:1px solid #E3E8EF;border-radius:12px;box-shadow:0 6px 20px rgba(16,24,40,.08);overflow:hidden">
+          <div style="padding:10px 13px;border-bottom:1px solid #E3E8EF;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:#475569">Capas</div>
+          <div style="padding:10px 13px;display:flex;flex-direction:column;gap:9px">
+            <sc-for list="{{ layers }}" as="ly" hint-placeholder-count="7">
+              <div style="display:flex;align-items:center;gap:10px;cursor:pointer">
+                <span style="font-size:12.5px;color:#475569;flex:1">{{ ly.name }}</span>
+                <span style="{{ ly.sw }}"><span style="{{ ly.knob }}"></span></span>
+              </div>
+            </sc-for>
+          </div>
+          <div style="padding:10px 13px;border-top:1px solid #E3E8EF;background:#F8FAFC">
+            <div style="font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#94A3B8;margin-bottom:8px">Aislar por longitud</div>
+            <div style="display:flex;align-items:center;gap:7px">
+              <div style="flex:1;height:30px;border:1px solid #CBD5E1;border-radius:8px;background:#fff;display:flex;align-items:center;padding:0 9px;font-family:'JetBrains Mono';font-size:12px">4.0</div>
+              <span style="font-size:11.5px;color:#94A3B8">a</span>
+              <div style="flex:1;height:30px;border:1px solid #CBD5E1;border-radius:8px;background:#fff;display:flex;align-items:center;padding:0 9px;font-family:'JetBrains Mono';font-size:12px">6.0</div>
+              <span style="font-family:'JetBrains Mono';font-size:11px;color:#64748B">m</span>
+            </div>
+          </div>
+        </div>
+        <div style="position:absolute;right:16px;bottom:16px;display:flex;gap:14px;background:rgba(255,255,255,.94);border:1px solid #E3E8EF;border-radius:10px;padding:8px 13px;font-size:11.5px">
+          <span style="display:flex;align-items:center;gap:6px"><span style="width:9px;height:9px;border-radius:2px;background:#6D5BD0"></span>Detectado</span>
+          <span style="display:flex;align-items:center;gap:6px"><span style="width:9px;height:9px;border-radius:2px;background:#F5A623"></span>Por revisar</span>
+          <span style="display:flex;align-items:center;gap:6px"><span style="width:9px;height:9px;border-radius:2px;background:#B0392F"></span>Sin resolver</span>
+        </div>
+      </div>
+    </div>
+
+    <div style="width:376px;flex:none;background:#fff;border-left:1px solid #E3E8EF;overflow:auto;padding:14px;display:flex;flex-direction:column;gap:11px">
+
+      <div style="border:1px solid #DCD6F5;background:#FAF9FE;border-radius:12px;padding:14px">
+        <div style="display:flex;align-items:center;gap:8px">
+          <span style="width:7px;height:7px;border-radius:2px;background:#6D5BD0"></span>
+          <span style="font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:#5847bd">Lo que leyó el agente</span>
+        </div>
+        <div style="font-size:12.5px;color:#475569;line-height:1.55;margin-top:9px">En esta hoja leí <b style="font-weight:600">escala 1:100</b> del rótulo y <b style="font-weight:600">cota +24.60</b> del corte A-A. La grilla radial está declarada hasta el eje 3; <b style="font-weight:600">los ejes entre 3 y 4 los inferí por simetría</b>. La simbología de soldadura del detalle E-15 no es legible: <b style="font-weight:600">no pude determinar el tipo de junta</b> de las 24 conexiones del anillo perimetral.</div>
+        <div style="display:flex;gap:14px;margin-top:12px;padding-top:11px;border-top:1px solid #DCD6F5">
+          <span style="font-size:11.5px;font-weight:600;color:#5847bd;cursor:pointer">Confirmar lectura ›</span>
+          <span style="font-size:11.5px;color:#64748B;cursor:pointer">Corregir sobre el plano</span>
+        </div>
+      </div>
+
+      <div>
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:#475569;margin-bottom:9px">Sin resolver en esta hoja</div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <sc-for list="{{ unres }}" as="u" hint-placeholder-count="3">
+            <div style="{{ u.cardStyle }}">
+              <div style="display:flex;align-items:center;gap:8px">
+                <span style="{{ u.pillStyle }}">{{ u.sev }}</span>
+                <span style="margin-left:auto;font-family:'JetBrains Mono';font-size:10.5px;color:#94A3B8">{{ u.code }}</span>
+              </div>
+              <div style="font-size:12px;font-weight:600;margin-top:5px;line-height:1.3">{{ u.title }}</div>
+              <div style="font-size:11px;color:#64748B;margin-top:3px;line-height:1.4">{{ u.body }}</div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+
+      <div style="border:1px solid #E3E8EF;border-radius:12px;overflow:hidden">
+        <div style="display:grid;grid-template-columns:1fr 74px 84px;background:#F8FAFC;border-bottom:1px solid #E3E8EF;padding:8px 13px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#94A3B8">
+          <span>Recuento</span><span style="text-align:right">Hoja</span><span style="text-align:right">Proyecto</span>
+        </div>
+        <sc-for list="{{ sums }}" as="x" hint-placeholder-count="6">
+          <div style="display:grid;grid-template-columns:1fr 74px 84px;align-items:center;padding:8px 13px;border-bottom:1px solid #F1F5F9">
+            <span style="font-size:12px;color:#64748B">{{ x.k }}</span>
+            <span style="{{ x.vStyle }}">{{ x.hoja }}</span>
+            <span style="{{ x.vStyle }}">{{ x.proy }}</span>
+          </div>
+        </sc-for>
+        <div style="display:flex;align-items:center;padding:9px 13px;background:#F8FAFC;font-size:12px">
+          <span style="color:#64748B">Páginas confirmadas</span>
+          <span style="margin-left:auto;font-family:'JetBrains Mono';font-size:12.5px;font-weight:600;color:#9A6408">3 de 7</span>
+        </div>
+      </div>
+
+      <div style="border:1px solid #F5D7A6;background:#FEF7EA;border-radius:12px;padding:13px">
+        <div style="font-size:12px;color:#7C5308;line-height:1.5"><b style="font-weight:600">E-15 está bloqueada:</b> sin cota ni escala no se puede construir geometría de esa hoja. El resto del modelo se construye sin ella y las 24 conexiones del anillo quedan sin tipo de junta.</div>
+      </div>
+    </div>
+  </div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isP11 }}" hint-placeholder-val="{{ true }}">
+<div data-screen-label="P11 Definicion de planta" style="width:1440px;height:900px;background:#F4F6F9;border-radius:14px;overflow:hidden;box-shadow:0 24px 60px rgba(16,24,40,.16);display:flex;flex-direction:column">
+  <div style="height:56px;flex:none;background:#1E2A3A;display:flex;align-items:center;padding:0 16px;gap:14px">
+    <div style="display:flex;align-items:center;gap:9px"><div style="width:9px;height:9px;background:#6EC6D8;border-radius:2px"></div><span style="font-family:'Space Grotesk';font-weight:600;font-size:14px;color:#fff;letter-spacing:-.2px">Bid</span></div>
+    <span style="color:rgba(255,255,255,.28)">/</span><span style="font-size:13.5px;color:#fff">Plantas</span>
+    <span style="color:rgba(255,255,255,.28)">/</span><span style="font-size:13.5px;color:rgba(255,255,255,.7)">METALITEC · Pachuca</span>
+    <span style="font-family:'JetBrains Mono';font-size:11px;color:#6EC6D8;border:1px solid rgba(110,198,216,.4);padding:2px 7px;border-radius:6px">v2026.1 vigente</span>
+    <div style="margin-left:auto;display:flex;gap:10px">
+      <div style="height:34px;padding:0 14px;border-radius:9px;border:1px solid rgba(255,255,255,.18);color:#fff;font-size:13px;display:flex;align-items:center;cursor:pointer">Descartar cambios</div>
+      <div style="height:34px;padding:0 16px;border-radius:9px;background:#1F9E91;color:#fff;font-size:13px;font-weight:600;display:flex;align-items:center;cursor:pointer">Publicar v2026.2</div>
+    </div>
+  </div>
+
+  <div style="flex:1;display:flex;overflow:hidden">
+
+    <div style="width:290px;flex:none;background:#fff;border-right:1px solid #E3E8EF;display:flex;flex-direction:column;padding:20px 14px;overflow:auto">
+      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:#94A3B8">Definición de planta</div>
+      <div style="font-family:'Space Grotesk';font-size:20px;font-weight:600;margin-top:7px;line-height:1.2">METALITEC<br>Pachuca, Hidalgo</div>
+      <div style="font-size:12px;color:#64748B;margin-top:7px;line-height:1.45">Esta definición se configura una vez y se reutiliza. Los proyectos se asocian a una versión concreta.</div>
+
+      <div style="display:flex;flex-direction:column;gap:2px;margin-top:20px">
+        <sc-for list="{{ pSteps }}" as="st" hint-placeholder-count="5">
+          <div style="{{ st.rowStyle }}" style-hover="background:#F8FAFC">
+            <span style="{{ st.dotStyle }}">{{ st.letter }}</span>
+            <div style="min-width:0"><div style="font-size:13px;font-weight:500;line-height:1.3">{{ st.title }}</div><div style="font-size:11.5px;color:#94A3B8;margin-top:2px;line-height:1.35">{{ st.sub }}</div></div>
+          </div>
+        </sc-for>
+      </div>
+
+      <div style="margin-top:auto;padding-top:18px">
+        <div style="font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:#94A3B8;margin-bottom:9px">Versiones publicadas</div>
+        <div style="display:flex;flex-direction:column;gap:7px">
+          <sc-for list="{{ pVers }}" as="v" hint-placeholder-count="3">
+            <div style="border:1px solid #E3E8EF;border-radius:9px;padding:9px 11px;background:#F8FAFC">
+              <div style="display:flex;align-items:center;gap:8px">
+                <span style="font-family:'JetBrains Mono';font-size:11.5px;font-weight:600">{{ v.ver }}</span>
+                <span style="margin-left:auto;{{ v.pillStyle }}">{{ v.estado }}</span>
+              </div>
+              <div style="font-size:11px;color:#94A3B8;margin-top:4px">{{ v.fecha }} · {{ v.uso }}</div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </div>
+
+    <div style="flex:1;overflow:auto;padding:24px 26px;display:flex;flex-direction:column;gap:18px;min-width:0">
+      <div>
+        <div style="font-family:'Space Grotesk';font-size:22px;font-weight:600">Capacidad y flujo de valor</div>
+        <div style="font-size:14px;color:#64748B;margin-top:6px;max-width:70ch">Es la base de los chequeos S11 y S12: sin capacidad declarada un proyecto no puede pasar del bloque de modelo. El cuello de botella determina la ocupación que se vigila semana a semana.</div>
+      </div>
+
+      <div style="background:#fff;border:1px solid #E3E8EF;border-radius:16px;overflow:hidden">
+        <div style="display:grid;grid-template-columns:1fr 250px 92px 92px;background:#F8FAFC;border-bottom:1px solid #E3E8EF;padding:10px 15px;font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#94A3B8">
+          <span>Estación</span><span>Detalle</span><span style="text-align:right">t/sem</span><span style="text-align:right">Utiliz.</span>
+        </div>
+        <sc-for list="{{ stationRows }}" as="st" hint-placeholder-count="5">
+          <div style="{{ st.rowStyle }}">
+            <span style="font-size:13px;font-weight:500">{{ st.name }}</span>
+            <span style="{{ st.detailStyle }}">{{ st.detail }}</span>
+            <span style="font-family:'JetBrains Mono';font-size:12.5px;text-align:right">{{ st.cap }}</span>
+            <span style="font-family:'JetBrains Mono';font-size:12.5px;text-align:right;font-weight:600">{{ st.util }}</span>
+          </div>
+        </sc-for>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 360px;gap:18px;align-items:start">
+        <div style="background:#fff;border:1px solid #E3E8EF;border-radius:16px;padding:20px">
+          <div style="font-size:12px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:#475569;margin-bottom:14px">Velocidades declaradas</div>
+          <div style="display:flex;flex-direction:column;gap:11px">
+            <sc-for list="{{ speeds }}" as="sp" hint-placeholder-count="4">
+              <div style="display:flex;align-items:center;justify-content:space-between;padding-bottom:10px;border-bottom:1px solid #F1F5F9">
+                <span style="font-size:13px;color:#475569">{{ sp.k }}</span>
+                <span style="font-family:'JetBrains Mono';font-size:14px;font-weight:600">{{ sp.v }}</span>
+              </div>
+            </sc-for>
+          </div>
+          <div style="margin-top:14px;display:flex;align-items:flex-start;gap:9px;background:#F8FAFC;border:1px solid #EEF2F6;border-radius:10px;padding:11px 13px">
+            <span style="width:7px;height:7px;border-radius:2px;background:#1F9E91;flex:none;margin-top:5px"></span>
+            <span style="font-size:11.5px;color:#64748B;line-height:1.45">El ahorro Lean es una sola métrica —reducción de HH/ton— y alimenta tanto el costeo como el gainsharing. Solo se acredita el verificado, nunca el estimado.</span>
+          </div>
+        </div>
+
+        <div style="background:#FEF7EA;border:1px solid #F5D7A6;border-left:4px solid #F5A623;border-radius:14px;padding:18px">
+          <div style="font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:#9A6408">Cambios sin publicar</div>
+          <div style="font-size:13.5px;font-weight:700;color:#7C5308;margin-top:8px;line-height:1.4">Publicar crea la versión v2026.2</div>
+          <div style="font-size:12.5px;color:#7C5308;margin-top:8px;line-height:1.55">Las versiones son <b style="font-weight:600">inmutables</b>: los 4 proyectos ligados a v2026.1 siguen calculados con ella. Solo los proyectos nuevos —o los que se reasocien de forma explícita— usarán v2026.2.</div>
+          <div style="margin-top:14px;padding-top:12px;border-top:1px solid #F5D7A6;display:flex;flex-direction:column;gap:6px">
+            <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:#7C5308"><span style="width:6px;height:6px;border-radius:50%;background:#F5A623;flex:none"></span>Velocidad de habilitado 22 → 24 t/sem</div>
+            <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:#7C5308"><span style="width:6px;height:6px;border-radius:50%;background:#F5A623;flex:none"></span>Ahorro Lean 7.1% → 8.4%</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="background:#fff;border:1px solid #E3E8EF;border-radius:16px;padding:20px">
+        <div style="display:flex;align-items:center;gap:12px">
+          <div style="font-size:12px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:#475569">Estado operativo · se actualiza cada semana</div>
+          <span style="font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:999px;background:#E8F6F4;color:#17786e">E7 actualizado hace 2 días</span>
+        </div>
+        <div style="font-size:12.5px;color:#64748B;margin-top:8px;line-height:1.5;max-width:74ch">La carga de planta y el inventario <b style="font-weight:600">no son parte de esta definición</b>: cambian cada semana y viven en su propio flujo. Si se quedan viejos, la decisión de programa deja de ser fiable.</div>
+        <div style="display:flex;gap:10px;margin-top:14px">
+          <div style="height:34px;padding:0 13px;border:1px solid #CBD5E1;border-radius:9px;display:flex;align-items:center;font-size:12.5px;cursor:pointer;background:#fff" style-hover="background:#F1F5F9">Actualizar carga de planta</div>
+          <div style="height:34px;padding:0 13px;border:1px solid #CBD5E1;border-radius:9px;display:flex;align-items:center;font-size:12.5px;cursor:pointer;background:#fff" style-hover="background:#F1F5F9">Actualizar inventario</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</sc-if>
+
 </div>
 
 <div style="position:fixed;left:50%;bottom:18px;transform:translateX(-50%);display:flex;align-items:center;gap:4px;background:rgba(30,42,58,.96);backdrop-filter:blur(8px);border-radius:12px;padding:6px;box-shadow:0 12px 34px rgba(16,24,40,.3);z-index:50">
@@ -1142,6 +1388,59 @@ class Component extends DCLogic {
     }
     return React.createElement('svg', {
       viewBox: '-420 -320 840 560', width: o.w, height: o.h,
+      style: { maxWidth: '100%', maxHeight: '100%', overflow: 'visible' }
+    }, els);
+  }
+
+  planView(opts) {
+    // Planta de cubierta del domo, vista superior. Violeta = detectado,
+    // ámbar = por revisar, rojo = sin resolver. Anillos 3-4 en rojo:
+    // la grilla radial de esa zona está inferida (VAL-05).
+    const o = Object.assign({ w: 760, h: 560 }, opts || {});
+    const els = []; let k = 0;
+    const R = 240, RINGS = 5, RADIAL = 24;
+    const P = (r, a) => [r * Math.cos(a), r * Math.sin(a) * 0.86];
+    const line = (p1, p2, st, w, op, extra) => els.push(React.createElement('line', Object.assign({
+      key: 'l' + (k++), x1: p1[0], y1: p1[1], x2: p2[0], y2: p2[1],
+      stroke: st, strokeWidth: w, strokeOpacity: op, strokeLinecap: 'round'
+    }, extra || {})));
+    // anillos concéntricos
+    for (let i = 1; i <= RINGS; i++) {
+      const r = R * (i / RINGS), pts = [];
+      for (let j = 0; j <= 96; j++) pts.push(P(r, (j / 96) * Math.PI * 2).join(','));
+      const unres = i === 4;
+      els.push(React.createElement('polyline', {
+        key: 'r' + i, points: pts.join(' '), fill: 'none',
+        stroke: unres ? '#B0392F' : '#6D5BD0', strokeWidth: unres ? 2.4 : 1.8,
+        strokeOpacity: unres ? .95 : .8, strokeDasharray: unres ? '7 5' : null
+      }));
+    }
+    // radiales
+    for (let m = 0; m < RADIAL; m++) {
+      const ang = (m / RADIAL) * Math.PI * 2;
+      const review = (m % 5 === 0);
+      line(P(R / RINGS, ang), P(R, ang), review ? '#F5A623' : '#6D5BD0', review ? 2.6 : 1.5, review ? 1 : .62);
+    }
+    // grilla de ejes de fondo
+    for (let g = 0; g < 8; g++) {
+      const ang = (g / 8) * Math.PI;
+      line(P(R * 1.12, ang), P(R * 1.12, ang + Math.PI), '#94A3B8', 1, .2, { strokeDasharray: '3 6' });
+    }
+    // marcas de nodo sin resolver en el anillo 4
+    for (let m = 0; m < RADIAL; m += 3) {
+      const pt = P(R * (4 / RINGS), (m / RADIAL) * Math.PI * 2);
+      els.push(React.createElement('circle', { key: 'n' + m, cx: pt[0], cy: pt[1], r: 4.2, fill: '#B0392F', fillOpacity: .9 }));
+    }
+    // etiquetas de eje
+    ['1', '2', '3', '4', '5'].forEach((t, i) => {
+      const pt = P(R * ((i + 1) / RINGS), -0.13);
+      els.push(React.createElement('text', {
+        key: 't' + i, x: pt[0], y: pt[1] - 7, fill: '#64748B', fontSize: 11,
+        fontFamily: "'JetBrains Mono'", textAnchor: 'middle'
+      }, t));
+    });
+    return React.createElement('svg', {
+      viewBox: '-300 -230 600 460', width: o.w, height: o.h,
       style: { maxWidth: '100%', maxHeight: '100%', overflow: 'visible' }
     }, els);
   }
@@ -1231,6 +1530,7 @@ class Component extends DCLogic {
     // Ver docs/00-Fundamentos/FLUJO_v1.md
     const navDefs = [
       ['P3 · Intake', { screen: 'p3' }], ['P4 · Generación', { screen: 'p4' }],
+      ['P20 · Ingesta', { screen: 'p20' }],
       ['B1 · P5·A Revisión', { screen: 'ws', mode: 'a', tab: 'bom' }],
       ['B1 · P6 BOM', { screen: 'p6' }],
       ['B1 · P5·B Edición', { screen: 'ws', mode: 'b', tab: 'alerts' }],
@@ -1240,7 +1540,8 @@ class Component extends DCLogic {
       ['B2 · P15 Programa', { screen: 'p15' }],
       ['B3 · P13 Precios MP', { screen: 'p13' }],
       ['B3 · P5·C Opciones', { screen: 'ws', mode: 'c' }],
-      ['B3 · P9 Opciones', { screen: 'p9' }]
+      ['B3 · P9 Opciones', { screen: 'p9' }],
+      ['⇄ P11 · Planta', { screen: 'p11' }]
     ];
     const active = (p) => p.screen === s.screen && (p.screen !== 'ws' || p.mode === mode);
     const nav = navDefs.map(([label, p]) => ({
@@ -1479,6 +1780,104 @@ class Component extends DCLogic {
       { fam: 'Misceláneos', clase: '90 HH/t', ton: '80 t', apu: '$94.80/kg' }
     ];
 
+    // ---- P20 · ingesta asistida de planos (#89, #90, #91) ----
+    const pageDefs = [
+      ['E-01', 'Notas generales y simbología', 'Notas',      'ok',   '—',        '—',            2],
+      ['E-04', 'Planta de cimentación',        'Planta',     'ok',   '±0.00',    '1:100',       48],
+      ['E-07', 'Planta N2 · pórticos 1–5',     'Planta',     'ok',   '+8.40',    '1:100',      196],
+      ['E-09', 'Elevación pórtico central',    'Elevación',  'rev',  '+8.40',    '1:75',        84],
+      ['E-12', 'Planta de cubierta · domo',    'Planta',     'rev',  '+24.60',   '1:100',      312],
+      ['E-15', 'Detalles de conexión A-A',     'Detalle',    'stop', 'sin cota', 'sin escala',   0],
+      ['E-18', 'Graderías · marcos tipo',      'Elevación',  'wait', '—',        '—',            0]
+    ];
+    const stMap = {
+      ok:   ['Confirmada',  '#E8F6F4', '#17786e', '#CFE7E3'],
+      rev:  ['Por revisar', '#FEF7EA', '#9A6408', '#F5D7A6'],
+      stop: ['Bloqueada',   '#FBE3E0', '#B0392F', '#F0C9C4'],
+      wait: ['Pendiente',   '#EEF2F6', '#64748B', '#E3E8EF']
+    };
+    const pages = pageDefs.map((d, i) => {
+      const st = stMap[d[3]], sel = i === 4;
+      return {
+        code: d[0], title: d[1], tipo: d[2], cota: d[4], escala: d[5], elems: d[6] ? String(d[6]) : '—',
+        estado: st[0], go: () => this.go({ pg: i }),
+        cardStyle: 'border:1px solid ' + (sel ? '#1F9E91' : '#E3E8EF') + ';border-radius:11px;background:#fff;padding:11px 12px;cursor:pointer' + (sel ? ';box-shadow:inset 3px 0 0 #1F9E91' : ''),
+        pillStyle: 'font-size:10px;font-weight:700;padding:2px 7px;border-radius:999px;background:' + st[1] + ';color:' + st[2] + ';border:1px solid ' + st[3],
+        cotaStyle: 'font-family:\'JetBrains Mono\';font-size:11px;color:' + (d[4] === 'sin cota' ? '#B0392F' : '#475569'),
+        escalaStyle: 'font-family:\'JetBrains Mono\';font-size:11px;color:' + (d[5] === 'sin escala' ? '#B0392F' : '#475569')
+      };
+    });
+    const layerDefs = [['Plano base', 1], ['Grilla de ejes', 1], ['Vigas', 1], ['Columnas', 1], ['Sin resolver', 1], ['Soldadura', 1], ['Concreto', 0]];
+    const layers = layerDefs.map(d => ({
+      name: d[0], on: d[1],
+      sw: 'width:32px;height:18px;border-radius:999px;flex:none;position:relative;background:' + (d[1] ? '#1F9E91' : '#CBD5E1'),
+      knob: 'position:absolute;top:2px;' + (d[1] ? 'right:2px' : 'left:2px') + ';width:14px;height:14px;border-radius:50%;background:#fff'
+    }));
+    const sumDefs = [
+      ['Columnas',     '48',     '312',      0],
+      ['Vigas',        '196',    '806',      0],
+      ['Arriostres',   '52',     '188',      0],
+      ['Placas',       '104',    '340',      0],
+      ['Sin resolver', '9',      '31',       1],
+      ['Peso',         '96.4 t', '667.8 t',  0]
+    ];
+    const sums = sumDefs.map(d => ({
+      k: d[0], hoja: d[1], proy: d[2],
+      vStyle: 'font-family:\'JetBrains Mono\';font-size:12.5px;font-weight:600;text-align:right;color:' + (d[3] ? '#9A6408' : '#1E2A3A')
+    }));
+    const unresolved = [
+      ['VAL-08', 'alta',  '9 elementos sin sección resuelta', 'Tubos armados de planta, fuera del catálogo METALITEC v4. Su kg/m se derivará por volumen × densidad.'],
+      ['VAL-01', 'alta',  'Columnetas de cubierta por conteo típico', 'Estimadas por espaciamiento, no contadas una a una. Confirmar contra detalle.'],
+      ['VAL-05', 'critica', 'Grilla de ejes inferida en el anillo 3', 'El plano no declara los ejes radiales entre 3 y 4. Se infirieron por simetría.']
+    ];
+    const sevMap = { critica: ['#FDF7F6', '#B0392F', '#F0C9C4'], alta: ['#FEFBF5', '#9A6408', '#F5E4C4'] };
+    const unres = unresolved.map(d => ({
+      code: d[0], sev: d[1] === 'critica' ? 'Crítica' : 'Alta', title: d[2], body: d[3],
+      cardStyle: 'border:1px solid ' + sevMap[d[1]][2] + ';border-radius:10px;background:' + sevMap[d[1]][0] + ';padding:10px 12px',
+      pillStyle: 'font-size:10px;font-weight:700;padding:2px 7px;border-radius:999px;color:' + sevMap[d[1]][1] + ';background:rgba(255,255,255,.7);border:1px solid ' + sevMap[d[1]][2]
+    }));
+    // ---- P11 · definición de planta (flujo paralelo) ----
+    const plantSteps = [
+      ['A', 'Identidad', 'Nombre, ubicación, layout', 'done'],
+      ['B', 'Capacidad y VSM', 'Estaciones, velocidades, cuello de botella', 'cur'],
+      ['C', 'Calibración por clase', 'Eje 24/40/60/90 y sus factores', 'todo'],
+      ['D', 'Financieros', '$/HH, cargas, overhead', 'todo'],
+      ['E', 'Publicar versión', 'Genera PlantConfig inmutable', 'todo']
+    ];
+    const pSteps = plantSteps.map(d => ({
+      letter: d[3] === 'done' ? '✓' : d[0], title: d[1], sub: d[2],
+      rowStyle: 'display:flex;gap:11px;align-items:flex-start;padding:10px 11px;border-radius:10px;cursor:pointer;background:' + (d[3] === 'cur' ? '#F1F8FA' : 'transparent'),
+      dotStyle: 'width:24px;height:24px;flex:none;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:\'JetBrains Mono\';font-size:11px;font-weight:600;' + (d[3] === 'cur' ? 'background:#1F9E91;color:#fff' : d[3] === 'done' ? 'background:#E8F6F4;color:#17786e' : 'background:#EEF2F6;color:#94A3B8')
+    }));
+    const stations = [
+      ['Corte', '5 mesas CNC + oxicorte', '38', '0.92'],
+      ['Habilitado', '4 líneas · CUELLO DE BOTELLA', '24', '1.00'],
+      ['Armado', '6 bancos', '31', '0.88'],
+      ['Soldadura FCAW', '8 posiciones', '27', '0.94'],
+      ['Acabado', '2 cabinas de granallado', '42', '0.71']
+    ];
+    const stationRows = stations.map(d => ({
+      name: d[0], detail: d[1], cap: d[2], util: d[3],
+      isBottleneck: d[1].indexOf('CUELLO') >= 0,
+      rowStyle: 'display:grid;grid-template-columns:1fr 250px 92px 92px;align-items:center;padding:11px 15px;border-bottom:1px solid #F1F5F9' + (d[1].indexOf('CUELLO') >= 0 ? ';background:#FEFBF5' : ''),
+      detailStyle: 'font-size:12px;color:' + (d[1].indexOf('CUELLO') >= 0 ? '#9A6408' : '#64748B') + ';font-weight:' + (d[1].indexOf('CUELLO') >= 0 ? '600' : '400')
+    }));
+    const speeds = [
+      { k: 'Velocidad base', v: '15 t/sem' },
+      { k: 'Con sobretiempo (prima 50%)', v: '24 t/sem' },
+      { k: 'Capacidad de habilitado', v: '600 HH/sem' },
+      { k: 'Ahorro Lean verificado', v: '8.4%' }
+    ];
+    const plantVersions = [
+      ['v2026.1', 'Vigente', '02/07/2026', '4 proyectos ligados'],
+      ['v2025.4', 'Histórica', '18/11/2025', '11 proyectos ligados'],
+      ['v2025.3', 'Histórica', '04/08/2025', '7 proyectos ligados']
+    ];
+    const pVers = plantVersions.map((d, i) => ({
+      ver: d[0], estado: d[1], fecha: d[2], uso: d[3],
+      pillStyle: 'font-size:10px;font-weight:700;padding:2px 7px;border-radius:999px;' + (i === 0 ? 'background:#E8F6F4;color:#17786e' : 'background:#EEF2F6;color:#64748B')
+    }));
+
     const railExtra = chatOverlay
       ? 'position:absolute;left:14px;top:14px;bottom:14px;z-index:20;border:1px solid #E3E8EF;border-right:1px solid #E3E8EF;border-radius:14px;box-shadow:0 18px 44px rgba(16,24,40,.18)'
       : '';
@@ -1495,6 +1894,8 @@ class Component extends DCLogic {
       plan, rssPhases, devs, mpPrices, load, program, progOpt, s11, equil, requi, families, famOpts, subprojects,
       isP3: s.screen === 'p3', isP4: s.screen === 'p4', isWs, isP6: s.screen === 'p6', isP8: s.screen === 'p8', isP9: s.screen === 'p9',
       isP13: s.screen === 'p13', isP14: s.screen === 'p14', isP15: s.screen === 'p15', isP16: s.screen === 'p16',
+      isP20: s.screen === 'p20', isP11: s.screen === 'p11',
+      pages, layers, sums, unres, pSteps, stationRows, speeds, pVers,
       isStep1: s.step === 1, isStep2: s.step === 2, isStep3: s.step === 3, isStep4: s.step === 4,
       planTotal: '115 t', planPico: '38 t/sem', planSemanas: '5', planRitmo: '23 t/sem',
       devTotal: '−$116,661',
@@ -1519,6 +1920,7 @@ class Component extends DCLogic {
       viewer: this.dome({ w: 760, h: 560, highlight: mode === 'b', sel: s.tab === 'props' || mode === 'a' }),
       viewerDark: this.dome({ w: 520, h: 340, dark: true }),
       viewerMini: this.dome({ w: 380, h: 270, sel: true }),
+      viewerPlan: this.planView({ w: 700, h: 520 }),
       hasSelection: isWs && mode !== 'b',
       selectedTag: bom[s.sel] ? bom[s.sel].marca + ' · ' + bom[s.sel].perfil : 'C-101',
       modelVersion: mode === 'a' ? 'v1' : 'v2',
