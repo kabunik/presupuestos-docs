@@ -451,6 +451,45 @@ a{color:#1F9E91;text-decoration:none}a:hover{color:#17786e;text-decoration:under
               </div>
             </div>
           </sc-if>
+
+          <sc-if value="{{ isTabDevs }}" hint-placeholder-val="{{ true }}">
+            <div style="flex:1;overflow:auto;padding:14px;display:flex;flex-direction:column;gap:11px">
+              <div>
+                <div style="font-size:13px;font-weight:600">Desviaciones de concurso</div>
+                <div style="font-size:11.5px;color:#64748B;margin-top:4px;line-height:1.45">El concurso rige donde difiera de la norma. Cada desviación se costea y su impacto entra al presupuesto.</div>
+              </div>
+              <sc-for list="{{ devs }}" as="d" hint-placeholder-count="4">
+                <div style="border:1px solid #E3E8EF;border-radius:11px;background:#fff;padding:12px 13px">
+                  <div style="display:flex;align-items:center;gap:8px">
+                    <span style="font-size:12.5px;font-weight:600">{{ d.concepto }}</span>
+                    <span style="margin-left:auto;font-size:10px;font-weight:700;padding:2px 7px;border-radius:999px;background:#E8F6F4;color:#17786e">Rige {{ d.rige }}</span>
+                  </div>
+                  <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:9px">
+                    <div style="background:#F8FAFC;border:1px solid #EEF2F6;border-radius:8px;padding:7px 9px">
+                      <div style="font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#94A3B8">Norma</div>
+                      <div style="font-size:11.5px;color:#64748B;margin-top:3px;line-height:1.35">{{ d.norma }}</div>
+                    </div>
+                    <div style="background:#E8F6F4;border:1px solid #CFE7E3;border-radius:8px;padding:7px 9px">
+                      <div style="font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#17786e">Concurso</div>
+                      <div style="font-size:11.5px;color:#17786e;margin-top:3px;line-height:1.35">{{ d.concurso }}</div>
+                    </div>
+                  </div>
+                  <div style="display:flex;align-items:center;margin-top:10px;padding-top:9px;border-top:1px solid #F1F5F9">
+                    <span style="font-size:11.5px;color:#64748B">Impacto en el presupuesto</span>
+                    <span style="margin-left:auto;{{ d.impactoStyle }}">{{ d.impacto }}</span>
+                  </div>
+                </div>
+              </sc-for>
+              <div style="display:flex;align-items:center;background:#F8FAFC;border:1px solid #E3E8EF;border-radius:11px;padding:12px 13px">
+                <span style="font-size:12px;color:#475569">Impacto neto</span>
+                <span style="margin-left:auto;font-family:'JetBrains Mono';font-size:14px;font-weight:600">{{ devTotal }}</span>
+              </div>
+              <div style="display:flex;align-items:flex-start;gap:9px;background:#FEFBF5;border:1px solid #F5E4C4;border-radius:11px;padding:11px 13px">
+                <span style="width:7px;height:7px;border-radius:2px;background:#F5A623;flex:none;margin-top:5px"></span>
+                <span style="font-size:11.5px;color:#7C5308;line-height:1.45">Las correas Z375 están sin costear. Una desviación sin costo asignado es una desviación sin registrar.</span>
+              </div>
+            </div>
+          </sc-if>
         </div>
       </sc-if>
     </div>
@@ -1314,6 +1353,225 @@ a{color:#1F9E91;text-decoration:none}a:hover{color:#17786e;text-decoration:under
 </div>
 </sc-if>
 
+<sc-if value="{{ isP17 }}" hint-placeholder-val="{{ true }}">
+<div data-screen-label="P17 Cierre y recalibracion" style="width:1440px;height:900px;background:#F4F6F9;border-radius:14px;overflow:hidden;box-shadow:0 24px 60px rgba(16,24,40,.16);display:flex;flex-direction:column">
+  <div style="height:56px;flex:none;background:#1E2A3A;display:flex;align-items:center;padding:0 16px;gap:14px">
+    <div style="display:flex;align-items:center;gap:9px"><div style="width:9px;height:9px;background:#6EC6D8;border-radius:2px"></div><span style="font-family:'Space Grotesk';font-weight:600;font-size:14px;color:#fff;letter-spacing:-.2px">Bid</span></div>
+    <span style="color:rgba(255,255,255,.28)">/</span><span style="font-size:13.5px;color:#fff">CNARCCS — Domo</span>
+    <span style="color:rgba(255,255,255,.28)">/</span><span style="font-size:13.5px;color:rgba(255,255,255,.7)">Cierre de proyecto</span>
+    <span style="font-family:'JetBrains Mono';font-size:11px;padding:4px 9px;border-radius:6px;background:rgba(110,198,216,.16);color:#8FD6E4">calculado con v2026.1</span>
+    <div style="margin-left:auto;display:flex;gap:10px">
+      <div style="height:34px;padding:0 14px;border-radius:9px;border:1px solid rgba(255,255,255,.18);color:#fff;font-size:13px;display:flex;align-items:center;cursor:pointer">Guardar borrador</div>
+      <div style="height:34px;padding:0 16px;border-radius:9px;background:#1F9E91;color:#fff;font-size:13px;font-weight:600;display:flex;align-items:center;cursor:pointer">Registrar cierre</div>
+    </div>
+  </div>
+
+  <div style="flex:1;display:flex;overflow:hidden">
+
+    <div style="flex:1;overflow:auto;padding:24px 26px;display:flex;flex-direction:column;gap:18px;min-width:0">
+      <div>
+        <div style="font-family:'Space Grotesk';font-size:22px;font-weight:600">Cierre de proyecto</div>
+        <div style="font-size:14px;color:#64748B;margin-top:6px;max-width:74ch">Real contra presupuestado en los ocho rubros. Toda desviación mayor a la tolerancia de <b style="font-weight:600">±5%</b> genera una propuesta de recalibración con evidencia. Un proyecto sin cierre registrado no alimenta recalibraciones.</div>
+      </div>
+
+      <div style="flex:none;background:#fff;border:1px solid #E3E8EF;border-radius:16px;overflow:hidden">
+        <div style="display:grid;grid-template-columns:1fr 132px 132px 84px;background:#F8FAFC;border-bottom:1px solid #E3E8EF;padding:10px 16px;font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#94A3B8">
+          <span>Rubro</span><span style="text-align:right">Presupuestado</span><span style="text-align:right">Real</span><span style="text-align:right">Δ</span>
+        </div>
+        <sc-for list="{{ closure }}" as="c" hint-placeholder-count="8">
+          <div style="{{ c.rowStyle }}">
+            <span style="font-size:13px">{{ c.rubro }}</span>
+            <span style="font-family:'JetBrains Mono';font-size:12.5px;text-align:right;color:#64748B">{{ c.pres }}</span>
+            <span style="font-family:'JetBrains Mono';font-size:12.5px;text-align:right;font-weight:600">{{ c.real }}</span>
+            <span style="{{ c.deltaStyle }}">{{ c.delta }}</span>
+          </div>
+        </sc-for>
+        <div style="display:flex;align-items:center;gap:9px;padding:12px 16px;background:#FEFBF5;border-top:1px solid #F5E4C4">
+          <span style="width:7px;height:7px;border-radius:2px;background:#F5A623;flex:none"></span>
+          <span style="font-size:12px;color:#7C5308">Dos rubros exceden la tolerancia: <b style="font-weight:600">HH/ton efectivas</b> y <b style="font-weight:600">desperdicio</b>. Generan propuesta.</span>
+        </div>
+      </div>
+
+      <div style="flex:none">
+        <div style="font-size:12px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:#475569;margin-bottom:11px">Propuestas de recalibración · decide dirección</div>
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <sc-for list="{{ recals }}" as="r" hint-placeholder-count="2">
+            <div style="background:#fff;border:1px solid #F5D7A6;border-left:4px solid #F5A623;border-radius:14px;padding:18px 20px">
+              <div style="display:flex;align-items:center;gap:12px">
+                <span style="font-size:13.5px;font-weight:600">{{ r.param }}</span>
+                <div style="margin-left:auto;display:flex;align-items:center;gap:9px">
+                  <span style="font-family:'JetBrains Mono';font-size:13px;color:#94A3B8;text-decoration:line-through">{{ r.actual }}</span>
+                  <span style="color:#94A3B8">→</span>
+                  <span style="font-family:'JetBrains Mono';font-size:15px;font-weight:600;color:#9A6408">{{ r.propuesto }}</span>
+                </div>
+              </div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:13px">
+                <div><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#94A3B8">Evidencia</div><div style="font-size:12px;color:#475569;margin-top:4px;line-height:1.45">{{ r.evidencia }}</div></div>
+                <div><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#94A3B8">Causa probable</div><div style="font-size:12px;color:#475569;margin-top:4px;line-height:1.45">{{ r.causa }}</div></div>
+              </div>
+              <div style="display:flex;align-items:center;gap:10px;margin-top:15px;padding-top:13px;border-top:1px solid #F5E4C4">
+                <div style="height:34px;padding:0 15px;border-radius:9px;background:#1F9E91;color:#fff;font-size:12.5px;font-weight:600;display:flex;align-items:center;cursor:pointer">Aprobar</div>
+                <div style="height:34px;padding:0 15px;border-radius:9px;border:1px solid #CBD5E1;background:#fff;font-size:12.5px;display:flex;align-items:center;cursor:pointer" style-hover="background:#F1F5F9">Rechazar</div>
+                <span style="margin-left:auto;font-size:11.5px;color:#64748B;line-height:1.4;max-width:44ch">Al aprobar se crea <b style="font-family:'JetBrains Mono';font-weight:600">PlantConfig v2026.2</b>. Los presupuestos ya emitidos siguen ligados a <b style="font-family:'JetBrains Mono';font-weight:600">v2026.1</b>.</span>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </div>
+
+    <div style="width:340px;flex:none;background:#fff;border-left:1px solid #E3E8EF;overflow:auto;padding:18px;display:flex;flex-direction:column;gap:16px">
+      <div style="border:1px solid #E3E8EF;border-radius:12px;background:#F8FAFC;padding:14px">
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:#94A3B8">La recalibración no es automática</div>
+        <div style="font-size:12px;color:#475569;margin-top:8px;line-height:1.55">Los parámetros <b style="font-weight:600">nunca se recalibran solos</b>. La dirección aprueba o rechaza, y todo cambio genera una versión nueva. Cada presupuesto queda ligado a la versión con la que se calculó.</div>
+      </div>
+
+      <div>
+        <div style="display:flex;align-items:center;gap:9px;margin-bottom:10px">
+          <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:#475569">Cierres pendientes</span>
+          <span style="font-family:'JetBrains Mono';font-size:10px;background:#FBE7C2;color:#9A6408;padding:2px 6px;border-radius:5px">3</span>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <sc-for list="{{ pendClose }}" as="pc" hint-placeholder-count="3">
+            <div style="border:1px solid #F5E4C4;background:#FEFBF5;border-radius:10px;padding:11px 12px">
+              <div style="font-size:12.5px;font-weight:600;color:#7C5308">{{ pc.proy }}</div>
+              <div style="display:flex;align-items:center;margin-top:5px">
+                <span style="font-size:11px;color:#9A6408">{{ pc.emit }}</span>
+                <span style="margin-left:auto;font-family:'JetBrains Mono';font-size:11px;color:#9A6408">{{ pc.dias }}</span>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+        <div style="font-size:11.5px;color:#64748B;margin-top:11px;line-height:1.45">Estos proyectos <b style="font-weight:600">no alimentan recalibraciones</b> hasta que se registre su cierre.</div>
+      </div>
+    </div>
+  </div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isP19 }}" hint-placeholder-val="{{ true }}">
+<div data-screen-label="P19 Requisicion lotes y grua" style="width:1440px;height:900px;background:#F4F6F9;border-radius:14px;overflow:hidden;box-shadow:0 24px 60px rgba(16,24,40,.16);display:flex;flex-direction:column">
+  <div style="height:56px;flex:none;background:#1E2A3A;display:flex;align-items:center;padding:0 16px;gap:14px">
+    <div style="display:flex;align-items:center;gap:9px"><div style="width:9px;height:9px;background:#6EC6D8;border-radius:2px"></div><span style="font-family:'Space Grotesk';font-weight:600;font-size:14px;color:#fff;letter-spacing:-.2px">Bid</span></div>
+    <span style="color:rgba(255,255,255,.28)">/</span><span style="font-size:13.5px;color:#fff">CNARCCS — Domo</span>
+    <span style="color:rgba(255,255,255,.28)">/</span><span style="font-size:13.5px;color:rgba(255,255,255,.7)">Requisición y fabricación</span>
+    <div style="margin-left:auto;display:flex;gap:10px">
+      <div style="height:34px;padding:0 14px;border-radius:9px;border:1px solid rgba(255,255,255,.18);color:#fff;font-size:13px;display:flex;align-items:center;cursor:pointer">Exportar requisición</div>
+    </div>
+  </div>
+
+  <div style="flex:1;overflow:auto;padding:24px 26px;display:grid;grid-template-columns:1fr 1fr;gap:20px;align-content:start">
+
+    <div style="display:flex;flex-direction:column;gap:18px">
+      <div>
+        <div style="font-family:'Space Grotesk';font-size:20px;font-weight:600">Requisición neta</div>
+        <div style="font-size:13px;color:#64748B;margin-top:5px;line-height:1.5">El inventario libre se aplica <b style="font-weight:600">antes</b> de procurar. Solo el neto va a compras.</div>
+      </div>
+
+      <div style="background:#fff;border:1px solid #E3E8EF;border-radius:16px;padding:20px">
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <sc-for list="{{ cascada }}" as="c" hint-placeholder-count="3">
+            <div style="display:flex;align-items:center;justify-content:space-between;padding-bottom:11px;border-bottom:1px solid #F1F5F9">
+              <span style="font-size:13px;color:#475569">{{ c.k }}</span>
+              <span style="{{ c.vStyle }}">{{ c.v }}</span>
+            </div>
+          </sc-for>
+        </div>
+        <div style="margin-top:16px">
+          <div style="font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#94A3B8;margin-bottom:8px">Detalle por material · toneladas</div>
+          <div style="border:1px solid #E3E8EF;border-radius:11px;overflow:hidden">
+            <div style="display:grid;grid-template-columns:1fr 68px 68px 68px;background:#F8FAFC;border-bottom:1px solid #E3E8EF;padding:8px 12px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:#94A3B8">
+              <span>Material</span><span style="text-align:right">Bruta</span><span style="text-align:right">Libre</span><span style="text-align:right">Neta</span>
+            </div>
+            <sc-for list="{{ reqMat }}" as="m" hint-placeholder-count="4">
+              <div style="display:grid;grid-template-columns:1fr 68px 68px 68px;align-items:center;padding:9px 12px;border-bottom:1px solid #F1F5F9;font-size:12px">
+                <span>{{ m.mat }}</span>
+                <span style="font-family:'JetBrains Mono';font-size:12px;text-align:right;color:#64748B">{{ m.bruta }}</span>
+                <span style="font-family:'JetBrains Mono';font-size:12px;text-align:right;color:#17786e">{{ m.libre }}</span>
+                <span style="font-family:'JetBrains Mono';font-size:12px;text-align:right;font-weight:600">{{ m.neta }}</span>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+
+      <div style="background:#fff;border:1px solid #E3E8EF;border-radius:16px;padding:20px">
+        <div style="font-size:12px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:#475569">Préstamos entre contratos</div>
+        <div style="font-size:12px;color:#64748B;margin-top:6px;line-height:1.45">Los préstamos se registran siempre, con su contrato de origen.</div>
+        <div style="display:flex;flex-direction:column;gap:8px;margin-top:13px">
+          <sc-for list="{{ prestamos }}" as="pr" hint-placeholder-count="2">
+            <div style="display:flex;align-items:center;gap:11px;border:1px solid #CFE7E3;background:#E8F6F4;border-radius:10px;padding:10px 12px">
+              <div style="min-width:0"><div style="font-size:12.5px;font-weight:600;color:#17786e">{{ pr.mat }}</div><div style="font-size:11px;color:#17786e;margin-top:2px">desde {{ pr.desde }} · {{ pr.reg }}</div></div>
+              <span style="margin-left:auto;font-family:'JetBrains Mono';font-size:13px;font-weight:600;color:#17786e">{{ pr.t }}</span>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:18px">
+      <div>
+        <div style="font-family:'Space Grotesk';font-size:20px;font-weight:600">Lotes y déficit</div>
+        <div style="font-size:13px;color:#64748B;margin-top:5px;line-height:1.5">Los lotes se calculan para cumplir el plan de montaje contra la planta <b style="font-weight:600">cargada</b>. El déficit se resuelve explícito, nunca se oculta.</div>
+      </div>
+
+      <div style="background:#fff;border:1px solid #E3E8EF;border-radius:16px;padding:20px">
+        <div style="font-size:11px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:#475569;margin-bottom:14px">Déficit de HH por semana</div>
+        <div style="display:flex;align-items:flex-end;gap:24px;height:112px;padding:0 6px">
+          <sc-for list="{{ lots }}" as="l" hint-placeholder-count="5">
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:6px;height:100%">
+              <span style="{{ l.defStyle }}">{{ l.def }}</span>
+              <div style="{{ l.barStyle }}"></div>
+              <span style="font-family:'JetBrains Mono';font-size:11px;color:#94A3B8">{{ l.sem }}</span>
+            </div>
+          </sc-for>
+        </div>
+        <div style="margin-top:18px;padding-top:15px;border-top:1px solid #F1F5F9">
+          <div style="display:grid;grid-template-columns:1fr 86px 96px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:#94A3B8;padding-bottom:8px">
+            <span>Vía de resolución</span><span style="text-align:right">HH</span><span style="text-align:right">Costo</span>
+          </div>
+          <sc-for list="{{ resol }}" as="r" hint-placeholder-count="3">
+            <div style="{{ r.style }}">
+              <span style="font-size:12.5px">{{ r.k }}</span>
+              <span style="font-family:'JetBrains Mono';font-size:12.5px;text-align:right;color:#64748B">{{ r.v }}</span>
+              <span style="{{ r.cStyle }}">{{ r.c }}</span>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+
+      <div style="background:#fff;border:1px solid #F5D7A6;border-left:4px solid #F5A623;border-radius:16px;padding:20px">
+        <div style="display:flex;align-items:center;gap:10px">
+          <span style="font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:999px;background:#FBE7C2;color:#9A6408">Chequeo de grúa</span>
+          <span style="font-size:13px;font-weight:600;color:#7C5308">2 piezas críticas</span>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px;margin-top:13px">
+          <sc-for list="{{ cranePieces }}" as="cp" hint-placeholder-count="2">
+            <div style="border:1px solid #F5E4C4;background:#FEFBF5;border-radius:10px;padding:11px 12px">
+              <div style="display:flex;align-items:center;gap:9px">
+                <span style="font-family:'JetBrains Mono';font-size:11.5px;font-weight:600;color:#7C5308">{{ cp.marca }}</span>
+                <span style="font-size:11.5px;color:#9A6408">{{ cp.perfil }}</span>
+              </div>
+              <div style="display:flex;gap:16px;margin-top:7px">
+                <span style="font-family:'JetBrains Mono';font-size:11px;color:#9A6408">{{ cp.largo }}</span>
+                <span style="font-family:'JetBrains Mono';font-size:11px;color:#9A6408">{{ cp.peso }}</span>
+                <span style="font-family:'JetBrains Mono';font-size:11px;color:#9A6408">radio {{ cp.radio }}</span>
+              </div>
+              <div style="font-size:11px;color:#7C5308;margin-top:6px">{{ cp.motivo }}</div>
+            </div>
+          </sc-for>
+        </div>
+        <div style="display:flex;align-items:center;margin-top:14px;padding-top:12px;border-top:1px solid #F5E4C4">
+          <span style="font-size:12px;color:#7C5308">Costo de partirlas</span>
+          <span style="margin-left:auto;font-family:'JetBrains Mono';font-size:15px;font-weight:600;color:#7C5308">$76,000</span>
+        </div>
+        <div style="font-size:11.5px;color:#9A6408;margin-top:10px;line-height:1.45">Partir una pieza cambia la solución estructural: <b style="font-weight:600">la decisión la valida el ingeniero de registro (EOR)</b>, no el sistema.</div>
+      </div>
+    </div>
+  </div>
+</div>
+</sc-if>
+
 </div>
 
 <div style="position:fixed;left:50%;bottom:18px;transform:translateX(-50%);display:flex;align-items:center;gap:4px;background:rgba(30,42,58,.96);backdrop-filter:blur(8px);border-radius:12px;padding:6px;box-shadow:0 12px 34px rgba(16,24,40,.3);z-index:50">
@@ -1529,24 +1787,25 @@ class Component extends DCLogic {
     // del motor (§4.3 APU necesita el pico de S11 → §4.9 → §4.7 planta cargada).
     // Ver docs/00-Fundamentos/FLUJO_v1.md
     const navDefs = [
-      ['P3 · Intake', { screen: 'p3' }], ['P4 · Generación', { screen: 'p4' }],
-      ['P20 · Ingesta', { screen: 'p20' }],
-      ['B1 · P5·A Revisión', { screen: 'ws', mode: 'a', tab: 'bom' }],
-      ['B1 · P6 BOM', { screen: 'p6' }],
-      ['B1 · P5·B Edición', { screen: 'ws', mode: 'b', tab: 'alerts' }],
-      ['B1 · P8 Chat', { screen: 'p8' }],
-      ['B2 · P14 Planta', { screen: 'p14' }],
-      ['B2 · P16 Familias', { screen: 'p16' }],
-      ['B2 · P15 Programa', { screen: 'p15' }],
-      ['B3 · P13 Precios MP', { screen: 'p13' }],
-      ['B3 · P5·C Opciones', { screen: 'ws', mode: 'c' }],
-      ['B3 · P9 Opciones', { screen: 'p9' }],
-      ['⇄ P11 · Planta', { screen: 'p11' }]
+      ['P3', { screen: 'p3' }], ['P4', { screen: 'p4' }], ['P20', { screen: 'p20' }],
+      ['B1·P5A', { screen: 'ws', mode: 'a', tab: 'bom' }],
+      ['B1·P6', { screen: 'p6' }],
+      ['B1·P5B', { screen: 'ws', mode: 'b', tab: 'alerts' }],
+      ['B1·P8', { screen: 'p8' }],
+      ['B2·P14', { screen: 'p14' }],
+      ['B2·P16', { screen: 'p16' }],
+      ['B2·P15', { screen: 'p15' }],
+      ['B3·P13', { screen: 'p13' }],
+      ['B3·P19', { screen: 'p19' }],
+      ['B3·P5C', { screen: 'ws', mode: 'c' }],
+      ['B3·P9', { screen: 'p9' }],
+      ['B5·P17', { screen: 'p17' }],
+      ['⇄P11', { screen: 'p11' }]
     ];
     const active = (p) => p.screen === s.screen && (p.screen !== 'ws' || p.mode === mode);
     const nav = navDefs.map(([label, p]) => ({
       label, go: () => this.go(p),
-      style: 'height:32px;padding:0 13px;border-radius:8px;display:flex;align-items:center;font-size:12.5px;font-weight:' + (active(p) ? '600' : '400') + ';cursor:pointer;color:' + (active(p) ? '#1E2A3A' : 'rgba(255,255,255,.72)') + ';background:' + (active(p) ? '#fff' : 'transparent')
+      style: 'height:30px;padding:0 9px;border-radius:7px;display:flex;align-items:center;white-space:nowrap;font-family:\'JetBrains Mono\';font-size:11px;font-weight:' + (active(p) ? '600' : '400') + ';cursor:pointer;color:' + (active(p) ? '#1E2A3A' : 'rgba(255,255,255,.72)') + ';background:' + (active(p) ? '#fff' : 'transparent')
     }));
 
     const stepDefs = [['1', 'Datos generales', 'Cliente, tipo, clase'], ['2', 'Carga de archivos', 'Planos, IFC, contrato'], ['3', 'Consideraciones', 'Alcance y desviaciones'], ['4', 'Plan de montaje', 'Secuencia y ritmo de obra']];
@@ -1614,10 +1873,10 @@ class Component extends DCLogic {
       pillStyle: 'font-size:10.5px;font-weight:700;padding:3px 8px;border-radius:999px;background:' + d[7] + ';color:' + d[4]
     }));
 
-    const tabDefs = [['bom', 'BOM', '1,470'], ['alerts', 'Alertas', '3'], ['props', 'Propiedades', '']];
+    const tabDefs = [['bom', 'BOM', '1,470'], ['alerts', 'Alertas', '3'], ['props', 'Propiedades', ''], ['devs', 'Concurso', '4']];
     const tabs = tabDefs.map(t => ({
       label: t[1], count: t[2], go: () => this.go({ tab: t[0] }),
-      style: 'flex:1;display:flex;align-items:center;justify-content:center;gap:6px;font-size:12.5px;cursor:pointer;font-weight:' + (s.tab === t[0] ? '600' : '400') + ';color:' + (s.tab === t[0] ? '#1E2A3A' : '#64748B') + ';box-shadow:' + (s.tab === t[0] ? 'inset 0 -2px 0 #1F9E91' : 'none'),
+      style: 'flex:1;display:flex;align-items:center;justify-content:center;gap:5px;font-size:12px;cursor:pointer;font-weight:' + (s.tab === t[0] ? '600' : '400') + ';color:' + (s.tab === t[0] ? '#1E2A3A' : '#64748B') + ';box-shadow:' + (s.tab === t[0] ? 'inset 0 -2px 0 #1F9E91' : 'none'),
       badgeStyle: t[2] ? 'font-family:\'JetBrains Mono\';font-size:10px;background:#EEF2F6;color:#64748B;padding:2px 6px;border-radius:5px' : 'display:none'
     }));
 
@@ -1878,6 +2137,75 @@ class Component extends DCLogic {
       pillStyle: 'font-size:10px;font-weight:700;padding:2px 7px;border-radius:999px;' + (i === 0 ? 'background:#E8F6F4;color:#17786e' : 'background:#EEF2F6;color:#64748B')
     }));
 
+    // ---- P17 · cierre de proyecto y recalibración (inv. 16) ----
+    // Los 8 rubros del cierre. Tolerancia ±5% por rubro: dentro va en teal,
+    // fuera en ámbar y genera propuesta de recalibración con evidencia.
+    const closeDefs = [
+      ['Costo total',              '$49,271,487', '$51,004,120', '+3.5%',  0],
+      ['HH por familia · pórticos','18,240 HH',   '18,610 HH',   '+2.0%',  0],
+      ['HH/ton efectivas',         '58.0',        '62.6',        '+7.9%',  1],
+      ['Desperdicio',              '7.0%',        '7.4%',        '+5.7%',  1],
+      ['Peso final de taller',     '734.6 t',     '741.2 t',     '+0.9%',  0],
+      ['Precio del acero',         '$24.80/kg',   '$25.10/kg',   '+1.2%',  0],
+      ['Montaje',                  'excluido',    'excluido',    '—',      2],
+      ['Desviaciones de concurso', '−$116,661',   '−$121,400',   '+4.1%',  0]
+    ];
+    const closure = closeDefs.map(d => ({
+      rubro: d[0], pres: d[1], real: d[2], delta: d[3],
+      rowStyle: 'display:grid;grid-template-columns:1fr 132px 132px 84px;align-items:center;padding:11px 16px;border-bottom:1px solid #F1F5F9' + (d[4] === 1 ? ';background:#FEFBF5' : ''),
+      deltaStyle: 'font-family:\'JetBrains Mono\';font-size:12.5px;font-weight:600;text-align:right;color:' + (d[4] === 1 ? '#9A6408' : d[4] === 2 ? '#94A3B8' : '#17786e')
+    }));
+    const recalDefs = [
+      ['Eje de complejidad · clase 40', '40 HH/t', '43 HH/t',
+       '3 proyectos cerrados de clase 40 con HH/ton efectivas de 43.1, 42.6 y 43.8. Desviación media +7.9%, sobre la tolerancia de ±5%.',
+       'Subestimación del armado en conexiones a momento.'],
+      ['Desperdicio de perfiles · clase 60', '7.0%', '7.4%',
+       '2 proyectos con desperdicio real por encima del factor aplicado. Desviación +5.7%.',
+       'Cortes a inglete en el anillo perimetral no previstos en el factor.']
+    ];
+    const recals = recalDefs.map(d => ({
+      param: d[0], actual: d[1], propuesto: d[2], evidencia: d[3], causa: d[4]
+    }));
+    const pendClose = [
+      ['CNAR Metropolitano', 'Emitida 12/05', '68 días'],
+      ['Nave Tultitlán',     'Emitida 03/06', '46 días'],
+      ['Pipe-rack Altamira', 'Emitida 21/06', '28 días']
+    ].map(d => ({ proy: d[0], emit: d[1], dias: d[2] }));
+    // ---- P19 · requisición, lotes y grúa (inv. 11, 13) ----
+    const cascada = [
+      { k: 'Requisición bruta',            v: '121.55 t', s: 0 },
+      { k: 'Inventario libre aplicable',   v: '− 34.00 t', s: 0 },
+      { k: 'Neta a comprar',               v: '87.55 t',  s: 1 }
+    ].map(r => ({ k: r.k, v: r.v, vStyle: 'font-family:\'JetBrains Mono\';font-size:' + (r.s ? '20px' : '14px') + ';font-weight:600;color:' + (r.s ? '#17786e' : '#1E2A3A') }));
+    const reqMat = [
+      ['Perfil W (A992)',      '74.20', '22.00', '52.20'],
+      ['Placa (A572-50)',      '28.35',  '9.00', '19.35'],
+      ['HSS (A500-C)',         '15.00',  '3.00', '12.00'],
+      ['Barra lisa y varios',   '4.00',  '0.00',  '4.00']
+    ].map(d => ({ mat: d[0], bruta: d[1], libre: d[2], neta: d[3] }));
+    const prestamos = [
+      ['Perfil W (A992)', '8.00 t', 'Nave Tultitlán', 'registrado 04/08'],
+      ['Placa (A572-50)', '3.00 t', 'Pipe-rack Altamira', 'registrado 04/08']
+    ].map(d => ({ mat: d[0], t: d[1], desde: d[2], reg: d[3] }));
+    const lotDefs = [['Sem 1', 0, 600], ['Sem 2', 920, 600], ['Sem 3', 0, 600], ['Sem 4', 180, 600], ['Sem 5', 0, 600]];
+    const lots = lotDefs.map(d => {
+      const over = d[1] > 0;
+      return {
+        sem: d[0], def: d[1] ? d[1] + ' HH' : '—',
+        barStyle: 'width:100%;max-width:66px;border-radius:4px 4px 0 0;height:' + Math.max(3, Math.round(d[1] / 1000 * 100)) + 'px;background:' + (over ? '#B0392F' : '#BFDDD9'),
+        defStyle: 'font-family:\'JetBrains Mono\';font-size:11.5px;font-weight:600;color:' + (over ? '#B0392F' : '#94A3B8')
+      };
+    });
+    const resol = [
+      { k: 'Sobretiempo · prima 50%', v: '740 HH', c: '$90,940' },
+      { k: 'Subcontrato all-in',      v: '360 HH', c: '$54,581' },
+      { k: 'Costo total del déficit', v: '1,100 HH', c: '$145,521', strong: 1 }
+    ].map(r => ({ k: r.k, v: r.v, c: r.c, style: 'display:grid;grid-template-columns:1fr 86px 96px;align-items:center;padding:10px 0;border-bottom:1px solid #F1F5F9' + (r.strong ? ';font-weight:600' : ''), cStyle: 'font-family:\'JetBrains Mono\';font-size:' + (r.strong ? '14px' : '12.5px') + ';font-weight:600;text-align:right;color:' + (r.strong ? '#B0392F' : '#1E2A3A') }));
+    const cranePieces = [
+      ['AR-410-07', 'Armado 900x14', '12.00 m', '2.02 t', '38.4 m', 'Excede 2.5 t en punta'],
+      ['AR-410-12', 'Armado 900x14', '12.00 m', '2.02 t', '41.1 m', 'Fuera de alcance del brazo']
+    ].map(d => ({ marca: d[0], perfil: d[1], largo: d[2], peso: d[3], radio: d[4], motivo: d[5] }));
+
     const railExtra = chatOverlay
       ? 'position:absolute;left:14px;top:14px;bottom:14px;z-index:20;border:1px solid #E3E8EF;border-right:1px solid #E3E8EF;border-radius:14px;box-shadow:0 18px 44px rgba(16,24,40,.18)'
       : '';
@@ -1896,6 +2224,8 @@ class Component extends DCLogic {
       isP13: s.screen === 'p13', isP14: s.screen === 'p14', isP15: s.screen === 'p15', isP16: s.screen === 'p16',
       isP20: s.screen === 'p20', isP11: s.screen === 'p11',
       pages, layers, sums, unres, pSteps, stationRows, speeds, pVers,
+      closure, recals, pendClose, cascada, reqMat, prestamos, lots, resol, cranePieces,
+      isP17: s.screen === 'p17', isP19: s.screen === 'p19',
       isStep1: s.step === 1, isStep2: s.step === 2, isStep3: s.step === 3, isStep4: s.step === 4,
       planTotal: '115 t', planPico: '38 t/sem', planSemanas: '5', planRitmo: '23 t/sem',
       devTotal: '−$116,661',
@@ -1913,7 +2243,7 @@ class Component extends DCLogic {
       isModeA: isWs && mode === 'a', isModeB: isWs && mode === 'b', isModeC: isWs && mode === 'c',
       showTabs: isWs && mode !== 'c',
       showChatThread: isWs && mode !== 'a',
-      isTabBom: s.tab === 'bom', isTabAlerts: s.tab === 'alerts', isTabProps: s.tab === 'props',
+      isTabBom: s.tab === 'bom', isTabAlerts: s.tab === 'alerts', isTabProps: s.tab === 'props', isTabDevs: s.tab === 'devs',
       approvalPartial: partial,
       chatThread: this.chatCards(false),
       chatThreadFull: this.chatCards(true),

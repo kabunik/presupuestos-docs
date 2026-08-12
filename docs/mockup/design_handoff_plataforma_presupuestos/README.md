@@ -27,6 +27,9 @@ Este paquete cubre las pantallas de **prioridad alta/crítica** de la primera et
 | **P16** | **Interferencia de familias y subproyectos** | — | alerta no suprimible + 4 opciones |
 | **P20** | **Ingesta asistida de planos** | — | páginas con estado, capas, lectura del agente en prosa |
 | **P11** | **Definición de planta** (flujo paralelo) | — | capacidad y VSM + versionado inmutable |
+| **P17** | **Cierre de proyecto y recalibración** | — | 8 rubros con Δ vs. tolerancia ±5% + bandeja de dirección |
+| **P18** | **Desviaciones de concurso** | — | **cuarta tab del panel del workspace**, «Concurso» |
+| **P19** | **Requisición, lotes y grúa** | — | cascada de inventario + déficit por semana + piezas críticas |
 
 Las seis últimas se añadieron reconciliando con el Sistema DM v1.7 (#80), resecuenciando el flujo
 (#85) y tras la revisión del 12-ago (#94, #97). Su especificación —junto con la de P17, P18 y P19,
@@ -36,7 +39,7 @@ aún sin mockear— está en `docs/Diseño de producto/RECONCILIACION_DISENO_Moc
 `docs/Diseño de producto/REFERENCIA_SteelGenie.md` con las 16 capturas en `docs/steel genie/`. Es
 referencia de **flujo**, no de aspecto: la paleta y la tipografía siguen siendo las de `tokens.css`.
 
-Fuera de alcance en esta etapa: P1 login, P2 dashboard, P7 aislado, P10 emisión de oferta, P12 admin, P17 cierre, P18 desviaciones como panel, P19 requisición.
+Fuera de alcance en esta etapa: P1 login, P2 dashboard, P7 aislado, P10 emisión de oferta, P12 admin.
 
 ---
 
