@@ -28,18 +28,40 @@ ni los edita la misma persona:
 | Bloque del kit | Contenido | Entidad de plataforma | Quién lo mantiene | Cadencia |
 |---|---|---|---|---|
 | `e3_precios.materiales` | Precios de MP con fuente/fecha/vigencia | **`PriceList`** (versionada) | Compras del tenant | Continua; **caduca** |
-| `e4_planta_vsm` | Velocidades, cuello de botella, ahorro Lean | **`TenantConfig`** | Admin del fabricante | Trimestral |
-| `e5_financieros` | $/HH propio y subcontrato, cargas, overhead | **`TenantConfig`** | Dirección/finanzas | Trimestral |
-| *(factores por clase)* | Desperdicio, soldadura, conexiones por eje 24/40/60/90 | **`TenantConfig`** | Calibración | Versionada, inmutable |
-| `e1_ficha` | Proyecto, cliente, peso de planos, clase, fase RSS, subproyectos | **`Project`** | Estimador | Por proyecto |
+| `e4_planta_vsm` | Velocidades, cuello de botella, ahorro Lean | **`PlantConfig`** (versionada) | Admin de la planta | Trimestral |
+| `e5_financieros` | $/HH propio y subcontrato, cargas, overhead | **`PlantConfig`** — *ver duda abajo* | Dirección/finanzas | Trimestral |
+| *(factores por clase)* | Desperdicio, soldadura, conexiones por eje 24/40/60/90 | **`PlantConfig`** | Calibración | Versionada, inmutable |
+| `e1_ficha` | Proyecto, cliente, peso de planos, clase, fase RSS, subproyectos, **`plant_id` + versión** | **`Project`** | Estimador | Por proyecto |
 | `e2_take_off` | Fuente, factor facturable AISC, peso reconstruido, exclusiones | **`Takeoff`** (derivado de `Model`) | Agente (percepción) | Por versión de modelo |
 | `e6_especificaciones` | Desviaciones de concurso, **plan de montaje** | **`Project`** | Estimador | Por proyecto |
-| `e7_bases.carga_planta` | Proyectos en curso, HH libres/sem, capacidad de habilitado | **`PlantLoad`** | Planeación del tenant | **Semanal** |
-| `e7_bases.inventario` | Disponible / asignado / libre, préstamos | **`Inventory`** | Almacén del tenant | **Semanal** |
+| `e7_bases.carga_planta` | Proyectos en curso, HH libres/sem, capacidad de habilitado | **`PlantLoad`** (por planta) | Planeación de la planta | **Semanal** |
+| `e7_bases.inventario` | Disponible / asignado / libre, préstamos | **`Inventory`** (por planta) | Almacén de la planta | **Semanal** |
 | `e7_bases.registro_cierres` | Cierres de proyecto con su versión de parámetros | **`ProjectClosure`** | Dirección | Al cerrar proyecto |
-| `version_parametros` | Versión con la que se calcula | atributo de `TenantConfig` + sello en `Offer` | Sistema | Inmutable |
+| `version_parametros` | Versión con la que se calcula | atributo de **`PlantConfig`** + sello en `Offer` | Sistema | Inmutable |
 
 ### Consecuencias de diseño
+
+0. **La planta es una entidad de primera clase, y un tenant puede tener varias** *(corregido el
+   12-ago, #94)*. La planta se configura en un **flujo paralelo** al del proyecto y con su propio
+   ciclo de vida; el proyecto **se asocia** a una planta ya configurada, en el intake. Consecuencia
+   fuerte: **`version_parametros` es por planta, no por tenant** — la calibración HH/ton sale del VSM
+   de *esa* planta.
+
+   ```
+   Tenant
+    └─ Plant[] 1..N
+         ├─ PlantConfig  versionada e inmutable ← E4 VSM + factores por clase (inv. 16)
+         ├─ PlantLoad    semanal                ← E7 carga
+         └─ Inventory    semanal                ← E7 inventario
+   Project → referencia (plant_id, config_version)
+   ```
+
+   **Duda abierta:** ¿`e5_financieros` ($/HH) va en `PlantConfig`, en `TenantConfig` o partido? La
+   nómina es de la planta; el overhead puede ser corporativo. Y `PriceList` probablemente sea del
+   tenant —compras centralizadas— pero puede variar por planta según logística.
+
+   Fuera de alcance de v1, anotado para no cerrar la puerta: un proyecto **repartido entre varias
+   plantas**. Hoy la referencia es a una sola.
 
 1. **`TenantConfig` no puede absorber E7.** La carga de planta y el inventario son **estado
    operativo semanal**, no configuración. Necesitan entidad propia, con **marca de frescura** —la
@@ -163,9 +185,8 @@ perceiving
   → computing_plant                bloque B2 · §4.7–§4.12
   → awaiting_family_decision       gate 4 · solo si INV-03 activa
   → awaiting_program_decision      gate 3 · solo si hay retraso
+  → awaiting_price_confirmation    gate 2 · arranque de B3 · corregido 12-ago
   → computing_price                bloque B3 · §4.3–§4.6, §4.13, §4.14
-  → ready_to_confirm
-  → awaiting_price_confirmation    gate 2 · fin del bloque B4 emisión
   → ready
   → emitted
   → awaiting_closure               bloque B5 · inv. 16
@@ -174,10 +195,15 @@ perceiving
   ⟲ editing  desde cualquier estado posterior a B1
 ```
 
-**Corrección respecto al borrador anterior:** tenía `awaiting_price_confirmation` **antes** de
-`awaiting_program_decision`. Está invertido. La confirmación de precios es la última compuerta antes
-de emitir; la decisión de programa ocurre en B2, mucho antes, porque el APU necesita el pico de S11
-(§4.3) y S11 necesita la planta cargada (§4.7).
+**Dos correcciones sucesivas de este ciclo de vida:**
+
+1. *(11-ago)* `awaiting_price_confirmation` estaba **antes** de `awaiting_program_decision`. La
+   decisión de programa ocurre en B2 porque el APU necesita el pico de S11 (§4.3) y S11 necesita la
+   planta cargada (§4.7).
+2. *(12-ago)* La confirmación de precios estaba al **final**, en B4. Se mueve al **arranque de B3**:
+   los precios son entrada de §4.3, y confirmarlos después de mostrar las opciones convierte la
+   compuerta en trámite. En B4 queda una **revalidación de vigencia** que puede reabrirla. Ver
+   [FLUJO_v1.md](FLUJO_v1.md) y #94.
 
 **Regla de invalidación en cascada.** Una edición que altere el takeoff no solo reabre el gate 1:
 **invalida B2 y B3 completos**. Lotes, S11, S12 y APU se calcularon sobre un peso que ya no es el
