@@ -29,7 +29,8 @@ ni los edita la misma persona:
 |---|---|---|---|---|
 | `e3_precios.materiales` | Precios de MP con fuente/fecha/vigencia | **`PriceList`** (versionada) | Compras del tenant | Continua; **caduca** |
 | `e4_planta_vsm` | Velocidades, cuello de botella, ahorro Lean | **`PlantConfig`** (versionada) | Admin de la planta | Trimestral |
-| `e5_financieros` | $/HH propio y subcontrato, cargas, overhead | **`PlantConfig`** — *ver duda abajo* | Dirección/finanzas | Trimestral |
+| `e5_financieros` — nómina | Nómina, prestaciones, CCT, mezcla propio/subcontrato → `$/HH` | **`PlantConfig`** | Dirección/finanzas de la planta | Trimestral |
+| `e5_financieros` — overhead | Overhead corporativo **y su regla de reparto entre plantas** | **`TenantConfig`** | Dirección corporativa | Trimestral |
 | *(factores por clase)* | Desperdicio, soldadura, conexiones por eje 24/40/60/90 | **`PlantConfig`** | Calibración | Versionada, inmutable |
 | `e1_ficha` | Proyecto, cliente, peso de planos, clase, fase RSS, subproyectos, **`plant_id` + versión** | **`Project`** | Estimador | Por proyecto |
 | `e2_take_off` | Fuente, factor facturable AISC, peso reconstruido, exclusiones | **`Takeoff`** (derivado de `Model`) | Agente (percepción) | Por versión de modelo |
@@ -56,9 +57,19 @@ ni los edita la misma persona:
    Project → referencia (plant_id, config_version)
    ```
 
-   **Duda abierta:** ¿`e5_financieros` ($/HH) va en `PlantConfig`, en `TenantConfig` o partido? La
-   nómina es de la planta; el overhead puede ser corporativo. Y `PriceList` probablemente sea del
-   tenant —compras centralizadas— pero puede variar por planta según logística.
+   **Resuelto el 12-ago (#100): `e5_financieros` va partido.** La **nómina en `PlantConfig`**
+   —prestaciones, CCT y mezcla propio/subcontrato son de esa planta y producen su `$/HH`— y el
+   **overhead en `TenantConfig`**, porque es corporativo.
+
+   **Consecuencia derivada, y no es menor.** El inv. 15 exige que *«el overhead cubra las cargas de
+   planta»* (golden test: cargas 99.61 < overhead 115.45). Con las cargas por planta y el overhead
+   por tenant, comparar el overhead total contra las cargas de **una** planta no dice nada. Por eso
+   `TenantConfig` guarda el overhead **y su regla de reparto** entre plantas —por tonelaje, por HH o
+   fijo—; cada planta recibe su `overhead_asignado_hh` y **el chequeo del inv. 15 sigue corriendo por
+   planta**. Con una sola planta el reparto es el 100% y el chequeo es idéntico al del golden test.
+
+   Sigue abierto: `PriceList` probablemente sea del tenant —compras centralizadas— pero puede variar
+   por planta según logística.
 
    Fuera de alcance de v1, anotado para no cerrar la puerta: un proyecto **repartido entre varias
    plantas**. Hoy la referencia es a una sola.

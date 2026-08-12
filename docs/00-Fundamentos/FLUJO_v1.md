@@ -91,11 +91,12 @@ FLUJO DE PLANTA  (paralelo, por administrador de planta)
                                  cuello de botella, capacidad de habilitado
   P11·C  Calibración por clase   eje 24/40/60/90 · desperdicio, soldadura,
                                  conexiones, tornillería
-  P11·D  Financieros             $/HH propio y subcontrato, cargas, overhead
-                                 ▸ valida tolerancia 2% y cargas < overhead (inv. 15)
+  P11·D  Financieros             nómina de la planta → $/HH propio y subcontrato
+                                 + overhead asignado desde TenantConfig según su reparto
+                                 ▸ valida tolerancia 2% y cargas < overhead POR PLANTA (inv. 15)
   P11·E  Publicar versión        genera PlantConfig vN inmutable (inv. 16)
      ║
-     ║  se enlaza en →  P3 paso 1 · el intake elige (planta, versión)
+     ║  se enlaza en →  P3 paso 1 · selector de planta y versión, con acceso a esta definición
      ▼
 FLUJO OPERATIVO  (semanal, por planeación y almacén de la planta)
   P14·A  Carga de planta         proyectos en curso, HH libres/sem  ← E7

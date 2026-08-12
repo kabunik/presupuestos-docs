@@ -71,6 +71,16 @@ a{color:#1F9E91;text-decoration:none}a:hover{color:#17786e;text-decoration:under
           <div style="display:flex;flex-direction:column;gap:6px"><label style="font-size:12px;font-weight:600;color:#475569">Destino (transporte)</label><div style="height:42px;border:1px solid #CBD5E1;border-radius:10px;background:#fff;display:flex;align-items:center;padding:0 12px;font-size:14px">Monterrey, N.L. · 312 km</div></div>
         </div>
         <div style="border-top:1px solid #E3E8EF;padding-top:20px;display:flex;flex-direction:column;gap:10px">
+          <div><label style="font-size:12px;font-weight:600;color:#475569">Planta de fabricación</label><div style="font-size:11.5px;color:#94A3B8;margin-top:3px">El proyecto se calcula contra la capacidad y la calibración de esta planta, en la versión que elijas.</div></div>
+          <div style="display:flex;gap:12px;align-items:flex-start">
+            <div style="flex:1;height:42px;border:1px solid #CBD5E1;border-radius:10px;background:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 12px;font-size:14px">METALITEC · Pachuca<span style="color:#94A3B8">›</span></div>
+            <div style="width:180px;height:42px;border:1px solid #CBD5E1;border-radius:10px;background:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 12px;font-family:'JetBrains Mono';font-size:13px">v2026.1<span style="font-size:14px;font-family:'DM Sans';color:#94A3B8">›</span></div>
+            <div onClick="{{ goP11 }}" style="height:42px;padding:0 15px;border:1px solid #CFE7E3;background:#E8F6F4;border-radius:10px;display:flex;align-items:center;gap:7px;font-size:13px;font-weight:600;color:#17786e;cursor:pointer;white-space:nowrap" style-hover="background:#D6EEEA">Ver definición ›</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;background:#F8FAFC;border:1px solid #EEF2F6;border-radius:10px;padding:10px 12px;margin-bottom:6px">
+            <span style="width:6px;height:6px;border-radius:50%;background:#1F9E91;flex:none"></span>
+            <span style="font-size:11.5px;color:#64748B">Capacidad 200 t/mes · cuello de botella en habilitado · calibrada para clases 40 y 60</span>
+          </div>
           <div><label style="font-size:12px;font-weight:600;color:#475569">Clase de complejidad (HH/ton)</label><div style="font-size:11.5px;color:#94A3B8;margin-top:3px">Un solo eje mueve desperdicio, soldadura, conexiones y horas. No se mezclan clases.</div></div>
           <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px">
             <div style="border:1px solid #E3E8EF;border-radius:11px;padding:12px;cursor:pointer;background:#fff"><div style="font-family:'JetBrains Mono';font-size:17px;font-weight:600;color:#94A3B8">24</div><div style="font-size:11px;color:#94A3B8;margin-top:4px;line-height:1.4">Naves simples, racks</div></div>
@@ -1266,7 +1276,7 @@ a{color:#1F9E91;text-decoration:none}a:hover{color:#17786e;text-decoration:under
 
       <div style="display:flex;flex-direction:column;gap:2px;margin-top:20px">
         <sc-for list="{{ pSteps }}" as="st" hint-placeholder-count="5">
-          <div style="{{ st.rowStyle }}" style-hover="background:#F8FAFC">
+          <div onClick="{{ st.go }}" style="{{ st.rowStyle }}" style-hover="background:#F8FAFC">
             <span style="{{ st.dotStyle }}">{{ st.letter }}</span>
             <div style="min-width:0"><div style="font-size:13px;font-weight:500;line-height:1.3">{{ st.title }}</div><div style="font-size:11.5px;color:#94A3B8;margin-top:2px;line-height:1.35">{{ st.sub }}</div></div>
           </div>
@@ -1290,11 +1300,46 @@ a{color:#1F9E91;text-decoration:none}a:hover{color:#17786e;text-decoration:under
     </div>
 
     <div style="flex:1;overflow:auto;padding:24px 26px;display:flex;flex-direction:column;gap:18px;min-width:0">
-      <div>
-        <div style="font-family:'Space Grotesk';font-size:22px;font-weight:600">Capacidad y flujo de valor</div>
-        <div style="font-size:14px;color:#64748B;margin-top:6px;max-width:70ch">Es la base de los chequeos S11 y S12: sin capacidad declarada un proyecto no puede pasar del bloque de modelo. El cuello de botella determina la ocupación que se vigila semana a semana.</div>
+      <div style="flex:none">
+        <div style="font-family:'Space Grotesk';font-size:22px;font-weight:600">{{ plantStepTitle }}</div>
+        <div style="font-size:14px;color:#64748B;margin-top:6px;max-width:70ch">{{ plantStepLede }}</div>
       </div>
 
+      <sc-if value="{{ isPA }}" hint-placeholder-val="{{ true }}">
+      <div style="display:grid;grid-template-columns:1fr 380px;gap:18px;align-items:start">
+        <div style="background:#fff;border:1px solid #E3E8EF;border-radius:16px;padding:20px">
+          <div style="font-size:12px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:#475569;margin-bottom:14px">Datos de la planta</div>
+          <sc-for list="{{ identity }}" as="id" hint-placeholder-count="6">
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:11px 0;border-bottom:1px solid #F1F5F9">
+              <span style="font-size:13px;color:#475569">{{ id.k }}</span>
+              <span style="font-family:'JetBrains Mono';font-size:13px;font-weight:500">{{ id.v }}</span>
+            </div>
+          </sc-for>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <div style="background:#fff;border:1px solid #E3E8EF;border-radius:16px;padding:18px">
+            <div style="font-size:11px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:#475569">Plantas de la organización</div>
+            <div style="font-size:12px;color:#64748B;margin-top:7px;line-height:1.45">Un proyecto se asocia a una planta. Cada una tiene su propia calibración y su propia versión.</div>
+            <div style="display:flex;flex-direction:column;gap:8px;margin-top:13px">
+              <sc-for list="{{ otherPlants }}" as="pl" hint-placeholder-count="2">
+                <div style="{{ pl.cardStyle }}">
+                  <div style="{{ pl.nameStyle }}">{{ pl.name }}</div>
+                  <div style="display:flex;align-items:center;margin-top:5px">
+                    <span style="font-size:11px;color:#64748B">{{ pl.rel }}</span>
+                    <span style="margin-left:auto;font-family:'JetBrains Mono';font-size:11.5px;color:#475569">{{ pl.cap }}</span>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+          <div style="background:#F8FAFC;border:1px solid #E3E8EF;border-radius:14px;padding:15px">
+            <div style="font-size:11.5px;color:#64748B;line-height:1.5">El <b style="font-weight:600">overhead corporativo</b> es del tenant y se reparte entre las plantas; la <b style="font-weight:600">nómina</b> es de cada planta. Ver el paso D.</div>
+          </div>
+        </div>
+      </div>
+      </sc-if>
+
+      <sc-if value="{{ isPB }}" hint-placeholder-val="{{ true }}">
       <div style="background:#fff;border:1px solid #E3E8EF;border-radius:16px;overflow:hidden">
         <div style="display:grid;grid-template-columns:1fr 250px 92px 92px;background:#F8FAFC;border-bottom:1px solid #E3E8EF;padding:10px 15px;font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#94A3B8">
           <span>Estación</span><span>Detalle</span><span style="text-align:right">t/sem</span><span style="text-align:right">Utiliz.</span>
@@ -1348,6 +1393,126 @@ a{color:#1F9E91;text-decoration:none}a:hover{color:#17786e;text-decoration:under
           <div style="height:34px;padding:0 13px;border:1px solid #CBD5E1;border-radius:9px;display:flex;align-items:center;font-size:12.5px;cursor:pointer;background:#fff" style-hover="background:#F1F5F9">Actualizar inventario</div>
         </div>
       </div>
+      </sc-if>
+
+      <sc-if value="{{ isPC }}" hint-placeholder-val="{{ true }}">
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;flex:none">
+        <sc-for list="{{ classCards }}" as="cc" hint-placeholder-count="4">
+          <div style="{{ cc.cardStyle }}">
+            <div style="{{ cc.claseStyle }}">{{ cc.clase }} HH/t</div>
+            <div style="font-size:11.5px;color:#64748B;margin-top:5px;line-height:1.35">{{ cc.tipo }}</div>
+            <div style="{{ cc.estadoStyle }}">{{ cc.estado }}</div>
+          </div>
+        </sc-for>
+      </div>
+      <div style="flex:none;background:#fff;border:1px solid #E3E8EF;border-radius:16px;overflow:hidden">
+        <div style="display:grid;grid-template-columns:1fr 80px 80px 80px 80px;background:#F8FAFC;border-bottom:1px solid #E3E8EF;padding:10px 16px;font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#94A3B8">
+          <span>Factor · % sobre peso AISC</span><span style="text-align:right">24</span><span style="text-align:right">40</span><span style="text-align:right">60</span><span style="text-align:right">90</span>
+        </div>
+        <sc-for list="{{ factors }}" as="f" hint-placeholder-count="8">
+          <div style="display:grid;grid-template-columns:1fr 80px 80px 80px 80px;align-items:center;padding:10px 16px;border-bottom:1px solid #F1F5F9">
+            <span style="font-size:12.5px">{{ f.concepto }}</span>
+            <span style="font-family:'JetBrains Mono';font-size:12.5px;text-align:right;color:#94A3B8">{{ f.c24 }}</span>
+            <span style="font-family:'JetBrains Mono';font-size:12.5px;text-align:right;font-weight:600;color:#17786e">{{ f.c40 }}</span>
+            <span style="font-family:'JetBrains Mono';font-size:12.5px;text-align:right;font-weight:600;color:#17786e">{{ f.c60 }}</span>
+            <span style="font-family:'JetBrains Mono';font-size:12.5px;text-align:right;color:#94A3B8">{{ f.c90 }}</span>
+          </div>
+        </sc-for>
+      </div>
+      <div style="flex:none;display:flex;align-items:flex-start;gap:10px;background:#F8FAFC;border:1px solid #E3E8EF;border-radius:14px;padding:14px 16px">
+        <span style="width:7px;height:7px;border-radius:2px;background:#1F9E91;flex:none;margin-top:5px"></span>
+        <span style="font-size:12px;color:#475569;line-height:1.5">La clase se elige <b style="font-weight:600">entera</b>: no se puede tomar la soldadura de una y el desperdicio de otra. Las columnas atenuadas son clases que esta planta no fabrica; los factores están precargados de la tabla de referencia y solo se ajustan con evidencia de cierres.</span>
+      </div>
+      </sc-if>
+
+      <sc-if value="{{ isPD }}" hint-placeholder-val="{{ true }}">
+      <div style="flex:none;display:grid;grid-template-columns:1fr 1fr;gap:14px">
+        <sc-for list="{{ hhCosts }}" as="h" hint-placeholder-count="2">
+          <div style="background:#fff;border:1px solid #E3E8EF;border-radius:16px;padding:18px">
+            <div style="font-size:11px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:#94A3B8">{{ h.k }}</div>
+            <div style="{{ h.vStyle }}">{{ h.v }}</div>
+            <div style="font-size:11.5px;color:#64748B;margin-top:5px">{{ h.nota }}</div>
+          </div>
+        </sc-for>
+      </div>
+      <div style="flex:none;display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:start">
+        <div style="background:#fff;border:1px solid #E3E8EF;border-radius:16px;padding:20px">
+          <div style="font-size:12px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:#475569">Nómina de esta planta</div>
+          <div style="font-size:11.5px;color:#94A3B8;margin-top:5px">PlantConfig · se declara aquí</div>
+          <div style="margin-top:13px">
+            <sc-for list="{{ nomina }}" as="n" hint-placeholder-count="4">
+              <div style="display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:1px solid #F1F5F9">
+                <span style="font-size:12.5px;color:#475569">{{ n.k }}</span>
+                <span style="font-family:'JetBrains Mono';font-size:12.5px;font-weight:500">{{ n.v }}</span>
+              </div>
+            </sc-for>
+          </div>
+          <div style="display:flex;align-items:center;gap:9px;margin-top:14px;background:#E8F6F4;border:1px solid #CFE7E3;border-radius:10px;padding:11px 13px">
+            <span style="font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:999px;background:rgba(255,255,255,.7);color:#17786e">✓ 0.8%</span>
+            <span style="font-size:11.5px;color:#17786e;line-height:1.4">Dentro de la tolerancia del 2% contra contabilidad</span>
+          </div>
+        </div>
+        <div style="background:#fff;border:1px solid #E3E8EF;border-radius:16px;padding:20px">
+          <div style="font-size:12px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:#475569">Overhead asignado</div>
+          <div style="font-size:11.5px;color:#94A3B8;margin-top:5px">TenantConfig · es corporativo y se reparte</div>
+          <div style="margin-top:13px">
+            <sc-for list="{{ overheadRows }}" as="o" hint-placeholder-count="4">
+              <div style="display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid #F1F5F9">
+                <span style="font-size:12.5px;color:#475569;flex:1">{{ o.k }}</span>
+                <span style="font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:#94A3B8">{{ o.src }}</span>
+                <span style="{{ o.vStyle }}">{{ o.v }}</span>
+              </div>
+            </sc-for>
+          </div>
+          <div style="display:flex;align-items:center;gap:9px;margin-top:14px;background:#E8F6F4;border:1px solid #CFE7E3;border-radius:10px;padding:11px 13px">
+            <span style="font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:999px;background:rgba(255,255,255,.7);color:#17786e">✓ cubiertas</span>
+            <span style="font-size:11.5px;color:#17786e;line-height:1.4">Cargas de planta <b style="font-family:'JetBrains Mono';font-weight:600">99.61</b> &lt; overhead asignado <b style="font-family:'JetBrains Mono';font-weight:600">115.45</b></span>
+          </div>
+        </div>
+      </div>
+      <div style="flex:none;display:flex;align-items:flex-start;gap:10px;background:#F8FAFC;border:1px solid #E3E8EF;border-radius:14px;padding:14px 16px">
+        <span style="width:7px;height:7px;border-radius:2px;background:#1F9E91;flex:none;margin-top:5px"></span>
+        <span style="font-size:12px;color:#475569;line-height:1.5">Todo <b style="font-weight:600">antes de impuestos</b>: IVA e ISR quedan fuera del motor y solo aparecen en la presentación de la oferta. Y el chequeo de cargas contra overhead corre <b style="font-weight:600">por planta</b>, con el overhead que le toca del reparto — comparar el corporativo entero contra una sola planta no diría nada.</span>
+      </div>
+      </sc-if>
+
+      <sc-if value="{{ isPE }}" hint-placeholder-val="{{ true }}">
+      <div style="flex:none;background:#fff;border:1px solid #E3E8EF;border-radius:16px;overflow:hidden">
+        <div style="display:grid;grid-template-columns:1fr 120px 120px 52px;background:#F8FAFC;border-bottom:1px solid #E3E8EF;padding:10px 16px;font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#94A3B8">
+          <span>Qué cambia en v2026.2</span><span style="text-align:right">v2026.1</span><span style="text-align:right">v2026.2</span><span style="text-align:right">Paso</span>
+        </div>
+        <sc-for list="{{ diffRows }}" as="d" hint-placeholder-count="4">
+          <div style="display:grid;grid-template-columns:1fr 120px 120px 52px;align-items:center;padding:11px 16px;border-bottom:1px solid #F1F5F9">
+            <span style="font-size:12.5px">{{ d.k }}</span>
+            <span style="font-family:'JetBrains Mono';font-size:12.5px;text-align:right;color:#94A3B8;text-decoration:line-through">{{ d.antes }}</span>
+            <span style="font-family:'JetBrains Mono';font-size:12.5px;text-align:right;font-weight:600;color:#17786e">{{ d.despues }}</span>
+            <span style="font-family:'JetBrains Mono';font-size:11px;text-align:right;color:#94A3B8">{{ d.paso }}</span>
+          </div>
+        </sc-for>
+      </div>
+      <div style="flex:none;display:grid;grid-template-columns:1fr 380px;gap:18px;align-items:start">
+        <div style="background:#fff;border:1px solid #E3E8EF;border-radius:16px;padding:20px">
+          <div style="font-size:12px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:#475569">Proyectos ligados a v2026.1</div>
+          <div style="font-size:12px;color:#64748B;margin-top:6px;line-height:1.45">Estos <b style="font-weight:600">no cambian</b> al publicar. Siguen calculados con la versión con la que se emitieron.</div>
+          <div style="margin-top:13px">
+            <sc-for list="{{ linkedProjects }}" as="lp" hint-placeholder-count="4">
+              <div style="display:flex;align-items:center;gap:11px;padding:10px 0;border-bottom:1px solid #F1F5F9">
+                <span style="font-size:12.5px;flex:1">{{ lp.proy }}</span>
+                <span style="font-size:11px;color:#64748B">{{ lp.estado }}</span>
+                <span style="font-family:'JetBrains Mono';font-size:11px;background:#EEF2F6;color:#475569;padding:2px 7px;border-radius:5px">{{ lp.ver }}</span>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+        <div style="background:#FEF7EA;border:1px solid #F5D7A6;border-left:4px solid #F5A623;border-radius:14px;padding:18px">
+          <div style="font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:#9A6408">Antes de publicar</div>
+          <div style="font-size:13.5px;font-weight:700;color:#7C5308;margin-top:8px;line-height:1.4">Las versiones son inmutables</div>
+          <div style="font-size:12.5px;color:#7C5308;margin-top:8px;line-height:1.55">Una vez publicada, <b style="font-weight:600">v2026.2 no se puede editar</b>: para cambiar algo se publica otra. Los proyectos nuevos la usarán por defecto; los existentes solo si se reasocian de forma explícita.</div>
+          <div style="height:38px;margin-top:15px;border-radius:9px;background:#1F9E91;color:#fff;font-size:13px;font-weight:600;display:flex;align-items:center;justify-content:center;cursor:pointer">Publicar v2026.2</div>
+        </div>
+      </div>
+      </sc-if>
+
     </div>
   </div>
 </div>
@@ -1574,10 +1739,22 @@ a{color:#1F9E91;text-decoration:none}a:hover{color:#17786e;text-decoration:under
 
 </div>
 
-<div style="position:fixed;left:50%;bottom:18px;transform:translateX(-50%);display:flex;align-items:center;gap:4px;background:rgba(30,42,58,.96);backdrop-filter:blur(8px);border-radius:12px;padding:6px;box-shadow:0 12px 34px rgba(16,24,40,.3);z-index:50">
-  <sc-for list="{{ nav }}" as="n" hint-placeholder-count="7">
-    <div onClick="{{ n.go }}" style="{{ n.style }}">{{ n.label }}</div>
-  </sc-for>
+<div style="position:fixed;left:50%;bottom:18px;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:8px;z-index:50">
+
+  <sc-if value="{{ isP11 }}" hint-placeholder-val="{{ true }}">
+  <div style="display:flex;align-items:center;gap:6px;background:rgba(31,158,145,.96);backdrop-filter:blur(8px);border-radius:12px;padding:6px 10px;box-shadow:0 12px 34px rgba(16,24,40,.3)">
+    <span style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:rgba(255,255,255,.75);padding-right:4px">Definición de planta</span>
+    <sc-for list="{{ plantNav }}" as="pn" hint-placeholder-count="5">
+      <div onClick="{{ pn.go }}" style="{{ pn.style }}">{{ pn.label }}</div>
+    </sc-for>
+  </div>
+  </sc-if>
+
+  <div style="display:flex;align-items:center;gap:4px;background:rgba(30,42,58,.96);backdrop-filter:blur(8px);border-radius:12px;padding:6px;box-shadow:0 12px 34px rgba(16,24,40,.3)">
+    <sc-for list="{{ nav }}" as="n" hint-placeholder-count="7">
+      <div onClick="{{ n.go }}" style="{{ n.style }}">{{ n.label }}</div>
+    </sc-for>
+  </div>
 </div>
 
 </x-dc>
@@ -2096,18 +2273,6 @@ class Component extends DCLogic {
       pillStyle: 'font-size:10px;font-weight:700;padding:2px 7px;border-radius:999px;color:' + sevMap[d[1]][1] + ';background:rgba(255,255,255,.7);border:1px solid ' + sevMap[d[1]][2]
     }));
     // ---- P11 · definición de planta (flujo paralelo) ----
-    const plantSteps = [
-      ['A', 'Identidad', 'Nombre, ubicación, layout', 'done'],
-      ['B', 'Capacidad y VSM', 'Estaciones, velocidades, cuello de botella', 'cur'],
-      ['C', 'Calibración por clase', 'Eje 24/40/60/90 y sus factores', 'todo'],
-      ['D', 'Financieros', '$/HH, cargas, overhead', 'todo'],
-      ['E', 'Publicar versión', 'Genera PlantConfig inmutable', 'todo']
-    ];
-    const pSteps = plantSteps.map(d => ({
-      letter: d[3] === 'done' ? '✓' : d[0], title: d[1], sub: d[2],
-      rowStyle: 'display:flex;gap:11px;align-items:flex-start;padding:10px 11px;border-radius:10px;cursor:pointer;background:' + (d[3] === 'cur' ? '#F1F8FA' : 'transparent'),
-      dotStyle: 'width:24px;height:24px;flex:none;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:\'JetBrains Mono\';font-size:11px;font-weight:600;' + (d[3] === 'cur' ? 'background:#1F9E91;color:#fff' : d[3] === 'done' ? 'background:#E8F6F4;color:#17786e' : 'background:#EEF2F6;color:#94A3B8')
-    }));
     const stations = [
       ['Corte', '5 mesas CNC + oxicorte', '38', '0.92'],
       ['Habilitado', '4 líneas · CUELLO DE BOTELLA', '24', '1.00'],
@@ -2206,6 +2371,111 @@ class Component extends DCLogic {
       ['AR-410-12', 'Armado 900x14', '12.00 m', '2.02 t', '41.1 m', 'Fuera de alcance del brazo']
     ].map(d => ({ marca: d[0], perfil: d[1], largo: d[2], peso: d[3], radio: d[4], motivo: d[5] }));
 
+    // ---- P11 · los 5 pasos de la definición de planta ----
+    // El paso se elige con state.pstep (a..e). El rail izquierdo es el stepper.
+    const pstep = s.pstep || 'b';
+    const plantStepDefs = [
+      ['a', 'A', 'Identidad', 'Nombre, ubicación, turnos'],
+      ['b', 'B', 'Capacidad y VSM', 'Estaciones, velocidades, cuello de botella'],
+      ['c', 'C', 'Calibración por clase', 'Eje 24/40/60/90 y sus factores'],
+      ['d', 'D', 'Financieros', '$/HH de planta y overhead asignado'],
+      ['e', 'E', 'Publicar versión', 'Genera PlantConfig inmutable']
+    ];
+    const order = ['a', 'b', 'c', 'd', 'e'];
+    const pSteps = plantStepDefs.map(d => {
+      const cur = d[0] === pstep, done = order.indexOf(d[0]) < order.indexOf(pstep);
+      return {
+        letter: done ? '✓' : d[1], title: d[2], sub: d[3],
+        go: () => this.go({ pstep: d[0] }),
+        rowStyle: 'display:flex;gap:11px;align-items:flex-start;padding:10px 11px;border-radius:10px;cursor:pointer;background:' + (cur ? '#F1F8FA' : 'transparent'),
+        dotStyle: 'width:24px;height:24px;flex:none;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:\'JetBrains Mono\';font-size:11px;font-weight:600;' + (cur ? 'background:#1F9E91;color:#fff' : done ? 'background:#E8F6F4;color:#17786e' : 'background:#EEF2F6;color:#94A3B8')
+      };
+    });
+    // barra de navegación paralela del flujo de planta
+    const plantNav = plantStepDefs.map(d => ({
+      label: d[1], go: () => this.go({ screen: 'p11', pstep: d[0] }),
+      style: 'height:30px;padding:0 12px;border-radius:7px;display:flex;align-items:center;white-space:nowrap;font-family:\'JetBrains Mono\';font-size:11px;font-weight:' + (d[0] === pstep ? '600' : '400') + ';cursor:pointer;color:' + (d[0] === pstep ? '#1E2A3A' : 'rgba(255,255,255,.72)') + ';background:' + (d[0] === pstep ? '#fff' : 'transparent')
+    }));
+    // ---- paso A · identidad ----
+    const identity = [
+      { k: 'Nombre de la planta', v: 'METALITEC · Pachuca' },
+      { k: 'Ubicación', v: 'Pachuca, Hidalgo, México' },
+      { k: 'Superficie de nave', v: '8,400 m²' },
+      { k: 'Turnos', v: '2 turnos · lunes a sábado' },
+      { k: 'Horas laborables', v: '48 h/semana por turno' },
+      { k: 'Tenant', v: 'Grupo Baysa' }
+    ];
+    const otherPlants = [
+      ['METALITEC · Pachuca', 'Esta planta', '200 t/mes', 1],
+      ['Baysa · Querétaro', 'Misma organización', '120 t/mes', 0]
+    ].map(d => ({
+      name: d[0], rel: d[1], cap: d[2],
+      cardStyle: 'border:1px solid ' + (d[3] ? '#CFE7E3' : '#E3E8EF') + ';border-radius:11px;padding:12px 13px;background:' + (d[3] ? '#E8F6F4' : '#fff'),
+      nameStyle: 'font-size:12.5px;font-weight:600;color:' + (d[3] ? '#17786e' : '#1E2A3A')
+    }));
+    // ---- paso C · calibración por clase · cifras de la hoja 7 del informe de factores ----
+    const classCols = ['24', '40', '60', '90'];
+    const factorDefs = [
+      ['Desperdicio de placas',        '8%',  '10%', '13%', '18%'],
+      ['Desperdicio de perfiles W',    '3%',  '5%',  '7%',  '10%'],
+      ['Desperdicio de ángulos y HSS', '5%',  '7%',  '9%',  '13%'],
+      ['Tornillería',                  '2%',  '2.5%','3.5%','5%'],
+      ['Soldadura · atornillada obra', '0.8%','1.2%','1.8%','2.8%'],
+      ['Soldadura · soldada en obra',  '1.8%','2.2%','3%',  '4.5%'],
+      ['Conexiones · apernadas',       '8%',  '10%', '13%', '16%'],
+      ['Conexiones · soldadas',        '5%',  '6%',  '8%',  '11%']
+    ];
+    const factors = factorDefs.map(d => ({
+      concepto: d[0], c24: d[1], c40: d[2], c60: d[3], c90: d[4]
+    }));
+    const classCards = [
+      ['24', 'Naves simples, racks', 'No calibrada', 0],
+      ['40', 'Estándar industrial', 'Calibrada · 11 cierres', 1],
+      ['60', 'Gran claro, sismorresistente', 'Calibrada · 4 cierres', 1],
+      ['90', 'Offshore, misceláneos', 'No calibrada', 0]
+    ].map(d => ({
+      clase: d[0], tipo: d[1], estado: d[2],
+      cardStyle: 'border:1px solid ' + (d[3] ? '#CFE7E3' : '#E3E8EF') + ';border-radius:11px;padding:13px;background:' + (d[3] ? '#E8F6F4' : '#F8FAFC'),
+      claseStyle: 'font-family:\'JetBrains Mono\';font-size:18px;font-weight:600;color:' + (d[3] ? '#17786e' : '#94A3B8'),
+      estadoStyle: 'font-size:10.5px;font-weight:600;margin-top:6px;color:' + (d[3] ? '#17786e' : '#94A3B8')
+    }));
+    // ---- paso D · financieros ----
+    const nomina = [
+      { k: 'Nómina base', v: '$68.40/HH' },
+      { k: 'Prestaciones de ley', v: '$21.90/HH' },
+      { k: 'Obligaciones CCT / sindicato', v: '$14.20/HH' },
+      { k: 'Equipo y consumibles imputables', v: '$18.29/HH' }
+    ];
+    const hhCosts = [
+      ['$/HH propio', '122.79', 'suma de la nómina de esta planta', 1],
+      ['$/HH subcontrato all-in', '164.85', 'tarifa contratada, incluye su overhead', 0]
+    ].map(d => ({
+      k: d[0], v: d[1], nota: d[2],
+      vStyle: 'font-family:\'JetBrains Mono\';font-size:22px;font-weight:600;letter-spacing:-.5px;color:' + (d[3] ? '#17786e' : '#1E2A3A')
+    }));
+    const overheadRows = [
+      { k: 'Overhead corporativo del tenant', v: '$412,000/mes', src: 'TenantConfig' },
+      { k: 'Regla de reparto entre plantas', v: 'por tonelaje', src: 'TenantConfig' },
+      { k: 'Participación de esta planta', v: '62.5%', src: 'derivado' },
+      { k: 'Overhead asignado', v: '115.45 $/HH', src: 'derivado', strong: 1 }
+    ].map(r => ({
+      k: r.k, v: r.v, src: r.src,
+      vStyle: 'font-family:\'JetBrains Mono\';font-size:' + (r.strong ? '15px' : '13px') + ';font-weight:600;color:' + (r.strong ? '#17786e' : '#1E2A3A')
+    }));
+    // ---- paso E · publicar versión ----
+    const diffRows = [
+      ['Velocidad de habilitado', '22 t/sem', '24 t/sem', 'B'],
+      ['Ahorro Lean verificado', '7.1%', '8.4%', 'B'],
+      ['Desperdicio de perfiles · clase 60', '6.5%', '7.0%', 'C'],
+      ['$/HH propio', '119.40', '122.79', 'D']
+    ].map(d => ({ k: d[0], antes: d[1], despues: d[2], paso: d[3] }));
+    const linkedProjects = [
+      ['CNARCCS — Domo', 'Oferta emitida', 'v2026.1'],
+      ['CNAR Metropolitano', 'Oferta emitida', 'v2026.1'],
+      ['Nave Tultitlán', 'En fabricación', 'v2026.1'],
+      ['Pipe-rack Altamira', 'En fabricación', 'v2026.1']
+    ].map(d => ({ proy: d[0], estado: d[1], ver: d[2] }));
+
     const railExtra = chatOverlay
       ? 'position:absolute;left:14px;top:14px;bottom:14px;z-index:20;border:1px solid #E3E8EF;border-right:1px solid #E3E8EF;border-radius:14px;box-shadow:0 18px 44px rgba(16,24,40,.18)'
       : '';
@@ -2225,6 +2495,16 @@ class Component extends DCLogic {
       isP20: s.screen === 'p20', isP11: s.screen === 'p11',
       pages, layers, sums, unres, pSteps, stationRows, speeds, pVers,
       closure, recals, pendClose, cascada, reqMat, prestamos, lots, resol, cranePieces,
+      plantNav, identity, otherPlants, factors, classCards, nomina, hhCosts, overheadRows, diffRows, linkedProjects,
+      isPA: pstep === 'a', isPB: pstep === 'b', isPC: pstep === 'c', isPD: pstep === 'd', isPE: pstep === 'e',
+      plantStepTitle: { a: 'Identidad de la planta', b: 'Capacidad y flujo de valor', c: 'Calibración por clase de complejidad', d: 'Costo empresa de la planta', e: 'Publicar versión de la definición' }[pstep],
+      plantStepLede: {
+        a: 'Datos que identifican la planta y su calendario. Una organización puede tener varias plantas; el proyecto se asocia a una en el intake.',
+        b: 'Es la base de los chequeos S11 y S12: sin capacidad declarada un proyecto no puede pasar del bloque de modelo. El cuello de botella determina la ocupación que se vigila semana a semana.',
+        c: 'Un solo eje de HH/ton mueve desperdicio, soldadura, conexiones y horas de forma coherente. Solo se calibran las clases que esta planta fabrica de verdad.',
+        d: 'La nómina es de esta planta; el overhead es corporativo y se reparte entre plantas. Todo antes de impuestos.',
+        e: 'Publicar crea una versión inmutable. Los proyectos ya ligados siguen calculados con la suya.'
+      }[pstep],
       isP17: s.screen === 'p17', isP19: s.screen === 'p19',
       isStep1: s.step === 1, isStep2: s.step === 2, isStep3: s.step === 3, isStep4: s.step === 4,
       planTotal: '115 t', planPico: '38 t/sem', planSemanas: '5', planRitmo: '23 t/sem',
@@ -2294,6 +2574,7 @@ class Component extends DCLogic {
       goP14: () => this.go({ screen: 'p14' }),
       goP15: () => this.go({ screen: 'p15' }),
       goP16: () => this.go({ screen: 'p16' }),
+      goP11: () => this.go({ screen: 'p11', pstep: 'a' }),
       // ---- chips de estado del workspace (inv. 4, 7, 8) ----
       rssChip: 'RSS 9.3% · ámbar',
       rssChipStyle: 'display:flex;align-items:center;gap:6px;font-family:\'JetBrains Mono\';font-size:11px;padding:4px 9px;border-radius:6px;background:rgba(255,255,255,.09);color:#F5A623',
