@@ -38,6 +38,7 @@ Tres cosas la volvieron urgente en la última semana:
 | **El gate de precios de MP va al arranque de B3**, no al final: los precios son entrada de §4.3. En B4 queda una revalidación de vigencia | Decisión de dirección, 12-ago · #94 |
 | **`e5_financieros` va partido:** nómina en `PlantConfig`, overhead en `TenantConfig` con regla de reparto entre plantas. El chequeo del inv. 15 sigue siendo **por planta** | Decisión de dirección, 12-ago · #100 |
 | **`PriceList` arranca con alcance de tenant**, asumido como provisional. El alcance se modela como campo (`plant_id` nullable), de modo que pasar a por-planta sea **aditivo y sin migración** | Decisión de dirección, 12-ago · #102 |
+| **glTF 2.0 / `.glb` es el formato de la proyección de render.** IFC4 queda como proyección de **entregable**; el `Model` canónico sigue siendo estructura propia | Decisión de dirección, 12-ago · #13 |
 
 ---
 
@@ -78,9 +79,9 @@ Consecuencias de leerlo así:
 
 ## El frente abierto
 
-### 1 · Formato de render
+### 1 · Formato de render — **decidido**
 
-**Abierto.** Se planteó OBJ por ser más fácil de renderizar y de mutar que IFC. El instinto es
+**Resuelto el 12-ago (#13): glTF 2.0 / `.glb`.** Se planteó OBJ por ser más fácil de renderizar y de mutar que IFC. El instinto es
 correcto: IFC es pesado de renderizar y doloroso de mutar en cada edición.
 
 **Pero OBJ es la elección equivocada** para este producto:
@@ -91,11 +92,14 @@ correcto: IFC es pesado de renderizar y doloroso de mutar en cada edición.
 - Es texto: para la misma geometría pesa **más** que un binario equivalente.
 - No tiene semántica de jerarquía.
 
-**Recomendación: glTF 2.0 / `.glb`.** Nombres por nodo, `extras` para alojar el `elementId`, nativo de
-web, binario, y three.js lo carga sin librería adicional. Mismo beneficio buscado, sin perder la
-identidad por elemento.
+**Por qué glTF 2.0 / `.glb`.** Nombres por nodo, `extras` para alojar el `elementId`, nativo de web,
+binario, y three.js lo carga sin librería adicional. Mismo beneficio que se buscaba con OBJ, sin
+perder la identidad por elemento — que es lo que la selección bidireccional necesita.
 
-**Quién decide:** spike K2.1 (#13), que ya está abierto con label `needs-definition`.
+**Lo que queda del spike K2.1 (#13)** ya no es el formato: es la **librería y la latencia**. three.js
+carga glTF de forma nativa, así que el spike se reduce a medir rendimiento con un modelo de la escala
+real —1,470 elementos en CNARCCS— y a validar que el pintado incremental de `model_delta` cumple el
+requisito de F2 sin recargar la escena.
 
 ### 2 · Fusión de geometría con conexiones y soldadura
 
@@ -202,7 +206,18 @@ No es una pantalla de comodidad. **Es la compuerta humana de la fusión del punt
 soldadura solo vive en el plano, ninguna máquina la lee perfecta al primer intento, y hasta 8.5% del
 peso depende de ella. Que el usuario la confirme sobre el plano es el diseño correcto, no un parche.
 
-Declarada como **P20** en `FLUJO_v1.md`, entre la generación y el bloque B1. Sin mockear.
+Declarada como **P20** en `FLUJO_v1.md`, entre la generación y el bloque B1. **Mockeada** (#97).
+
+Y al hacerla concreta destapó **tres tareas que no estaban en el backlog**:
+
+| Tarea | Por qué es nueva |
+|---|---|
+| **#104 · Visor de plano PDF con overlay y marcado** | No es el visor 3D: es otra tecnología y otro riesgo. Renderizar 48 páginas y 62 MB con overlay vectorial alineado y herramientas de marcado encima. No estaba en K2 ni en K1 |
+| **#105 · Camino de contrato para la confirmación de ingesta** | **La corrección humana no es una edición.** Corregir «la escala es 1:75» no edita la solución estructural: corrige un dato de entrada mal leído, y debería **re-derivar** el modelo, no versionarlo. Hoy el contrato solo tiene `/generate` y `/edit`; falta el camino de vuelta |
+| **#106 · Tools de soldadura** | Metros de filete, volumen de bisel, depósito y **consumible a comprar** = depósito ÷ eficiencia del proceso. Es aritmética, así que va en tools. El `ROL.docx` ya especifica el método |
+
+De las tres, **#105 es la que urge**: dcode está construyendo la percepción esta semana y si no existe el
+camino de vuelta, la corrección humana no tiene por dónde entrar y P20 queda sin backend.
 
 ### 8 · `model_delta.origen`
 
@@ -236,7 +251,7 @@ del consultor.
 
 | # | Decisión | Quién |
 |---|---|---|
-| 1 | **Formato de render**: confirmar glTF/`.glb` como proyección de render, e IFC4 como proyección de entregable | Kabunik + dcode · spike #13 |
+| ~~1~~ | ~~Formato de render~~ **Resuelto el 12-ago (#13): glTF 2.0 / `.glb`** para render, IFC4 para entregable. El spike #13 pasa a ser de librería y latencia, no de formato | ✅ |
 | 2 | **Dueño de la fusión de soldadura y conexiones** en el modelo, y cuándo entra | dcode + Daniel |
 | 3 | **Confirmar que la base de datos del modelo la construye Kabunik** (K3.2, K7.3), y qué necesita dcode de ella | Ambos |
 | 4 | **Alcance de PDF escaneado en v1**: sí o no | Producto |
