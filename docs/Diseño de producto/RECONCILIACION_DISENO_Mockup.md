@@ -349,6 +349,14 @@ Formato natural: pantalla con tres tarjetas apiladas, o tabs de una pantalla «F
 | P17 · cierre y recalibración | Media | ✓ | pendiente |
 | P18 · desviaciones como panel del workspace | Media | ✓ | pendiente |
 | P19 · requisición, lotes y grúa | Media | ✓ | pendiente |
+| **P11·A–E · flujo paralelo de definición de planta** | **Alta** | parcial — ver #94 | pendiente |
+| **P20 · ingesta asistida de planos** | **Alta** | parcial — ver #94 | pendiente |
+
+**Añadidos el 12-ago (#94):** el flujo de definición de planta es **paralelo** al del proyecto —la
+planta se configura una vez, se versiona y el proyecto se asocia a ella—, y la ingesta asistida es la
+compuerta humana de la percepción, donde el usuario confirma sobre el plano lo que el agente
+interpretó. Ambos son de prioridad Alta y ninguno está mockeado. Estructura del flujo de planta en
+`docs/00-Fundamentos/FLUJO_v1.md`.
 
 Las tres pendientes son de prioridad Media y su especificación está completa: se pueden mockear en
 la siguiente ronda sin más decisiones de diseño.

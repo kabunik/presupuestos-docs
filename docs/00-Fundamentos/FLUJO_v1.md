@@ -40,8 +40,8 @@ termina donde hay una compuerta humana o un artefacto entregable:
 |---|---|---|---|---|
 | **B1 · Modelo y peso** | §4.1, §4.2 | E2 take-off (percepción) | Peso planos/facturable/comprar, factor, boom por familias, exclusiones, doble chequeo | **Gate: aprobar BOM** |
 | **B2 · Planta y programa** | §4.7–§4.12 | B1 + plan de montaje (E6) + carga e inventario (E7) + VSM (E4) | Lotes y déficit, grúa, S11, requisición neta, S12 con escenarios A/B/B\*/C, interferencia de familias | **Gate: decisión de programa** · **Gate: decisión de familias** |
-| **B3 · Costo y precio** | §4.3–§4.6, §4.13, §4.14 | B1 + **el pico de S11 de B2** + precios (E3) + financieros (E5) | APU AISC, Más X%, reconciliación, costo empresa, desviaciones costeadas, flujo de caja, capítulo financiero, RSS, **precio de licitación** | Opciones de oferta |
-| **B4 · Emisión** | §4.15 | B3 | Leyenda de alcance, oferta, IFC, memoria descriptiva | **Gate: confirmar precios de MP** |
+| **B3 · Costo y precio** | §4.3–§4.6, §4.13, §4.14 | B1 + **el pico de S11 de B2** + precios (E3) + financieros (E5) | APU AISC, Más X%, reconciliación, costo empresa, desviaciones costeadas, flujo de caja, capítulo financiero, RSS, **precio de licitación** | Arranca en **Gate: confirmar precios de MP**; termina en las opciones de oferta |
+| **B4 · Emisión** | §4.15 | B3 | Leyenda de alcance, oferta, IFC, memoria descriptiva | **Revalidación de vigencia** de los precios confirmados |
 | **B5 · Cierre** | §4.16 | Proyecto ejecutado | Cierre en 8 rubros, propuesta de recalibración | **Gate: aprobar recalibración** |
 
 ## El flujo corregido
@@ -51,7 +51,9 @@ P3  Intake                    datos + clase HH/ton · archivos · consideracione
     (4 pasos)                 · plan de montaje + fase RSS
      ↓
 P4  Generación                streaming de B1
-     ↓
+P20 Ingesta asistida          el humano confirma sobre el plano: clasificación de
+     ↓                        páginas, grilla de ejes, niveles, marcas, cotas y
+                              SIMBOLOGÍA DE SOLDADURA — compuerta de la fusión (#89)
 ──── B1 · MODELO Y PESO ──────────────────────────────────────────────────
 P5·A Workspace · revisión     visor + BOM + alertas de percepción + exclusiones
 P6   Grilla BOM               takeoff a fondo, selección bidireccional
@@ -64,16 +66,55 @@ P15  Decisión de programa     escenarios A/B/B*/C  ▸ GATE 3 · Acuerdo de ret
 P19  Requisición y lotes      déficit, grúa
      ↓
 ──── B3 · COSTO Y PRECIO ─────────────────────────────────────────────────
+P13  Gate de precios de MP    ▸ GATE 2 · Confirmar precios · los precios son
+                              ENTRADA de §4.3: se confirman antes de costear
 P9   Opciones de oferta       3 opciones, flujo de caja, ingeniería de valor,
                               reconciliación APU vs. Más X%, v1 vs v2
      ↓
 ──── B4 · EMISIÓN ────────────────────────────────────────────────────────
-P13  Gate de precios de MP    ▸ GATE 2 · Confirmar precios
-P10  Emisión                  leyenda de alcance, exclusiones, sello de versión
+P10  Emisión                  revalidación de vigencia · leyenda de alcance,
+                              exclusiones, sello de versión
      ↓
 ──── B5 · CIERRE ─────────────────────────────────────────────────────────
 P17  Cierre y recalibración   ▸ GATE 5 · Aprobar recalibración
 ```
+
+## El flujo paralelo de definición de planta
+
+*Añadido el 12-ago (#94).* La planta **no se configura dentro del proyecto**: tiene su propio flujo,
+su propio ciclo de vida y su propio versionado. El proyecto **se asocia** a una planta ya configurada.
+
+```
+FLUJO DE PLANTA  (paralelo, por administrador de planta)
+  P11·A  Alta de planta          identidad, ubicación, layout
+  P11·B  Capacidad y VSM         estaciones, velocidades base y con OT,
+                                 cuello de botella, capacidad de habilitado
+  P11·C  Calibración por clase   eje 24/40/60/90 · desperdicio, soldadura,
+                                 conexiones, tornillería
+  P11·D  Financieros             $/HH propio y subcontrato, cargas, overhead
+                                 ▸ valida tolerancia 2% y cargas < overhead (inv. 15)
+  P11·E  Publicar versión        genera PlantConfig vN inmutable (inv. 16)
+     ║
+     ║  se enlaza en →  P3 paso 1 · el intake elige (planta, versión)
+     ▼
+FLUJO OPERATIVO  (semanal, por planeación y almacén de la planta)
+  P14·A  Carga de planta         proyectos en curso, HH libres/sem  ← E7
+  P14·B  Inventario              disponible / asignado / libre, préstamos ← E7
+                                 ▸ marca de frescura; si está viejo, S12 no es fiable
+```
+
+Por qué importa que sea paralelo y no un paso del proyecto:
+
+- **Se reutiliza.** Un proyecto nuevo apunta a la misma `PlantConfig` sin reconfigurar nada.
+- **Se versiona.** «Usar una definición nueva» es publicar `vN+1`; los proyectos anteriores siguen
+  ligados a la suya. Es el mecanismo del inv. 16, ahora **por planta**.
+- **Un tenant puede tener varias plantas.** El intake elige a cuál se fabrica.
+- **Los ritmos son distintos.** La configuración es trimestral; la carga y el inventario, semanales.
+  Meterlos en el mismo flujo obligaría a revisar todo cada semana.
+
+Sin `PlantConfig` publicada, un proyecto **no puede pasar de B1**: B2 necesita capacidad y carga.
+
+---
 
 ### Lo que cambia respecto al flujo anterior
 
@@ -81,8 +122,19 @@ P17  Cierre y recalibración   ▸ GATE 5 · Aprobar recalibración
 |---|---|---|
 | Posición de P9 | Justo tras el chat de edición | **Al final de B3**, después de toda la planta |
 | P14 / P15 / P16 | Pantallas sueltas, sin lugar en la secuencia | **Bloque B2 completo**, entre el gate de BOM y el precio |
-| P13 | Sin ubicar | **B4**, inmediatamente antes de emitir |
+| P13 | Sin ubicar | **Arranque de B3**, antes de costear (corregido el 12-ago) |
 | Orden de las compuertas | 1 → 2 → 3 → 4 → 5 | **1 → 4 → 3 → 2 → 5** |
+
+> **Por qué el gate de precios está en B3 y no al final (corregido el 12-ago).** El inv. 8 exige que
+> la confirmación esté **registrada y con vigencias vigentes al emitir** — no que sea el último paso.
+> Y los precios son **entrada de §4.3**: mostrar opciones con $/ton calculados sobre precios sin
+> validar convierte la compuerta en un trámite, y si el usuario rechaza un precio, todo lo que acaba
+> de revisar estaba mal. Después del gate de BOM ya se sabe qué materiales lleva la oferta, así que la
+> confirmación cabe ahí. En B4 queda una **revalidación de vigencia** que puede reabrirla — algo que ya
+> era necesario porque la vigencia caduca sola.
+>
+> Daniel escribió «compuerta final» en §14 del Documento Maestro. El requisito se cumple igual, pero
+> el cambio de ubicación interpreta su invariante: **pendiente de confirmar con él** (#94).
 
 > **Aviso sobre la numeración de las compuertas.** La que usa
 > [INVARIANTES_Y_COMPUERTAS.md](INVARIANTES_Y_COMPUERTAS.md) es de **catálogo**, no de flujo. En
@@ -101,9 +153,9 @@ estados y le faltan tres:
 | BOM aprobado | **Analizar planta** | `--navy` | P14 |
 | Interferencia activa sin decidir | **Decidir familias** | `--amber` | P16 |
 | Programa sin decidir | **Decidir programa** | `--amber` | P15 |
-| Programa decidido | **Generar opciones** | `--teal` | P9 |
-| Opciones vigentes | **Confirmar precios** | `--red` (gate) | P13 |
-| Precios confirmados | **Emitir oferta** | `--teal` | P10 |
+| Programa decidido | **Confirmar precios** | `--red` (gate) | P13 |
+| Precios confirmados | **Generar opciones** | `--teal` | P9 |
+| Opciones vigentes | **Emitir oferta** | `--teal` | P10 |
 | Oferta emitida | **Registrar cierre** | `--navy` | P17 |
 
 Los dos CTAs en rojo son los dos gates bloqueantes. Los dos en ámbar exigen decisión registrada pero
@@ -121,9 +173,8 @@ perceiving
   → computing_plant                                                   (B2)
   → awaiting_family_decision       ▸ GATE 4  · solo si INV-03 activa
   → awaiting_program_decision      ▸ GATE 3  · solo si hay retraso
-  → computing_price                                                   (B3)
-  → ready_to_confirm
-  → awaiting_price_confirmation    ▸ GATE 2                          (fin de B4)
+  → awaiting_price_confirmation    ▸ GATE 2 · arranque de B3
+  → computing_price                bloque B3 · los precios son entrada de §4.3
   → ready
   → emitted
   → awaiting_closure                                                  (B5)
