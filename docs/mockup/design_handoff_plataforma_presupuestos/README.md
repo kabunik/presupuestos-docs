@@ -13,7 +13,7 @@ Este paquete cubre las pantallas de **prioridad alta/crítica** de la primera et
 
 | Ref | Pantalla | Flow | Estado en el mock |
 |---|---|---|---|
-| P3 | Wizard de intake (**4 pasos**) | Flow 1 | 4 sub-pasos navegables |
+| P3 | Wizard de intake (**4 pasos**) | Flow 1 | 4 sub-pasos navegables · **selector de planta y versión** en el paso 1 |
 | P4 | Progreso de generación (streaming) | Flow 1 | 1 estado (etapa 3 en curso) |
 | P5·A | Workspace — revisión del primer output | Flow 2 | gate de BOM visible |
 | P5·B | Workspace — edición conversacional en vivo | Flow 3 | delta + rechazo por guardarraíl |
@@ -26,7 +26,7 @@ Este paquete cubre las pantallas de **prioridad alta/crítica** de la primera et
 | **P15** | **Decisión de programa (A/B/B\*/C)** | — | 4 escenarios + compuerta de comunicación |
 | **P16** | **Interferencia de familias y subproyectos** | — | alerta no suprimible + 4 opciones |
 | **P20** | **Ingesta asistida de planos** | — | páginas con estado, capas, lectura del agente en prosa |
-| **P11** | **Definición de planta** (flujo paralelo) | — | capacidad y VSM + versionado inmutable |
+| **P11·A–E** | **Definición de planta** (flujo paralelo) | — | **los 5 pasos navegables** + barra de navegación propia |
 | **P17** | **Cierre de proyecto y recalibración** | — | 8 rubros con Δ vs. tolerancia ±5% + bandeja de dirección |
 | **P18** | **Desviaciones de concurso** | — | **cuarta tab del panel del workspace**, «Concurso» |
 | **P19** | **Requisición, lotes y grúa** | — | cascada de inventario + déficit por semana + piezas críticas |
@@ -34,6 +34,10 @@ Este paquete cubre las pantallas de **prioridad alta/crítica** de la primera et
 Las seis últimas se añadieron reconciliando con el Sistema DM v1.7 (#80), resecuenciando el flujo
 (#85) y tras la revisión del 12-ago (#94, #97). Su especificación —junto con la de P17, P18 y P19,
 aún sin mockear— está en `docs/Diseño de producto/RECONCILIACION_DISENO_Mockup.md`.
+
+El **flujo de definición de planta es paralelo** al del proyecto: tiene su propia barra de navegación
+en el prototipo y se entra a él desde el **selector de planta del paso 1 del intake**. La planta se
+configura una vez, se versiona, y el proyecto se asocia a `(planta, versión)`.
 
 **P20 y P11 toman como referencia de flujo el recorrido de Steel Genie**, extraído en
 `docs/Diseño de producto/REFERENCIA_SteelGenie.md` con las 16 capturas en `docs/steel genie/`. Es

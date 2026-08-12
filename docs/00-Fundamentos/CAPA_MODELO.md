@@ -36,6 +36,7 @@ Tres cosas la volvieron urgente en la última semana:
 | **Un solo agente orquestador**, con varios puntos de interacción en el userflow. Varios agentes en el futuro son viables sin cambiar la arquitectura | Aclaración de dirección, 12-ago |
 | **La planta es entidad de primera clase y un tenant puede tener varias.** Se configura en un flujo paralelo, se versiona, y el proyecto se asocia a `(plant_id, config_version)` en el intake. **`version_parametros` es por planta, no por tenant** | Decisión de dirección, 12-ago · `FLUJO_v1.md` · #94 |
 | **El gate de precios de MP va al arranque de B3**, no al final: los precios son entrada de §4.3. En B4 queda una revalidación de vigencia | Decisión de dirección, 12-ago · #94 |
+| **`e5_financieros` va partido:** nómina en `PlantConfig`, overhead en `TenantConfig` con regla de reparto entre plantas. El chequeo del inv. 15 sigue siendo **por planta** | Decisión de dirección, 12-ago · #100 |
 
 ---
 
@@ -239,7 +240,7 @@ del consultor.
 | 3 | **Confirmar que la base de datos del modelo la construye Kabunik** (K3.2, K7.3), y qué necesita dcode de ella | Ambos |
 | 4 | **Alcance de PDF escaneado en v1**: sí o no | Producto |
 | 5 | **Prioridad de los planos PDF de CNARCCS** por encima del resto de insumos de Daniel | Juan → Daniel |
-| 6 | **¿`e5_financieros` ($/HH) va en `PlantConfig`, en `TenantConfig` o partido?** La nómina es de la planta; el overhead puede ser corporativo | Dirección + Daniel |
+| ~~6~~ | ~~¿`e5_financieros` va en `PlantConfig` o `TenantConfig`?~~ **Resuelto el 12-ago (#100): partido.** Nómina en `PlantConfig`, overhead en `TenantConfig` **con su regla de reparto entre plantas**, para que el chequeo del inv. 15 siga corriendo por planta | ✅ |
 | 7 | **Confirmar con Daniel la reubicación del gate de precios** al arranque de B3. Él escribió «compuerta final»; el requisito se cumple igual, pero es su invariante | Juan → Daniel |
 
 Los puntos 5, 6 y 8 del frente (secciones sin peso, PDF escaneado, `origen` del delta) no necesitan
