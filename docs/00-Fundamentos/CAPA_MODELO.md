@@ -37,6 +37,7 @@ Tres cosas la volvieron urgente en la última semana:
 | **La planta es entidad de primera clase y un tenant puede tener varias.** Se configura en un flujo paralelo, se versiona, y el proyecto se asocia a `(plant_id, config_version)` en el intake. **`version_parametros` es por planta, no por tenant** | Decisión de dirección, 12-ago · `FLUJO_v1.md` · #94 |
 | **El gate de precios de MP va al arranque de B3**, no al final: los precios son entrada de §4.3. En B4 queda una revalidación de vigencia | Decisión de dirección, 12-ago · #94 |
 | **`e5_financieros` va partido:** nómina en `PlantConfig`, overhead en `TenantConfig` con regla de reparto entre plantas. El chequeo del inv. 15 sigue siendo **por planta** | Decisión de dirección, 12-ago · #100 |
+| **`PriceList` arranca con alcance de tenant**, asumido como provisional. El alcance se modela como campo (`plant_id` nullable), de modo que pasar a por-planta sea **aditivo y sin migración** | Decisión de dirección, 12-ago · #102 |
 
 ---
 

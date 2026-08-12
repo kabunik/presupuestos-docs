@@ -27,7 +27,7 @@ ni los edita la misma persona:
 
 | Bloque del kit | Contenido | Entidad de plataforma | Quién lo mantiene | Cadencia |
 |---|---|---|---|---|
-| `e3_precios.materiales` | Precios de MP con fuente/fecha/vigencia | **`PriceList`** (versionada) | Compras del tenant | Continua; **caduca** |
+| `e3_precios.materiales` | Precios de MP con fuente/fecha/vigencia | **`PriceList`** (versionada, `plant_id` nullable) | Compras del tenant | Continua; **caduca** |
 | `e4_planta_vsm` | Velocidades, cuello de botella, ahorro Lean | **`PlantConfig`** (versionada) | Admin de la planta | Trimestral |
 | `e5_financieros` — nómina | Nómina, prestaciones, CCT, mezcla propio/subcontrato → `$/HH` | **`PlantConfig`** | Dirección/finanzas de la planta | Trimestral |
 | `e5_financieros` — overhead | Overhead corporativo **y su regla de reparto entre plantas** | **`TenantConfig`** | Dirección corporativa | Trimestral |
@@ -68,8 +68,32 @@ ni los edita la misma persona:
    fijo—; cada planta recibe su `overhead_asignado_hh` y **el chequeo del inv. 15 sigue corriendo por
    planta**. Con una sola planta el reparto es el 100% y el chequeo es idéntico al del golden test.
 
-   Sigue abierto: `PriceList` probablemente sea del tenant —compras centralizadas— pero puede variar
-   por planta según logística.
+   **`PriceList` arranca con alcance de tenant** *(decisión del 12-ago, #102)*, asumida como
+   definición inicial que puede mutar: cada fabricante tiene su realidad. Para que revertirla sea
+   aditivo, el alcance se modela **como campo, no como padre**:
+
+   ```json
+   "PriceList": { "id": "…", "tenant_id": "…", "plant_id": null }
+   ```
+
+   `plant_id: null` significa «aplica a todas las plantas del tenant». Mañana, una lista específica de
+   planta es **una fila más** con `plant_id` puesto y la resolución es «gana la más específica»: sin
+   migración y sin cambio de contrato. Es el mismo patrón que `plan_montaje_meta.procedencia` — la
+   variación se modela como dato, no como estructura.
+
+   Tres consecuencias que hay que respetar desde ya:
+   - `get_price_list(tenant_id, plant_id?)` — la firma admite el futuro sin cambiar (ver §5).
+   - El proyecto referencia un **`price_list_id`**, no «la lista del tenant», para que el consumidor no
+     dependa del alcance.
+   - La bitácora del inv. 8 registra el **`price_list_id`** confirmado, no solo `referencia_oferta`: si
+     mañana hay varias listas, queda inequívoco cuál se confirmó.
+
+   **Evolución probable, y no es duplicar la lista.** Lo que varía entre plantas no es el precio
+   negociado sino el **flete de entrada**: dos plantas comprando al mismo molino pagan distinto precio
+   entregado por transporte. Así que cuando toque, la opción recomendada es **precio de tenant + factor
+   de flete de entrada por planta**, no una lista por planta — mantiene una sola fuente del precio y
+   modela lo que realmente cambia. Hoy ese flete **no está modelado en ningún sitio**:
+   `optimizador_transporte` es para el transporte de salida del proyecto, no para la materia prima.
 
    Fuera de alcance de v1, anotado para no cerrar la puerta: un proyecto **repartido entre varias
    plantas**. Hoy la referencia es a una sola.
@@ -237,7 +261,7 @@ Los cuatro acordados, más lo que exigen los invariantes:
 | `disponibilidad_perfiles(...)` | Acordado | Stock/inventario del tenant |
 | `registrar_cierre(project_id, actuals)` | Acordado | Datos reales para el lazo cotizado-vs-ejecutado |
 | `get_plant_load(tenant_id, semanas)` | **Nuevo** | E7 carga: proyectos en curso, HH libres/sem, capacidad de habilitado, **+ marca de frescura** |
-| `get_price_list(tenant_id)` | **Nuevo** | E3 precios con fuente/fecha/vigencia restante por material |
+| `get_price_list(tenant_id, plant_id?)` | **Nuevo** | E3 precios con fuente/fecha/vigencia restante por material. `plant_id` se acepta desde ya aunque hoy siempre resuelva a la lista del tenant (#102) |
 
 Los dos nuevos existen porque S12 (inv. 14) y la compuerta de precios (inv. 8) no pueden resolverse
 con `get_config_tenant`: leen estado operativo semanal, no configuración.
