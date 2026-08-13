@@ -99,6 +99,11 @@ como configuración o feature flag, según el handoff.
 Se mantiene la frontera de `Hoja_de_Ruta_del_Producto.pdf`: *decidir, predecir, estimar, simular* está
 dentro; *registrar, administrar, contabilizar* está fuera.
 
+> **Cambio de alcance del 13-ago (#112).** El módulo de montaje **entra en la v1**. Estaba fuera con
+> la interfaz reservada; el consultor lo entregó funcional y nuestras vistas P15 y P19 ya muestran su
+> output, así que mantenerlo fuera dejaría esas pantallas alimentadas por nada. Detalle y conflictos
+> resueltos en [MOTOR_MONTAJE.md](MOTOR_MONTAJE.md).
+
 **No entra en v1:**
 
 | Elemento | Por qué |
@@ -109,7 +114,7 @@ dentro; *registrar, administrar, contabilizar* está fuera.
 | RAG / memoria multicliente | F3 |
 | Optimizador de nesting | F3 (prioridad media en la hoja de ruta del consultor) |
 | **Recalibración automática de parámetros** | **Prohibida por el inv. 16**, no diferida. Nunca entra |
-| Módulo de estimaciones de montaje | Declarado «siguiente desarrollo» por el consultor. **Su interfaz queda reservada** (`plan_montaje` E6, S8/S9/S11) y no debe romperse |
+| ~~Módulo de estimaciones de montaje~~ | **ENTRA EN v1 (decisión de dirección, 13-ago · #112).** El consultor lo entregó funcional el 12-ago y ya teníamos vistas que muestran su output. dcode lo envuelve como tool; sus entradas viven en un wizard paralelo activado por la opción de alcance. Ver [MOTOR_MONTAJE.md](MOTOR_MONTAJE.md) |
 | Simuladores gráficos y modelador dentro del motor | Módulos anexos del Sistema DM; el visor de la plataforma no es esto (ver T1) |
 | Re-evaluación de ofertas vivas | Prioridad media en la hoja de ruta del consultor; no v1 |
 | Biblioteca de proyectos tipo | «A evaluar» en la hoja de ruta; riesgo de cruzar a archivo administrativo |

@@ -104,6 +104,24 @@ FLUJO OPERATIVO  (semanal, por planeación y almacén de la planta)
                                  ▸ marca de frescura; si está viejo, S12 no es fiable
 ```
 
+### El segundo flujo paralelo: montaje
+
+*Añadido el 13-ago (#112).* Mismo patrón, distinto disparador. El de planta se elige siempre; **el de
+montaje se activa solo si el alcance del proyecto incluye montaje** — si es solo suministro, se apaga.
+
+```
+FLUJO DE MONTAJE  (paralelo, activado por la opción de alcance en P3 paso 3)
+  P22·A  Alcance y plazo         T_MAX_SEM
+  P22·B  Loteo y transporte      LOTE_TON ≤50 t · costo de cambio de lote · lote chico
+  P22·C  Soldadura de campo      kg de aporte · reparto por posición · % de UT
+                                 ▸ COMPUERTA: sin verificación el motor no corre
+  P22·D  Condiciones de obra     obra falsa · lluvia · festivos · sitio
+  P22·E  Tarifas y BOM contractual  heredado de PlantConfig + tonelaje contractual FIRMADO
+     ║
+     ╚═→ alimenta el motor de montaje, que devuelve lotes, frontera costo–tiempo
+         y señales de ingeniería de valor. Ver MOTOR_MONTAJE.md
+```
+
 Por qué importa que sea paralelo y no un paso del proyecto:
 
 - **Se reutiliza.** Un proyecto nuevo apunta a la misma `PlantConfig` sin reconfigurar nada.
