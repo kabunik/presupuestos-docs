@@ -71,7 +71,13 @@ multicliente, RAG/memoria multicliente, optimizador de nesting, puente a Strumis
 | **P18** | **Desviaciones de concurso** | 10 | Media | Tabla de cinco columnas —concepto, norma, concurso, cuál rige, impacto— con el costo sumado al presupuesto. Puede vivir como panel del workspace en lugar de pantalla propia |
 | **P19** | **Requisición y secuencia de fabricación** | 11, 13 | Media | Cascada bruta → inventario libre → neta; lotes con déficit por semana y su costo de resolución; piezas críticas de grúa. Hoy `requisicion_neta`, `lotes` y `secuencia_grua` son salidas *required* sin ninguna superficie |
 
-Doce pantallas del inventario original más siete nuevas. **P13 es la de mayor urgencia** entre las
+### Pantalla nueva que introduce la entrada del motor de montaje
+
+| Ref | Pantalla | Prioridad | Por qué |
+|---|---|---|---|
+| **P22·A–E** | **Wizard del plan de montaje** (segundo flujo paralelo) | Alta | Las entradas del motor de montaje son de proyecto, no de planta, y una de ellas —la verificación de la soldadura de campo— es una **compuerta humana** que detiene el motor. Se activa desde el bloque de alcance del paso 3 del intake; si el proyecto es solo suministro, no existe. Spec en [MOTOR_MONTAJE.md](MOTOR_MONTAJE.md) |
+
+Doce pantallas del inventario original más ocho nuevas. **P13 es la de mayor urgencia** entre las
 nuevas: es bloqueante de la emisión y no tiene ni diseño ni contrato.
 
 ---

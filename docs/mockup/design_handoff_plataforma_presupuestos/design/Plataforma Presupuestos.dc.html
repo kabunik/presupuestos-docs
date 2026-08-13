@@ -116,8 +116,18 @@ a{color:#1F9E91;text-decoration:none}a:hover{color:#17786e;text-decoration:under
       <sc-if value="{{ isStep3 }}" hint-placeholder-val="{{ true }}">
       <div style="max-width:820px;display:flex;flex-direction:column;gap:22px">
         <div><div style="font-family:'Space Grotesk';font-size:26px;font-weight:600">Opciones y consideraciones</div><div style="font-size:14px;color:#64748B;margin-top:6px">Alcance y condiciones particulares que el agente debe respetar al construir la solución.</div></div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div><label style="font-size:12px;font-weight:600;color:#475569">Alcance contratado</label><div style="font-size:11.5px;color:#94A3B8;margin-top:3px">Es una bifurcación, no un dato: si incluye montaje se activa el motor de montaje con su propio flujo de definiciones.</div></div>
+          <div style="display:flex;gap:12px;align-items:flex-start">
+            <div style="flex:1;height:42px;border:1px solid #CBD5E1;border-radius:10px;background:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 12px;font-size:14px">Suministro + montaje<span style="color:#94A3B8">›</span></div>
+            <div onClick="{{ goP22 }}" style="height:42px;padding:0 15px;border:1px solid #DCD6F5;background:#EEEAFB;border-radius:10px;display:flex;align-items:center;gap:7px;font-size:13px;font-weight:600;color:#5847BD;cursor:pointer;white-space:nowrap" style-hover="background:#E4DEF8">Definir el plan de montaje ›</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;background:#FDF7F6;border:1px solid #F0C9C4;border-radius:10px;padding:10px 12px;margin-bottom:6px">
+            <span style="width:6px;height:6px;border-radius:50%;background:#B0392F;flex:none"></span>
+            <span style="font-size:11.5px;color:#8F2E26">Falta verificar la soldadura de campo · sin eso el motor de montaje no corre y la oferta no lleva plan de montaje</span>
+          </div>
+        </div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px">
-          <div style="display:flex;flex-direction:column;gap:6px"><label style="font-size:12px;font-weight:600;color:#475569">Alcance</label><div style="height:42px;border:1px solid #CBD5E1;border-radius:10px;background:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 12px;font-size:14px">Suministro + montaje<span style="color:#94A3B8">›</span></div></div>
           <div style="display:flex;flex-direction:column;gap:6px"><label style="font-size:12px;font-weight:600;color:#475569">Grado preferente</label><div style="height:42px;border:1px solid #CBD5E1;border-radius:10px;background:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 12px;font-size:14px">A992 / A572 Gr.50<span style="color:#94A3B8">›</span></div></div>
           <div style="display:flex;flex-direction:column;gap:6px"><label style="font-size:12px;font-weight:600;color:#475569">Tipo de conexión</label><div style="height:42px;border:1px solid #CBD5E1;border-radius:10px;background:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 12px;font-size:14px">Empernada en obra<span style="color:#94A3B8">›</span></div></div>
           <div style="display:flex;flex-direction:column;gap:6px"><label style="font-size:12px;font-weight:600;color:#475569">Acabado</label><div style="height:42px;border:1px solid #CBD5E1;border-radius:10px;background:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 12px;font-size:14px">Galvanizado en caliente<span style="color:#94A3B8">›</span></div></div>
@@ -1522,6 +1532,282 @@ a{color:#1F9E91;text-decoration:none}a:hover{color:#17786e;text-decoration:under
 </div>
 </sc-if>
 
+<sc-if value="{{ isP22 }}" hint-placeholder-val="{{ true }}">
+<div data-screen-label="P22 Plan de montaje" style="width:1440px;height:900px;background:#F4F6F9;border-radius:14px;overflow:hidden;box-shadow:0 24px 60px rgba(16,24,40,.16);display:flex;flex-direction:column">
+  <div style="height:56px;flex:none;background:#1E2A3A;display:flex;align-items:center;padding:0 16px;gap:14px">
+    <div style="display:flex;align-items:center;gap:9px"><div style="width:9px;height:9px;background:#6EC6D8;border-radius:2px"></div><span style="font-family:'Space Grotesk';font-weight:600;font-size:14px;color:#fff;letter-spacing:-.2px">Bid</span></div>
+    <span style="color:rgba(255,255,255,.28)">/</span><span style="font-size:13.5px;color:rgba(255,255,255,.7)">CNARCCS · Domo de acopio</span>
+    <span style="color:rgba(255,255,255,.28)">/</span><span style="font-size:13.5px;color:#fff">Plan de montaje</span>
+    <span style="font-family:'JetBrains Mono';font-size:11px;color:#B9AEF0;border:1px solid rgba(185,174,240,.4);padding:2px 7px;border-radius:6px">alcance: suministro + montaje</span>
+    <div style="margin-left:auto;display:flex;gap:10px">
+      <div style="height:34px;padding:0 14px;border-radius:9px;border:1px solid rgba(255,255,255,.18);color:#fff;font-size:13px;display:flex;align-items:center;cursor:pointer">Descartar cambios</div>
+      <div style="height:34px;padding:0 16px;border-radius:9px;background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.14);color:rgba(255,255,255,.42);font-size:13px;font-weight:600;display:flex;align-items:center;gap:8px;cursor:not-allowed"><span style="width:7px;height:7px;border-radius:50%;background:#B0392F"></span>Correr motor de montaje</div>
+    </div>
+  </div>
+
+  <div style="flex:1;display:flex;overflow:hidden">
+
+    <div style="width:290px;flex:none;background:#fff;border-right:1px solid #E3E8EF;display:flex;flex-direction:column;padding:20px 14px;overflow:auto">
+      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:#94A3B8">Flujo paralelo</div>
+      <div style="font-family:'Space Grotesk';font-size:20px;font-weight:600;margin-top:7px;line-height:1.2">Entradas del motor<br>de montaje</div>
+      <div style="font-size:12px;color:#64748B;margin-top:7px;line-height:1.45">Estas definiciones son <b style="font-weight:600">de este proyecto</b>, no de la planta. Se activaron porque el alcance incluye montaje.</div>
+
+      <div style="display:flex;flex-direction:column;gap:2px;margin-top:20px">
+        <sc-for list="{{ mSteps }}" as="ms" hint-placeholder-count="5">
+          <div onClick="{{ ms.go }}" style="{{ ms.rowStyle }}" style-hover="background:#F8FAFC">
+            <span style="{{ ms.dotStyle }}">{{ ms.letter }}</span>
+            <div style="min-width:0"><div style="font-size:13px;font-weight:500;line-height:1.3">{{ ms.title }}</div><div style="font-size:11.5px;color:#94A3B8;margin-top:2px;line-height:1.35">{{ ms.sub }}</div></div>
+          </div>
+        </sc-for>
+      </div>
+
+      <div style="margin-top:auto;padding-top:18px">
+        <div style="font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:#94A3B8;margin-bottom:9px">Puede correr el motor</div>
+        <div style="border:1px solid #F0C9C4;background:#FDF7F6;border-radius:11px;padding:11px 12px">
+          <div style="display:flex;align-items:center;gap:8px"><span style="width:7px;height:7px;border-radius:50%;background:#B0392F;flex:none"></span><span style="font-size:12.5px;font-weight:600;color:#8F2E26">No · faltan C y E</span></div>
+          <div style="display:flex;flex-direction:column;gap:6px;margin-top:10px">
+            <sc-for list="{{ mReady }}" as="mr" hint-placeholder-count="5">
+              <div style="display:flex;align-items:center;gap:8px">
+                <span style="{{ mr.dot }}">{{ mr.letter }}</span>
+                <span style="font-size:11.5px;color:#475569;flex:1;min-width:0">{{ mr.label }}</span>
+                <span style="{{ mr.pill }}">{{ mr.estado }}</span>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="flex:1;overflow:auto;padding:24px 26px;display:flex;flex-direction:column;gap:14px;min-width:0">
+      <div style="flex:none">
+        <div style="font-family:'Space Grotesk';font-size:22px;font-weight:600">{{ mStepTitle }}</div>
+        <div style="font-size:14px;color:#64748B;margin-top:6px;max-width:70ch">{{ mStepLede }}</div>
+      </div>
+
+      <sc-if value="{{ isMA }}" hint-placeholder-val="{{ true }}">
+      <div style="flex:none;display:grid;grid-template-columns:1fr 400px;gap:18px;align-items:start">
+        <div style="background:#fff;border:1px solid #E3E8EF;border-radius:16px;padding:20px">
+          <div style="font-size:12px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:#475569;margin-bottom:6px">Alcance y plazo de obra</div>
+          <sc-for list="{{ mAlcance }}" as="ma" hint-placeholder-count="6">
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:14px;padding:11px 0;border-bottom:1px solid #F1F5F9">
+              <div style="min-width:0"><div style="font-size:13px;color:#1E2A3A">{{ ma.k }}</div><div style="font-size:11px;color:#94A3B8;margin-top:2px;font-family:'JetBrains Mono'">{{ ma.param }}</div></div>
+              <div style="display:flex;align-items:center;gap:9px;flex:none">
+                <span style="{{ ma.badge }}">{{ ma.origen }}</span>
+                <span style="font-family:'JetBrains Mono';font-size:13px;font-weight:500">{{ ma.v }}</span>
+              </div>
+            </div>
+          </sc-for>
+          <div style="display:flex;align-items:flex-start;gap:9px;margin-top:15px;background:#FAF9FE;border:1px solid #DCD6F5;border-radius:12px;padding:13px 14px">
+            <span style="width:7px;height:7px;border-radius:2px;background:#6D5BD0;flex:none;margin-top:5px"></span>
+            <span style="font-size:12px;color:#475569;line-height:1.5">Si el alcance del proyecto se cambiara a <b style="font-weight:600">solo suministro</b>, este flujo se desactiva y el plan de montaje desaparece de la oferta. No se conserva a medias: el alcance es la bifurcación.</span>
+          </div>
+        </div>
+        <div style="background:#fff;border:1px solid #E3E8EF;border-radius:16px;padding:20px">
+          <div style="font-size:11px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:#475569">El intercambio con fabricación</div>
+          <div style="font-size:12px;color:#64748B;margin-top:7px;line-height:1.45">Cinco archivos entran al motor. <b style="font-weight:600">Tres los deriva la plataforma</b>; solo dos los introduce una persona — y este wizard existe para esos dos.</div>
+          <div style="display:flex;flex-direction:column;gap:8px;margin-top:14px">
+            <sc-for list="{{ mFiles }}" as="mf" hint-placeholder-count="5">
+              <div style="{{ mf.cardStyle }}">
+                <div style="display:flex;align-items:center;gap:8px">
+                  <span style="font-family:'JetBrains Mono';font-size:11.5px;font-weight:600;color:#1E2A3A;min-width:0">{{ mf.name }}</span>
+                  <span style="margin-left:auto;{{ mf.pill }}">{{ mf.tipo }}</span>
+                </div>
+                <div style="font-size:11.5px;color:#64748B;margin-top:5px;line-height:1.4">{{ mf.de }}</div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+      </sc-if>
+
+      <sc-if value="{{ isMB }}" hint-placeholder-val="{{ true }}">
+      <div style="flex:none;display:grid;grid-template-columns:1fr 400px;gap:18px;align-items:start">
+        <div style="background:#fff;border:1px solid #E3E8EF;border-radius:16px;padding:20px">
+          <div style="font-size:12px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:#475569;margin-bottom:6px">Parámetros de loteo</div>
+          <sc-for list="{{ mLote }}" as="ml" hint-placeholder-count="5">
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:14px;padding:11px 0;border-bottom:1px solid #F1F5F9">
+              <div style="min-width:0"><div style="font-size:13px;color:#1E2A3A">{{ ml.k }}</div><div style="font-size:11px;color:#94A3B8;margin-top:2px;font-family:'JetBrains Mono'">{{ ml.param }}</div></div>
+              <span style="font-family:'JetBrains Mono';font-size:13px;font-weight:500;flex:none">{{ ml.v }}</span>
+            </div>
+          </sc-for>
+        </div>
+        <div style="background:#FEF7EA;border:1px solid #F5D7A6;border-left:4px solid #F5A623;border-radius:14px;padding:18px">
+          <div style="font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:#9A6408">Consecuencia del último lote</div>
+          <div style="font-size:13.5px;font-weight:700;color:#7C5308;margin-top:8px;line-height:1.4">21.25 t cae bajo el umbral de 30 t</div>
+          <div style="font-family:'JetBrains Mono';font-size:24px;font-weight:600;letter-spacing:-.6px;color:#7C5308;margin-top:11px">+$382.50 USD</div>
+          <div style="font-size:12.5px;color:#7C5308;margin-top:8px;line-height:1.55">21.25 t × 18 USD/t de recargo. A 18.50 de tipo de cambio, <b style="font-weight:600">$7,076 MXN</b>. Subir <b style="font-weight:600">LOTE_TON</b> a 41 t daría tres lotes parejos y lo evitaría — es la primera decisión de ingeniería de valor que aparece en el flujo.</div>
+        </div>
+      </div>
+      <div style="flex:none;background:#fff;border:1px solid #E3E8EF;border-radius:16px;overflow:hidden">
+        <div style="display:flex;align-items:center;gap:10px;padding:13px 18px;border-bottom:1px solid #E3E8EF">
+          <span style="font-size:12px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:#475569">Lotes que resultan</span>
+          <span style="font-family:'JetBrains Mono';font-size:10.5px;font-weight:600;background:#EEEAFB;color:#5847BD;padding:2px 8px;border-radius:5px">derivado · 121.25 t ÷ 50 t</span>
+          <span style="margin-left:auto;font-size:11.5px;color:#94A3B8">El reparto por categoría lo asigna el motor, no el wizard</span>
+        </div>
+        <div style="display:grid;grid-template-columns:88px 1fr 110px 130px 150px;background:#F8FAFC;border-bottom:1px solid #E3E8EF;padding:10px 18px;font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#94A3B8">
+          <span>Lote</span><span>Orden de montaje</span><span style="text-align:right">Toneladas</span><span style="text-align:right">Cambio de lote</span><span style="text-align:right">Recargo lote chico</span>
+        </div>
+        <sc-for list="{{ mLotePrev }}" as="lp" hint-placeholder-count="3">
+          <div style="{{ lp.rowStyle }}">
+            <span style="font-family:'JetBrains Mono';font-size:12.5px;font-weight:600">{{ lp.id }}</span>
+            <span style="font-size:12.5px;color:#475569">{{ lp.orden }}</span>
+            <span style="font-family:'JetBrains Mono';font-size:12.5px;text-align:right;font-weight:500">{{ lp.ton }}</span>
+            <span style="font-family:'JetBrains Mono';font-size:12.5px;text-align:right;color:#64748B">{{ lp.cambio }}</span>
+            <span style="{{ lp.recStyle }}">{{ lp.recargo }}</span>
+          </div>
+        </sc-for>
+      </div>
+      </sc-if>
+
+      <sc-if value="{{ isMC }}" hint-placeholder-val="{{ true }}">
+      <div style="flex:none;display:flex;align-items:flex-start;gap:13px;background:#FDF7F6;border:1px solid #F0C9C4;border-left:4px solid #B0392F;border-radius:14px;padding:16px 18px">
+        <span style="width:9px;height:9px;border-radius:50%;background:#B0392F;flex:none;margin-top:5px"></span>
+        <div style="min-width:0">
+          <div style="font-size:13.5px;font-weight:700;color:#8F2E26">Compuerta humana · sin verificación el motor no corre</div>
+          <div style="font-size:12.5px;color:#8F2E26;margin-top:6px;line-height:1.55">La soldadura de campo es la <b style="font-weight:600">sexta compuerta</b> del sistema, y la única que vive en este flujo. Los cómputos de campo no se estiman por tonelaje: se verifican o se declaran no disponibles.</div>
+        </div>
+        <div style="flex:none;display:flex;gap:7px">
+          <sc-for list="{{ mWeldStates }}" as="ws" hint-placeholder-count="3">
+            <div style="{{ ws.style }}">{{ ws.label }}</div>
+          </sc-for>
+        </div>
+      </div>
+      <div style="flex:none;display:grid;grid-template-columns:1fr 400px;gap:18px;align-items:start">
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <div style="background:#fff;border:1px solid #E3E8EF;border-radius:16px;padding:20px">
+            <div style="font-size:12px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:#475569;margin-bottom:6px">Cómputos de soldadura de campo</div>
+            <sc-for list="{{ mWeld }}" as="mw" hint-placeholder-count="3">
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:14px;padding:11px 0;border-bottom:1px solid #F1F5F9">
+                <div style="min-width:0"><div style="font-size:13px;color:#1E2A3A">{{ mw.k }}</div><div style="font-size:11px;color:#94A3B8;margin-top:2px;font-family:'JetBrains Mono'">{{ mw.param }}</div></div>
+                <div style="display:flex;align-items:center;gap:9px;flex:none">
+                  <span style="{{ mw.badge }}">{{ mw.origen }}</span>
+                  <span style="font-family:'JetBrains Mono';font-size:13px;font-weight:500">{{ mw.v }}</span>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+          <div style="background:#fff;border:1px solid #E3E8EF;border-radius:16px;padding:20px">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
+              <span style="font-size:12px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:#475569">Reparto por posición de soldadura</span>
+              <span style="font-family:'JetBrains Mono';font-size:10.5px;font-weight:600;background:#EEEAFB;color:#5847BD;padding:2px 8px;border-radius:5px">SOLD_POS_PCT</span>
+            </div>
+            <sc-for list="{{ mPos }}" as="mp" hint-placeholder-count="4">
+              <div style="display:flex;align-items:center;gap:13px;padding:9px 0">
+                <span style="font-size:12.5px;width:104px;flex:none">{{ mp.pos }}</span>
+                <div style="flex:1;height:9px;border-radius:5px;background:#F1F5F9;overflow:hidden;min-width:0"><div style="{{ mp.barStyle }}"></div></div>
+                <span style="font-family:'JetBrains Mono';font-size:12.5px;font-weight:600;width:44px;text-align:right;flex:none">{{ mp.pct }}</span>
+                <span style="font-family:'JetBrains Mono';font-size:12px;color:#64748B;width:74px;text-align:right;flex:none">{{ mp.kg }}</span>
+              </div>
+            </sc-for>
+            <div style="font-size:11.5px;color:#94A3B8;margin-top:11px;line-height:1.45">La posición gobierna el rendimiento: sobrecabeza cuesta muchas más HH por kilo de aporte que plana. Por eso el reparto es entrada y no un promedio.</div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <div style="background:#FAF9FE;border:1px solid #DCD6F5;border-radius:14px;padding:18px">
+            <div style="font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:#5847BD">Lo que esto resolvió</div>
+            <div style="font-size:13.5px;font-weight:700;color:#1E2A3A;margin-top:8px;line-height:1.4">Campo y taller son dos datos distintos</div>
+            <div style="font-size:12.5px;color:#475569;margin-top:8px;line-height:1.55">Tratábamos «soldadura» como una sola cosa. El esquema del motor las separa, y tiene razón: <b style="font-weight:600">el taller se deriva del modelo</b>, mientras <b style="font-weight:600">el campo depende del método de montaje</b> y de la secuencia. Dos fuentes, dos consecuencias.</div>
+          </div>
+          <div style="background:#fff;border:1px solid #E3E8EF;border-radius:14px;padding:18px">
+            <div style="font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:#94A3B8">La regla del cero</div>
+            <div style="font-size:12.5px;color:#475569;margin-top:9px;line-height:1.55"><b style="font-family:'JetBrains Mono';font-weight:600">kg_aporte = 0</b> es un dato: significa que no hay soldadura de campo y se declara. <b style="font-weight:600">La ausencia del dato no es cero</b>: es una bandera que detiene el motor.</div>
+            <div style="font-size:11.5px;color:#94A3B8;margin-top:10px;line-height:1.45">Es el mismo invariante 5 que nos prohíbe el «cero silencioso» en escaleras, F1554 y Nelson studs, aplicado a otro sitio.</div>
+          </div>
+        </div>
+      </div>
+      </sc-if>
+
+      <sc-if value="{{ isMD }}" hint-placeholder-val="{{ true }}">
+      <div style="flex:none;display:grid;grid-template-columns:1fr 400px;gap:18px;align-items:start">
+        <div style="background:#fff;border:1px solid #E3E8EF;border-radius:16px;padding:20px">
+          <div style="font-size:12px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:#475569;margin-bottom:6px">Condiciones y calendario de obra</div>
+          <sc-for list="{{ mObra }}" as="mo" hint-placeholder-count="6">
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:14px;padding:11px 0;border-bottom:1px solid #F1F5F9">
+              <div style="min-width:0"><div style="font-size:13px;color:#1E2A3A">{{ mo.k }}</div><div style="font-size:11px;color:#94A3B8;margin-top:2px;font-family:'JetBrains Mono'">{{ mo.param }}</div></div>
+              <span style="font-family:'JetBrains Mono';font-size:13px;font-weight:500;flex:none">{{ mo.v }}</span>
+            </div>
+          </sc-for>
+          <div style="display:flex;align-items:center;gap:14px;margin-top:16px;background:#F8FAFC;border:1px solid #E3E8EF;border-radius:12px;padding:14px 16px">
+            <div style="min-width:0"><div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:#94A3B8">Días laborables que se pierden</div><div style="font-size:12px;color:#64748B;margin-top:5px;line-height:1.45">8 de lluvia + 3 festivos, sobre semanas de 6 días</div></div>
+            <div style="margin-left:auto;text-align:right;flex:none">
+              <div style="font-family:'JetBrains Mono';font-size:22px;font-weight:600;letter-spacing:-.5px;color:#9A6408">1.8 sem</div>
+              <div style="font-family:'JetBrains Mono';font-size:10.5px;font-weight:600;background:#EEEAFB;color:#5847BD;padding:2px 8px;border-radius:5px;margin-top:5px">derivado</div>
+            </div>
+          </div>
+        </div>
+        <div style="background:#fff;border:1px solid #E3E8EF;border-radius:16px;padding:20px">
+          <div style="font-size:11px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:#475569">Los factores de realidad</div>
+          <div style="font-size:12px;color:#64748B;margin-top:7px;line-height:1.45">Lo que separa este motor de una regla de tres. Cada factor se aplica sobre las HH nominales y el conjunto produce una <b style="font-family:'JetBrains Mono';font-weight:600">dispersion_esperada_pct</b> declarada.</div>
+          <div style="display:flex;flex-wrap:wrap;gap:7px;margin-top:14px">
+            <sc-for list="{{ mFactores }}" as="mfa" hint-placeholder-count="8">
+              <div style="{{ mfa.style }}">{{ mfa.label }}</div>
+            </sc-for>
+          </div>
+          <div style="display:flex;align-items:flex-start;gap:9px;margin-top:16px;background:#FAF9FE;border:1px solid #DCD6F5;border-radius:12px;padding:13px 14px">
+            <span style="width:7px;height:7px;border-radius:2px;background:#6D5BD0;flex:none;margin-top:5px"></span>
+            <span style="font-size:12px;color:#475569;line-height:1.5">Una cifra con dispersión declarada es más honesta que una cifra sola. Es lo mismo que hacemos con la banda de la oferta, y viene del motor, no de la presentación.</span>
+          </div>
+        </div>
+      </div>
+      </sc-if>
+
+      <sc-if value="{{ isME }}" hint-placeholder-val="{{ true }}">
+      <div style="flex:none;background:#fff;border:1px solid #E3E8EF;border-radius:16px;overflow:hidden">
+        <div style="display:flex;align-items:center;gap:10px;padding:11px 18px;border-bottom:1px solid #E3E8EF">
+          <span style="font-size:12px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:#475569">Tarifas de taller que pide el motor</span>
+          <span style="margin-left:auto;font-size:11.5px;color:#94A3B8">Lo que ya vive en la definición de planta no se pide dos veces</span>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 150px 120px 200px;background:#F8FAFC;border-bottom:1px solid #E3E8EF;padding:8px 18px;font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#94A3B8">
+          <span>Campo del esquema</span><span style="text-align:right">Valor</span><span style="text-align:right">Origen</span><span style="text-align:right">Procedencia</span>
+        </div>
+        <sc-for list="{{ mTarifas }}" as="mt" hint-placeholder-count="6">
+          <div style="{{ mt.rowStyle }}">
+            <div style="min-width:0"><div style="font-size:12.5px;color:#1E2A3A">{{ mt.k }}</div><div style="font-family:'JetBrains Mono';font-size:11px;color:#94A3B8;margin-top:2px">{{ mt.param }}</div></div>
+            <span style="{{ mt.vStyle }}">{{ mt.v }}</span>
+            <span style="{{ mt.pill }}">{{ mt.origen }}</span>
+            <span style="font-size:11.5px;color:#64748B;text-align:right;line-height:1.4">{{ mt.proc }}</span>
+          </div>
+        </sc-for>
+      </div>
+      <div style="flex:none;display:grid;grid-template-columns:1fr 400px;gap:18px;align-items:start">
+        <div style="background:#fff;border:1px solid #E3E8EF;border-radius:16px;padding:20px">
+          <div style="font-size:12px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:#475569">BOM contractual · lleva firma</div>
+          <div style="font-size:12px;color:#64748B;margin-top:7px;line-height:1.45">Este tonelaje no lo pone el sistema: lo firma una persona.</div>
+          <div style="display:flex;flex-direction:column;gap:7px;margin-top:13px">
+            <sc-for list="{{ mBom }}" as="mb" hint-placeholder-count="4">
+              <div style="{{ mb.rowStyle }}">
+                <span style="font-size:12.5px;color:#475569;flex:1;min-width:0">{{ mb.k }}</span>
+                <span style="{{ mb.vStyle }}">{{ mb.v }}</span>
+              </div>
+            </sc-for>
+          </div>
+          <div style="height:36px;margin-top:13px;border-radius:9px;border:1px dashed #CBD5E1;color:#94A3B8;font-size:13px;font-weight:600;display:flex;align-items:center;justify-content:center;cursor:pointer">Firmar el tonelaje contractual</div>
+        </div>
+        <div style="background:#FAF9FE;border:1px solid #DCD6F5;border-radius:14px;padding:18px">
+          <div style="font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:#5847BD">Compuerta G1 · ±3%</div>
+          <div style="font-size:13.5px;font-weight:700;color:#1E2A3A;margin-top:8px;line-height:1.4">No es el doble chequeo del invariante 4</div>
+          <div style="display:flex;flex-direction:column;gap:9px;margin-top:12px">
+            <sc-for list="{{ mGates }}" as="mg" hint-placeholder-count="2">
+              <div style="background:#fff;border:1px solid #DCD6F5;border-radius:11px;padding:10px 13px">
+                <div style="display:flex;align-items:center;gap:8px"><span style="font-size:12.5px;font-weight:600;color:#1E2A3A;min-width:0">{{ mg.name }}</span><span style="margin-left:auto;font-family:'JetBrains Mono';font-size:11.5px;font-weight:600;color:#5847BD;flex:none">{{ mg.tol }}</span></div>
+                <div style="font-size:11.5px;color:#64748B;margin-top:5px;line-height:1.45">{{ mg.compara }}</div>
+              </div>
+            </sc-for>
+          </div>
+          <div style="font-size:11.5px;color:#64748B;margin-top:12px;line-height:1.45">El primero pregunta «¿calculé bien?». El segundo, «¿lo que voy a montar es lo que se contrató?».</div>
+          <div style="display:flex;align-items:center;gap:10px;margin-top:13px;background:#fff;border:1px solid #DCD6F5;border-radius:10px;padding:10px 13px">
+            <span style="font-size:12px;color:#475569;flex:1;min-width:0">Diferencia contra G1</span>
+            <span style="font-family:'JetBrains Mono';font-size:11.5px;font-weight:600;color:#94A3B8;flex:none">Se evalúa al firmar</span>
+          </div>
+        </div>
+      </div>
+      </sc-if>
+
+    </div>
+  </div>
+</div>
+</sc-if>
+
 <sc-if value="{{ isP17 }}" hint-placeholder-val="{{ true }}">
 <div data-screen-label="P17 Cierre y recalibracion" style="width:1440px;height:900px;background:#F4F6F9;border-radius:14px;overflow:hidden;box-shadow:0 24px 60px rgba(16,24,40,.16);display:flex;flex-direction:column">
   <div style="height:56px;flex:none;background:#1E2A3A;display:flex;align-items:center;padding:0 16px;gap:14px">
@@ -1978,6 +2264,15 @@ a{color:#1F9E91;text-decoration:none}a:hover{color:#17786e;text-decoration:under
   </div>
   </sc-if>
 
+  <sc-if value="{{ isP22 }}" hint-placeholder-val="{{ true }}">
+  <div style="display:flex;align-items:center;gap:6px;background:rgba(109,91,208,.96);backdrop-filter:blur(8px);border-radius:12px;padding:6px 10px;box-shadow:0 12px 34px rgba(16,24,40,.3)">
+    <span style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:rgba(255,255,255,.75);padding-right:4px">Plan de montaje</span>
+    <sc-for list="{{ montajeNav }}" as="mn" hint-placeholder-count="5">
+      <div onClick="{{ mn.go }}" style="{{ mn.style }}">{{ mn.label }}</div>
+    </sc-for>
+  </div>
+  </sc-if>
+
   <div style="display:flex;align-items:center;gap:4px;background:rgba(30,42,58,.96);backdrop-filter:blur(8px);border-radius:12px;padding:6px;box-shadow:0 12px 34px rgba(16,24,40,.3)">
     <sc-for list="{{ nav }}" as="n" hint-placeholder-count="7">
       <div onClick="{{ n.go }}" style="{{ n.style }}">{{ n.label }}</div>
@@ -2208,7 +2503,8 @@ class Component extends DCLogic {
       ['B4·P10', { screen: 'p10' }],
       ['P7 alertas', { screen: 'p7' }],
       ['P2 panel', { screen: 'p2' }],
-      ['⇄P11', { screen: 'p11' }]
+      ['⇄P11', { screen: 'p11' }],
+      ['⇄P22', { screen: 'p22' }]
     ];
     const active = (p) => p.screen === s.screen && (p.screen !== 'ws' || p.mode === mode);
     const nav = navDefs.map(([label, p]) => ({
@@ -2808,6 +3104,151 @@ class Component extends DCLogic {
       ? 'position:absolute;left:14px;top:14px;bottom:14px;z-index:20;border:1px solid #E3E8EF;border-right:1px solid #E3E8EF;border-radius:14px;box-shadow:0 18px 44px rgba(16,24,40,.18)'
       : '';
 
+    // ---- P22 · wizard del motor de montaje (segundo flujo paralelo, #117) ----
+    // Activado por la opción de alcance en P3 paso 3. Captura los overrides de
+    // params.json más los dos archivos de usuario del contrato FAB→MONTAJE.
+    // Ver docs/00-Fundamentos/MOTOR_MONTAJE.md §El wizard de montaje
+    const mstep = s.mstep || 'a';
+    const mStepDefs = [
+      ['a', 'A', 'Alcance y plazo', 'Qué se monta y en cuánto tiempo'],
+      ['b', 'B', 'Loteo y transporte', 'Lotes ≤50 t y sus costos de cambio'],
+      ['c', 'C', 'Soldadura de campo', 'Compuerta: sin verificar no corre'],
+      ['d', 'D', 'Condiciones de obra', 'Obra falsa, lluvia y festivos'],
+      ['e', 'E', 'Tarifas y BOM contractual', 'Heredado de planta + tonelaje firmado']
+    ];
+    const morder = ['a', 'b', 'c', 'd', 'e'];
+    const mSteps = mStepDefs.map(d => {
+      const cur = d[0] === mstep, done = morder.indexOf(d[0]) < morder.indexOf(mstep);
+      return {
+        letter: done ? '✓' : d[1], title: d[2], sub: d[3],
+        go: () => this.go({ mstep: d[0] }),
+        rowStyle: 'display:flex;gap:11px;align-items:flex-start;padding:10px 11px;border-radius:10px;cursor:pointer;background:' + (cur ? '#FAF9FE' : 'transparent'),
+        dotStyle: 'width:24px;height:24px;flex:none;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:\'JetBrains Mono\';font-size:11px;font-weight:600;' + (cur ? 'background:#6D5BD0;color:#fff' : done ? 'background:#EEEAFB;color:#5847BD' : 'background:#EEF2F6;color:#94A3B8')
+      };
+    });
+    // barra de navegación paralela del flujo de montaje — violeta para distinguirla del de planta
+    const montajeNav = mStepDefs.map(d => ({
+      label: d[1], go: () => this.go({ screen: 'p22', mstep: d[0] }),
+      style: 'height:30px;padding:0 12px;border-radius:7px;display:flex;align-items:center;white-space:nowrap;font-family:\'JetBrains Mono\';font-size:11px;font-weight:' + (d[0] === mstep ? '600' : '400') + ';cursor:pointer;color:' + (d[0] === mstep ? '#1E2A3A' : 'rgba(255,255,255,.72)') + ';background:' + (d[0] === mstep ? '#fff' : 'transparent')
+    }));
+    const mBadge = (t) => {
+      const c = { tool: ['#E8F6F4', '#17786e'], deriv: ['#EEEAFB', '#5847BD'], entrada: ['#EEF2F6', '#475569'], falta: ['#FBE3E0', '#8F2E26'], fija: ['#EEF2F6', '#94A3B8'] }[t];
+      return 'font-family:\'JetBrains Mono\';font-size:10px;font-weight:600;padding:2px 7px;border-radius:5px;white-space:nowrap;background:' + c[0] + ';color:' + c[1];
+    };
+    // ---- paso A · alcance y plazo ----
+    const mAlcance = [
+      ['Alcance contratado', '', 'P3 · paso 3', 'entrada', 'Suministro + montaje'],
+      ['Sitio de obra', '', 'P3 · paso 1', 'entrada', 'Pachuca, Hidalgo'],
+      ['Tonelaje a montar', '', 'tool ✓', 'tool', '121.25 t'],
+      ['Plazo máximo de montaje', 'T_MAX_SEM', 'entrada', 'entrada', '12 semanas'],
+      ['Transporte incluido en', 'transporte_incluido_en', 'entrada', 'entrada', 'Montaje'],
+      ['Moneda del motor', 'fx_usado', 'fija', 'fija', 'USD']
+    ].map(d => ({ k: d[0], param: d[1], origen: d[2], badge: mBadge(d[3]), v: d[4] }));
+    const mFiles = [
+      ['despiece_tornilleria.json', 'derivado', 'De la percepción y las tools. Mata la estimación de pernos por tonelaje', 0],
+      ['computos_soldadura.json', 'mixto', 'Taller derivado; el campo se verifica en el paso C', 1],
+      ['cronograma_fab.json', 'derivado', 'Del bloque B2: lotes, planta cargada y fecha de liberación', 0],
+      ['tarifas_taller.json', 'del usuario', 'Paso E, con lo heredado de la planta en solo lectura', 1],
+      ['bom_contractual.json', 'del usuario', 'Paso E, y va firmado: firmado_por + fecha_firma', 1]
+    ].map(d => ({
+      name: d[0], tipo: d[1], de: d[2],
+      cardStyle: 'border:1px solid ' + (d[3] ? '#DCD6F5' : '#E3E8EF') + ';border-radius:11px;padding:11px 12px;background:' + (d[3] ? '#FAF9FE' : '#F8FAFC'),
+      pill: 'font-family:\'JetBrains Mono\';font-size:10px;font-weight:600;padding:2px 7px;border-radius:5px;flex:none;background:' + (d[3] ? '#EEEAFB' : '#EEF2F6') + ';color:' + (d[3] ? '#5847BD' : '#94A3B8')
+    }));
+    // ---- paso B · loteo · LOTE_TON=50 y tarifas del paquete del consultor ----
+    const mLote = [
+      ['Tonelaje máximo por lote', 'LOTE_TON', '50 t'],
+      ['Costo de cambio de lote', 'costo_cambio_lote_usd', '$850 USD'],
+      ['Umbral de lote chico', 'penal_lote_chico.umbral_ton', '30 t'],
+      ['Recargo bajo el umbral', 'penal_lote_chico.recargo_usd_ton', '$18 USD/t'],
+      ['Transporte incluido en', 'transporte_incluido_en', 'Montaje']
+    ].map(d => ({ k: d[0], param: d[1], v: d[2] }));
+    // 121.25 t ÷ 50 t → 2 lotes completos + 21.25 t. El último cae bajo el umbral.
+    const mLotePrev = [
+      ['M-01', 'Placas base y columnas primero', '50.00 t', '—', '—', 0],
+      ['M-02', 'Resto de columnas', '50.00 t', '$850', '—', 0],
+      ['M-03', 'Cierre de estructura', '21.25 t', '$850', '+$382.50', 1]
+    ].map(d => ({
+      id: d[0], orden: d[1], ton: d[2], cambio: d[3], recargo: d[4],
+      rowStyle: 'display:grid;grid-template-columns:88px 1fr 110px 130px 150px;align-items:center;padding:11px 18px;border-bottom:1px solid #F1F5F9' + (d[5] ? ';background:#FEFBF5' : ''),
+      recStyle: 'font-family:\'JetBrains Mono\';font-size:12.5px;text-align:right;font-weight:' + (d[5] ? '600' : '400') + ';color:' + (d[5] ? '#9A6408' : '#CBD5E1')
+    }));
+    // ---- paso C · soldadura de campo · la sexta compuerta ----
+    const mWeld = [
+      ['Aporte de soldadura de campo', 'SOLD_CAMPO_KG', 'por defecto', 'entrada', '900 kg'],
+      ['Ensayos no destructivos · UT', 'END_PCT_UT', 'entrada', 'entrada', '10% de juntas'],
+      ['Estado de la verificación', 'computos_soldadura.campo', 'requerido', 'falta', 'Pendiente']
+    ].map(d => ({ k: d[0], param: d[1], origen: d[2], badge: mBadge(d[3]), v: d[4] }));
+    const mWeldStates = [
+      ['Ingresada', 0], ['Pendiente', 1], ['No disponible', 0]
+    ].map(d => ({
+      label: d[0],
+      style: 'height:27px;padding:0 11px;border-radius:8px;display:flex;align-items:center;font-family:\'JetBrains Mono\';font-size:11px;font-weight:600;white-space:nowrap;' + (d[1] ? 'background:#B0392F;color:#fff' : 'background:#fff;border:1px solid #F0C9C4;color:#C08A84')
+    }));
+    // SOLD_POS_PCT sobre los 900 kg de aporte. Saturación creciente = dificultad creciente.
+    const mPos = [
+      ['Plana', 30, '270 kg', '#C9C0EE'],
+      ['Horizontal', 30, '270 kg', '#AFA2E4'],
+      ['Vertical', 25, '225 kg', '#8E7FDD'],
+      ['Sobrecabeza', 15, '135 kg', '#6D5BD0']
+    ].map(d => ({
+      pos: d[0], pct: d[1] + '%', kg: d[2],
+      barStyle: 'height:100%;border-radius:5px;width:' + Math.round(d[1] / 30 * 100) + '%;background:' + d[3]
+    }));
+    // ---- paso D · condiciones de obra ----
+    const mObra = [
+      ['Obra falsa requerida', 'OBRA_FALSA', 'Sí'],
+      ['HH de obra falsa', 'OBRA_FALSA_HH', '600 HH'],
+      ['Días de lluvia por mes', 'DIAS_LLUVIA_MES', '4 días'],
+      ['Meses de lluvia dentro del plazo', 'MESES_LLUVIA', '2 meses'],
+      ['Días festivos dentro del plazo', 'FESTIVOS_DIAS', '3 días'],
+      ['Frentes de acceso al sitio', '', 'Uno']
+    ].map(d => ({ k: d[0], param: d[1], v: d[2] }));
+    const mFactores = ['Reposicionamientos de grúa', 'Rampa de aprendizaje', 'Ausentismo', 'PF&D', 'Doble manejo', 'Obra falsa', 'Calendario con lluvia', 'NCR'].map(l => ({
+      label: l,
+      style: 'height:27px;padding:0 11px;border-radius:8px;background:#F8FAFC;border:1px solid #E3E8EF;display:flex;align-items:center;font-size:11.5px;color:#475569;white-space:nowrap'
+    }));
+    // ---- paso E · tarifas heredadas + BOM contractual ----
+    // $/HH taller = $122.79 MXN (paso D de planta, cifra del golden test) ÷ 18.50
+    const mTarifas = [
+      ['Costo de hora de taller', 'usd_hh_taller', '$6.64 USD', 'heredado', '$122.79 MXN ÷ 18.50 · paso D de planta', 0],
+      ['Capacidad de taller', 'capacidad_taller_ton_sem', '15 t/sem', 'heredado', 'Velocidad base · paso B de planta', 0],
+      ['HH por tonelada y tipología', 'hh_ton_por_tipologia', 'sin mapeo', 'pendiente', 'pesada/mediana/liviana ↔ eje 24/40/60/90', 2],
+      ['Material en proceso', 'usd_ton_material_proceso', '$260 USD/t', 'del motor', 'Valor por defecto del paquete del consultor', 0],
+      ['Costo de cambio de lote', 'costo_cambio_lote_usd', '$850 USD', 'del usuario', 'Paso B de este wizard', 1],
+      ['Tipo de cambio', 'fx_usado', '18.50', 'del tenant', 'Versionado y sellado junto a la oferta', 1]
+    ].map(d => ({
+      k: d[0], param: d[1], v: d[2], origen: d[3], proc: d[4],
+      rowStyle: 'display:grid;grid-template-columns:1fr 150px 120px 200px;align-items:center;padding:7px 18px;border-bottom:1px solid #F1F5F9' + (d[5] === 2 ? ';background:#FEFBF5' : ''),
+      vStyle: 'font-family:\'JetBrains Mono\';font-size:12.5px;text-align:right;font-weight:600;color:' + (d[5] === 2 ? '#9A6408' : '#1E2A3A'),
+      pill: 'font-family:\'JetBrains Mono\';font-size:10px;font-weight:600;padding:2px 7px;border-radius:5px;justify-self:end;white-space:nowrap;' + (d[5] === 2 ? 'background:#FBE7C2;color:#9A6408' : d[5] === 1 ? 'background:#EEEAFB;color:#5847BD' : 'background:#EEF2F6;color:#475569')
+    }));
+    const mBom = [
+      ['Tonelaje del modelo', '121.25 t', 0],
+      ['Tonelaje contractual firmado', 'Pendiente', 2],
+      ['Firmado por', '—', 1],
+      ['Fecha de firma', '—', 1]
+    ].map(d => ({
+      k: d[0], v: d[1],
+      rowStyle: 'display:flex;align-items:center;gap:12px;padding:9px 13px;border-radius:10px;background:' + (d[2] === 2 ? '#FEF7EA' : '#F8FAFC') + ';border:1px solid ' + (d[2] === 2 ? '#F5D7A6' : '#E3E8EF'),
+      vStyle: 'font-family:\'JetBrains Mono\';font-size:12.5px;font-weight:600;flex:none;color:' + (d[2] === 2 ? '#9A6408' : d[2] === 1 ? '#94A3B8' : '#1E2A3A')
+    }));
+    const mGates = [
+      { name: 'Inv. 4 · doble chequeo', tol: 'del invariante', compara: 'Dos cálculos internos: el peso del modelo contra el peso reconstruido' },
+      { name: 'G1 · motor de montaje', tol: '±3%', compara: 'El modelo contra el tonelaje contractual firmado' }
+    ];
+    const mReady = [
+      ['A', 'Alcance y plazo', 'listo', 0],
+      ['B', 'Loteo', 'listo', 0],
+      ['C', 'Soldadura de campo', 'bloquea', 2],
+      ['D', 'Condiciones de obra', 'listo', 0],
+      ['E', 'Tarifas y BOM', 'falta firma', 1]
+    ].map(d => ({
+      letter: d[3] ? '!' : '✓', label: d[1], estado: d[2],
+      dot: 'width:17px;height:17px;flex:none;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:\'JetBrains Mono\';font-size:9.5px;font-weight:600;' + (d[3] === 2 ? 'background:#B0392F;color:#fff' : d[3] === 1 ? 'background:#F5A623;color:#fff' : 'background:#E8F6F4;color:#17786e'),
+      pill: 'font-family:\'JetBrains Mono\';font-size:9.5px;font-weight:600;padding:1px 6px;border-radius:4px;flex:none;' + (d[3] === 2 ? 'background:#FBE3E0;color:#8F2E26' : d[3] === 1 ? 'background:#FBE7C2;color:#9A6408' : 'background:#E8F6F4;color:#17786e')
+    }));
+
     // Entre el gate de BOM y el precio va todo el bloque B2 de planta, y el gate de
     // precios de MP va al ARRANQUE de B3 (los precios son entrada de §4.3), no al
     // final. Cuando el modo C muestra opciones, los precios ya están confirmados.
@@ -2820,7 +3261,17 @@ class Component extends DCLogic {
       plan, rssPhases, devs, mpPrices, load, program, progOpt, s11, equil, requi, families, famOpts, subprojects,
       isP3: s.screen === 'p3', isP4: s.screen === 'p4', isWs, isP6: s.screen === 'p6', isP8: s.screen === 'p8', isP9: s.screen === 'p9',
       isP13: s.screen === 'p13', isP14: s.screen === 'p14', isP15: s.screen === 'p15', isP16: s.screen === 'p16',
-      isP20: s.screen === 'p20', isP11: s.screen === 'p11',
+      isP20: s.screen === 'p20', isP11: s.screen === 'p11', isP22: s.screen === 'p22',
+      mSteps, montajeNav, mAlcance, mFiles, mLote, mLotePrev, mWeld, mWeldStates, mPos, mObra, mFactores, mTarifas, mBom, mGates, mReady,
+      isMA: mstep === 'a', isMB: mstep === 'b', isMC: mstep === 'c', isMD: mstep === 'd', isME: mstep === 'e',
+      mStepTitle: { a: 'Alcance y plazo de montaje', b: 'Loteo y transporte a obra', c: 'Soldadura de campo', d: 'Condiciones de obra y calendario', e: 'Tarifas de taller y BOM contractual' }[mstep],
+      mStepLede: {
+        a: 'Este flujo existe porque el alcance del proyecto incluye montaje. Lo que se define aquí es de este proyecto, no de la planta: la planta aporta sus tarifas, la obra aporta su plazo.',
+        b: 'El motor arma lotes de hasta 50 t y cobra cada cambio de lote. El tonelaje del último lote es donde aparece la primera decisión de ingeniería de valor.',
+        c: 'La única compuerta humana que vive en este flujo. Los cómputos de campo no se estiman por tonelaje: se verifican, y su ausencia detiene el motor.',
+        d: 'Los factores de realidad son lo que separa este motor de una regla de tres. El calendario de obra recorta días laborables antes de que empiece el cálculo.',
+        e: 'Lo que ya está calibrado en la planta se hereda en solo lectura. Lo único que se firma aquí es el tonelaje contra el que se compara el modelo.'
+      }[mstep],
       pages, layers, sums, unres, pSteps, stationRows, speeds, pVers,
       closure, recals, pendClose, cascada, reqMat, prestamos, lots, resol, cranePieces,
       plantNav, identity, otherPlants, factors, classCards, nomina, hhCosts, overheadRows, diffRows, linkedProjects,
@@ -2905,6 +3356,7 @@ class Component extends DCLogic {
       goP15: () => this.go({ screen: 'p15' }),
       goP16: () => this.go({ screen: 'p16' }),
       goP11: () => this.go({ screen: 'p11', pstep: 'a' }),
+      goP22: () => this.go({ screen: 'p22', mstep: 'a' }),
       // ---- chips de estado del workspace (inv. 4, 7, 8) ----
       rssChip: 'RSS 9.3% · ámbar',
       rssChipStyle: 'display:flex;align-items:center;gap:6px;font-family:\'JetBrains Mono\';font-size:11px;padding:4px 9px;border-radius:6px;background:rgba(255,255,255,.09);color:#F5A623',

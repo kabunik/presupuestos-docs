@@ -167,6 +167,11 @@ P22·E  Tarifas y BOM contractual  heredado de PlantConfig en solo lectura + lo 
                                 tonelaje contractual FIRMADO · fx_usado
 ```
 
+**Mockeado el 13-ago** (#117): los cinco pasos están navegables en el prototipo, con barra de
+navegación paralela propia —violeta, para distinguirla de la teal de planta— y la entrada desde el
+bloque de *Alcance contratado* del paso 3 del intake. Ese campo dejó de ser un dato más: es la
+bifurcación que enciende o apaga el flujo, y lo dice.
+
 Dos reglas de diseño que salen del propio motor:
 
 - **Toda estimación automática queda marcada** con su fuente y una bandera, y el valor real siempre

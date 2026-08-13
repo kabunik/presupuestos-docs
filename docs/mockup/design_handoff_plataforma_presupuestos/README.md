@@ -33,6 +33,7 @@ Este paquete cubre las pantallas de **prioridad alta/crítica** de la primera et
 | **P10** | **Emisión de oferta** | — | verificación de los 8 criterios bloqueantes + leyenda + artefactos |
 | **P7** | **Catálogo de alertas** | — | las 3 familias con bloquea/supresible por código |
 | **P2** | **Dashboard de proyectos** | — | cierres pendientes + frescura de E7 por planta |
+| **P22·A–E** | **Plan de montaje** (segundo flujo paralelo) | — | los 5 pasos + **compuerta de soldadura de campo** + G1 a ±3% |
 
 Las seis últimas se añadieron reconciliando con el Sistema DM v1.7 (#80), resecuenciando el flujo
 (#85) y tras la revisión del 12-ago (#94, #97). Su especificación —junto con la de P17, P18 y P19,
@@ -42,12 +43,19 @@ El **flujo de definición de planta es paralelo** al del proyecto: tiene su prop
 en el prototipo y se entra a él desde el **selector de planta del paso 1 del intake**. La planta se
 configura una vez, se versiona, y el proyecto se asocia a `(planta, versión)`.
 
+Hay un **segundo flujo paralelo**, el del **plan de montaje** (P22, barra violeta), y la diferencia con
+el de planta es el disparador: el de planta se recorre siempre, este **solo si el alcance del proyecto
+incluye montaje**. Se entra desde el bloque de *Alcance contratado* del paso 3 del intake, que dejó de
+ser un campo más para volverse la bifurcación que enciende o apaga el motor de montaje. Sus definiciones
+son **del proyecto**, no de la planta: lo que ya está calibrado en `PlantConfig` se hereda en solo
+lectura. Especificación en `docs/00-Fundamentos/MOTOR_MONTAJE.md`.
+
 **P20 y P11 toman como referencia de flujo el recorrido de Steel Genie**, extraído en
 `docs/Diseño de producto/REFERENCIA_SteelGenie.md` con las 16 capturas en `docs/steel genie/`. Es
 referencia de **flujo**, no de aspecto: la paleta y la tipografía siguen siendo las de `tokens.css`.
 
 Fuera de alcance en esta etapa: **P1 login** y **P12 admin de organización**, ambas de prioridad Baja.
-Todo lo demás está mockeado — **17 marcos en el prototipo** y el recorrido cerrado de punta a punta.
+Todo lo demás está mockeado — **18 marcos en el prototipo** y el recorrido cerrado de punta a punta.
 
 El mock está desplegado en **https://strusite.com/bid_platform/bid-mockup.html**. Se ve a partir de
 1500 px de ancho: el diseño es de 1440 px y no tiene breakpoints móviles. La barra inferior de
