@@ -346,6 +346,9 @@ Formato natural: pantalla con tres tarjetas apiladas, o tabs de una pantalla «F
 | **P14 · carga de planta y ocupación** | Alta | ✓ | ✓ |
 | **P15 · escenarios de programa** | Alta | ✓ | ✓ |
 | **P16 · interferencia de familias** | Alta | ✓ | ✓ |
+| **P10 · emisión de oferta** | **Alta** | ✓ #74 | ✓ #110 |
+| **P7 · catálogo de alertas** | Alta | ✓ #68 | ✓ #110 |
+| **P2 · dashboard** | Media | ✓ | ✓ #110 |
 | P17 · cierre y recalibración | Media | ✓ | ✓ #98 |
 | P18 · desviaciones como panel del workspace | Media | ✓ | ✓ #98 — cuarta tab «Concurso» |
 | P19 · requisición, lotes y grúa | Media | ✓ | ✓ #98 |

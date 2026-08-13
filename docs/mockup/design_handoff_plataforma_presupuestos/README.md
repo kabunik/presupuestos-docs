@@ -30,6 +30,9 @@ Este paquete cubre las pantallas de **prioridad alta/crítica** de la primera et
 | **P17** | **Cierre de proyecto y recalibración** | — | 8 rubros con Δ vs. tolerancia ±5% + bandeja de dirección |
 | **P18** | **Desviaciones de concurso** | — | **cuarta tab del panel del workspace**, «Concurso» |
 | **P19** | **Requisición, lotes y grúa** | — | cascada de inventario + déficit por semana + piezas críticas |
+| **P10** | **Emisión de oferta** | — | verificación de los 8 criterios bloqueantes + leyenda + artefactos |
+| **P7** | **Catálogo de alertas** | — | las 3 familias con bloquea/supresible por código |
+| **P2** | **Dashboard de proyectos** | — | cierres pendientes + frescura de E7 por planta |
 
 Las seis últimas se añadieron reconciliando con el Sistema DM v1.7 (#80), resecuenciando el flujo
 (#85) y tras la revisión del 12-ago (#94, #97). Su especificación —junto con la de P17, P18 y P19,
@@ -43,7 +46,12 @@ configura una vez, se versiona, y el proyecto se asocia a `(planta, versión)`.
 `docs/Diseño de producto/REFERENCIA_SteelGenie.md` con las 16 capturas en `docs/steel genie/`. Es
 referencia de **flujo**, no de aspecto: la paleta y la tipografía siguen siendo las de `tokens.css`.
 
-Fuera de alcance en esta etapa: P1 login, P2 dashboard, P7 aislado, P10 emisión de oferta, P12 admin.
+Fuera de alcance en esta etapa: **P1 login** y **P12 admin de organización**, ambas de prioridad Baja.
+Todo lo demás está mockeado — **17 marcos en el prototipo** y el recorrido cerrado de punta a punta.
+
+El mock está desplegado en **https://strusite.com/bid_platform/bid-mockup.html**. Se ve a partir de
+1500 px de ancho: el diseño es de 1440 px y no tiene breakpoints móviles. La barra inferior de
+navegación es andamiaje del prototipo, no producto.
 
 ---
 
