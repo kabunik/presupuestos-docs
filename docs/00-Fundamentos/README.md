@@ -3,7 +3,7 @@
 > Base documental y referencial de la Plataforma de Presupuestos de Estructuras Metálicas.
 > Estos documentos son la **capa de reconciliación** entre el sistema del consultor
 > (Sistema DM v1.7) y la arquitectura de plataforma Kabunik × dcode.
-> Última revisión: **2026-08-12**.
+> Última revisión: **2026-08-13**.
 
 ## Por qué existe esta carpeta
 
@@ -32,6 +32,7 @@ vocabulario. Esta carpeta resuelve ese desencaje y fija el punto de partida para
 | 10 | [FLUJO_v1.md](FLUJO_v1.md) | **El orden del flujo, derivado de la cadena de dependencias del motor.** Los 5 bloques, las 5 compuertas en orden de ejecución y el ciclo de vida |
 | 11 | [MODEL_DELTA_propuesta.md](MODEL_DELTA_propuesta.md) | **Propuesta** de formato de `model_delta` para C1.2. Pendiente de validar con dcode |
 | 12 | [CAPA_MODELO.md](CAPA_MODELO.md) | **Frente abierto de la capa del modelo.** Lo decidido, la arquitectura de proyecciones y las decisiones pendientes |
+| 13 | [MOTOR_MONTAJE.md](MOTOR_MONTAJE.md) | **El motor de montaje del consultor**, su reconciliación con nuestro plan y el wizard que captura sus entradas |
 
 Léelos en ese orden la primera vez.
 

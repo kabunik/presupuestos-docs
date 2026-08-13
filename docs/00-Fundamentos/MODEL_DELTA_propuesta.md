@@ -78,6 +78,15 @@ falta una op — no de que haya que meterla a presión en `set_property`.
 | `add_elements` | `elementos: [{…}]` | Elementos nuevos | B1, B2, B3 |
 | `remove_elements` | `elementos` | Elementos eliminados | B1, B2, B3 |
 | `set_family` | `elementos`, `familia`, `clase_hh_ton` | Asignación de familia y partición en subproyectos | B2, B3 |
+| `add_cost` | `elementos`, `concepto`, `importe`, `procedencia` | Adjuntar costo al modelo. **Propuesto por dcode** (#112) | B3 |
+
+> **Convergencia con dcode (13-ago, #112).** En la reunión del 12-ago dcode listó sus tools de delta:
+> `set_geometry`, `set_property`, `add_elements`, `remove_elements`, `add_cost`. **Cuatro de las cinco
+> coinciden exactamente** con esta propuesta, hecha el 11-ago sin haber visto la suya. La quinta
+> difiere y las dos hacen falta, así que el conjunto pasa a **seis operaciones**.
+>
+> `add_cost` tiene una condición que no es negociable: **debe llevar procedencia de tool**. Si el
+> agente pudiera escribir un costo que él mismo calculó, «ninguna cifra sin tool» se cae.
 
 `set_family` existe por el **inv. 3**: partir el proyecto en subproyectos por familia es una mutación
 del modelo, no un ajuste de configuración, y tiene que quedar en el historial de versiones como
