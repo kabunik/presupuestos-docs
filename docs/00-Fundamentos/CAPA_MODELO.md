@@ -39,6 +39,9 @@ Tres cosas la volvieron urgente en la última semana:
 | **`e5_financieros` va partido:** nómina en `PlantConfig`, overhead en `TenantConfig` con regla de reparto entre plantas. El chequeo del inv. 15 sigue siendo **por planta** | Decisión de dirección, 12-ago · #100 |
 | **`PriceList` arranca con alcance de tenant**, asumido como provisional. El alcance se modela como campo (`plant_id` nullable), de modo que pasar a por-planta sea **aditivo y sin migración** | Decisión de dirección, 12-ago · #102 |
 | **glTF 2.0 / `.glb` es el formato de la proyección de render.** IFC4 queda como proyección de **entregable**; el `Model` canónico sigue siendo estructura propia | Decisión de dirección, 12-ago · #13 |
+| **Onboarding de calibración: híbrido por tenant.** Asistido para los primeros tenants, autónomo cuando madure, con flag por organización | Decisión de dirección, 12-ago · #75 |
+| **Los factores por clase solo se mueven con evidencia de cierres** (inv. 16). No son configuración editable | Decisión de dirección, 12-ago · #110 |
+| **Los PDF escaneados se soportan en v1**, con VLM en la interpretación. **Decisión de dcode**, no nuestra | dcode, 12-ago · #92 |
 
 ---
 
@@ -185,14 +188,19 @@ facturable → a comprar → factor 1.2125 queda mal y **el golden test deja de 
 Tratar la tornillería como perfil faltante al que asignar peso la **duplica** contra la partida
 porcentual.
 
-### 6 · Alcance de los PDFs: escaneado vs. vectorial
+### 6 · Alcance de los PDFs — **resuelto por dcode**
 
-**Abierto.** La reunión notó que el PDF vectorial exportado de CAD es mucho más fácil de procesar que
-el escaneado. Pregunta de alcance: **¿la v1 soporta planos escaneados?**
+**dcode los soporta en v1**, midiendo el impacto de un **VLM** en la interpretación (#92). Deja de ser
+pregunta de producto nuestra y pasa a ser alcance de D2.
 
-Si no, es una validación del intake y hay que declararla, no descubrirla con un cliente. Los planos de
-CNARCCS son 48 páginas y 62 MB, probablemente vectoriales — pero eso no dice nada del resto del
-mercado.
+Dos consecuencias que sí son nuestras y quedan abiertas:
+
+- **¿Entra en el RSS?** Un modelo derivado de un plano escaneado carga más incertidumbre que uno
+  derivado de vectores, y el inv. 7 manda agregar por raíz de suma de cuadrados las partidas con rango.
+  Si un escaneado no sube el RSS, el semáforo está mintiendo.
+- **Un VLM hace la ingesta asistida más necesaria, no menos.** Acierta mucho y falla de formas difíciles
+  de predecir, lo que refuerza P20 como compuerta humana. Y el guardarraíl no cambia: **el VLM
+  identifica, las tools calculan.**
 
 ### 7 · La ingesta asistida de planos
 
