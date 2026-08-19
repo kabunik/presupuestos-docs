@@ -1,0 +1,403 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "SistemaDM.Input",
+  "version": "1.7",
+  "type": "object",
+  "required": [
+    "e1_ficha",
+    "e2_take_off",
+    "e3_precios",
+    "e4_planta_vsm",
+    "e5_financieros",
+    "e6_especificaciones",
+    "e7_bases",
+    "version_parametros"
+  ],
+  "properties": {
+    "version_parametros": {
+      "type": "string",
+      "description": "Versión de parámetros con la que se calcula (inv. 16). Ej: v2026.1"
+    },
+    "e1_ficha": {
+      "type": "object",
+      "required": [
+        "proyecto",
+        "peso_planos_t",
+        "clase_hh_ton",
+        "fase_rss"
+      ],
+      "properties": {
+        "proyecto": {
+          "type": "string"
+        },
+        "cliente": {
+          "type": "string"
+        },
+        "peso_planos_t": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "clase_hh_ton": {
+          "enum": [
+            24,
+            40,
+            60,
+            90
+          ]
+        },
+        "fase_rss": {
+          "enum": [
+            "verde",
+            "ambar",
+            "rojo"
+          ],
+          "description": "v1.7: gobierna el default_crecimiento del Más 6% (6/10/15%)"
+        },
+        "subproyectos": {
+          "type": "array",
+          "description": "Obligatorio si las familias difieren >=1 salto del eje (inv. 3)",
+          "items": {
+            "type": "object",
+            "required": [
+              "familia",
+              "peso_planos_t",
+              "clase_hh_ton"
+            ],
+            "properties": {
+              "familia": {
+                "type": "string"
+              },
+              "peso_planos_t": {
+                "type": "number"
+              },
+              "clase_hh_ton": {
+                "enum": [
+                  24,
+                  40,
+                  60,
+                  90
+                ]
+              },
+              "margen_por_hh": {
+                "type": "number",
+                "description": "$/HH de margen para rentabilidad relativa"
+              }
+            }
+          }
+        }
+      }
+    },
+    "e2_take_off": {
+      "type": "object",
+      "required": [
+        "fuente",
+        "factor_facturable_aisc",
+        "peso_reconstruido_t"
+      ],
+      "properties": {
+        "fuente": {
+          "enum": [
+            "ifc",
+            "pdf_dxf"
+          ]
+        },
+        "factor_facturable_aisc": {
+          "type": "number",
+          "description": "AISC 303-22 §9.2 (inv. 1)"
+        },
+        "peso_reconstruido_t": {
+          "type": "number",
+          "description": "Para doble chequeo (inv. 4)"
+        },
+        "exclusiones": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Siempre explícitas: escaleras, F1554, Nelson studs (inv. 5)"
+        }
+      }
+    },
+    "e3_precios": {
+      "type": "object",
+      "required": [
+        "materiales"
+      ],
+      "properties": {
+        "materiales": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "material",
+              "precio_kg",
+              "fuente",
+              "fecha",
+              "vigencia_dias"
+            ],
+            "properties": {
+              "material": {
+                "type": "string"
+              },
+              "precio_kg": {
+                "type": "number"
+              },
+              "fuente": {
+                "type": "string"
+              },
+              "fecha": {
+                "type": "string",
+                "format": "date"
+              },
+              "vigencia_dias": {
+                "type": "integer"
+              }
+            }
+          }
+        },
+        "confirmacion_precios": {
+          "type": "object",
+          "description": "v1.7 inv. 8: sin confirmación NO se emite precio",
+          "required": [
+            "confirmado",
+            "por",
+            "fecha",
+            "referencia_oferta"
+          ],
+          "properties": {
+            "confirmado": {
+              "type": "boolean"
+            },
+            "por": {
+              "type": "string"
+            },
+            "fecha": {
+              "type": "string",
+              "format": "date"
+            },
+            "referencia_oferta": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "e4_planta_vsm": {
+      "type": "object",
+      "required": [
+        "velocidad_base_t_sem",
+        "velocidad_ot_t_sem"
+      ],
+      "properties": {
+        "velocidad_base_t_sem": {
+          "type": "number"
+        },
+        "velocidad_ot_t_sem": {
+          "type": "number"
+        },
+        "cuello_botella": {
+          "type": "string"
+        },
+        "ahorro_lean_pct": {
+          "type": "number"
+        }
+      }
+    },
+    "e5_financieros": {
+      "type": "object",
+      "required": [
+        "costo_hh_propio",
+        "costo_hh_subcontrato"
+      ],
+      "properties": {
+        "costo_hh_propio": {
+          "type": "number"
+        },
+        "costo_hh_subcontrato": {
+          "type": "number"
+        },
+        "cargas_planta_hh": {
+          "type": "number"
+        },
+        "overhead_disponible_hh": {
+          "type": "number"
+        },
+        "tolerancia_vs_contabilidad": {
+          "type": "number",
+          "default": 0.02
+        }
+      }
+    },
+    "e6_especificaciones": {
+      "type": "object",
+      "required": [
+        "plan_montaje_t_sem"
+      ],
+      "properties": {
+        "desviaciones_concurso": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "concepto",
+              "norma",
+              "concurso",
+              "rige",
+              "impacto"
+            ],
+            "properties": {
+              "concepto": {
+                "type": "string"
+              },
+              "norma": {
+                "type": "string"
+              },
+              "concurso": {
+                "type": "string"
+              },
+              "rige": {
+                "enum": [
+                  "norma",
+                  "concurso"
+                ]
+              },
+              "impacto": {
+                "type": "number"
+              }
+            }
+          },
+          "description": "El concurso RIGE donde difiera (inv. 10); el impacto entra al presupuesto"
+        },
+        "plan_montaje_t_sem": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          },
+          "description": "ENTRADA del sistema (inv. 11)"
+        }
+      }
+    },
+    "e7_bases": {
+      "type": "object",
+      "required": [
+        "carga_planta",
+        "inventario"
+      ],
+      "properties": {
+        "carga_planta": {
+          "type": "object",
+          "required": [
+            "hh_libres_sem"
+          ],
+          "properties": {
+            "proyectos_en_curso": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "proyecto": {
+                    "type": "string"
+                  },
+                  "hh_sem": {
+                    "type": "array",
+                    "items": {
+                      "type": "number"
+                    }
+                  },
+                  "t_sem": {
+                    "type": "array",
+                    "items": {
+                      "type": "number"
+                    }
+                  }
+                }
+              }
+            },
+            "hh_libres_sem": {
+              "type": "number"
+            },
+            "capacidad_habilitado_hh_sem": {
+              "type": "number"
+            }
+          }
+        },
+        "inventario": {
+          "type": "object",
+          "properties": {
+            "disponible_t": {
+              "type": "number"
+            },
+            "asignado_t": {
+              "type": "number"
+            },
+            "libre_t": {
+              "type": "number"
+            },
+            "prestamos": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            }
+          }
+        },
+        "registro_cierres": {
+          "type": "array",
+          "description": "v1.7 inv. 16",
+          "items": {
+            "$ref": "#/definitions/cierre_proyecto"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "cierre_proyecto": {
+      "type": "object",
+      "required": [
+        "proyecto",
+        "version_parametros",
+        "rubros"
+      ],
+      "properties": {
+        "proyecto": {
+          "type": "string"
+        },
+        "version_parametros": {
+          "type": "string"
+        },
+        "rubros": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "rubro",
+              "presupuestado",
+              "real"
+            ],
+            "properties": {
+              "rubro": {
+                "enum": [
+                  "costo_total",
+                  "hh_por_familia",
+                  "hh_ton_efectivas",
+                  "desperdicio",
+                  "peso_final",
+                  "precio_acero",
+                  "montaje",
+                  "desviaciones_concurso"
+                ]
+              },
+              "presupuestado": {
+                "type": "number"
+              },
+              "real": {
+                "type": "number"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

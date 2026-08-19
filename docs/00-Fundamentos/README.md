@@ -3,7 +3,7 @@
 > Base documental y referencial de la Plataforma de Presupuestos de Estructuras Metálicas.
 > Estos documentos son la **capa de reconciliación** entre el sistema del consultor
 > (Sistema DM v1.7) y la arquitectura de plataforma Kabunik × dcode.
-> Última revisión: **2026-08-13**.
+> Última revisión: **2026-08-19**.
 
 ## Por qué existe esta carpeta
 
@@ -33,11 +33,16 @@ vocabulario. Esta carpeta resuelve ese desencaje y fija el punto de partida para
 | 11 | [MODEL_DELTA_propuesta.md](MODEL_DELTA_propuesta.md) | **Propuesta** de formato de `model_delta` para C1.2. Pendiente de validar con dcode |
 | 12 | [CAPA_MODELO.md](CAPA_MODELO.md) | **Frente abierto de la capa del modelo.** Lo decidido, la arquitectura de proyecciones y las decisiones pendientes |
 | 13 | [MOTOR_MONTAJE.md](MOTOR_MONTAJE.md) | **El motor de montaje del consultor**, su reconciliación con nuestro plan y el wizard que captura sus entradas |
+| 14 | [SISTEMA_PRESUPUESTOS_v1.3.md](SISTEMA_PRESUPUESTOS_v1.3.md) | **La aritmética calibrada contra la planta real.** Los 7 motores, los modos A/B/C, el pipeline V1–V7 y los cuatro conflictos de cifras que abre |
+| 15 | [MOTOR_PINTURA.md](MOTOR_PINTURA.md) | **La pintura es un motor, no cuatro campos.** Su frontera —nunca dentro del costo de fabricación— y lo que necesita del modelo |
 
 Léelos en ese orden la primera vez.
 
 - **8 y 9** (11-ago) desbloquearon el congelamiento del contrato v0: eran los dos huecos que cambiaban
   la forma del payload.
+- **14 y 15** (19-ago) son la primera calibración contra la planta **real** de Metalitec, no contra el
+  caso didáctico. El golden test sigue intacto; lo que aparece es la capa de economía de planta que le
+  faltaba, y con ella cuatro conflictos de cifras entre documentos del propio consultor.
 - **10** (11-ago) corrigió el orden del flujo, que violaba la cadena de dependencias del motor.
 - **11 y 12** (11 y 12-ago) cubren el último hueco de forma del contrato y declaran el frente abierto
   de la capa del modelo.

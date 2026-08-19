@@ -1,7 +1,36 @@
 # Activos reutilizables
 
 > Qué del material entregado se usa **tal cual**, para qué, y en qué ítem del backlog.
-> Revisado el **2026-08-06**.
+> Revisado el **2026-08-06**, ampliado el **2026-08-19** con la entrega nueva.
+
+## Actualización del 19-ago: el bloqueo de percepción se levantó
+
+Veníamos arrastrando que **no teníamos ningún par IFC + planos del mismo proyecto**, y sin él la
+percepción no tenía contra qué medirse. Con la entrega del 19-ago hay uno completo:
+
+| Activo | Qué desbloquea |
+|---|---|
+| `Proyectos ejemplo/Ampliacion_Bodega_50.ifc` — IFC4, mm, **409 elementos** | **D2** percepción y **D4** eval: es el primer caso con modelo y planos del mismo proyecto |
+| `Proyectos ejemplo/Ampliación bodega 50 4.pdf` — 21 MB de planos | El otro lado del par. Insumo directo de P20 |
+| `Resumen_HHton_Soldadura_IFC_...pdf` — 596.2 t · **28.2 HH/ton** ponderado · 9 familias | **Segundo oráculo** después del golden test, y el único con desglose por familia |
+| `Analisis planta/Carga de Planta Zapotlan.xlsx` — 4 proyectos × semana, 65 → 235 t/sem | Fixture real de **P14**: es literalmente la estructura de la pantalla |
+| `Elementos estructurales/AG22` y `AC6` | El nivel de detalle al que aspira el motor de HH, con verificación AISC/AWS |
+
+Dos advertencias sobre el par IFC + planos, para no usarlo mal:
+
+**El IFC está sintetizado, no es nativo de Tekla.** La cabecera dice `IfcOpenShell 0.8.5`, fechado el
+13-ago. Sirve como caso de conversión y como oráculo de geometría, pero **no prueba que sepamos leer un
+IFC de Tekla**, que es el que traerán los clientes.
+
+**El resumen declara su propia clase de estimación**, y es una práctica que conviene adoptar tal cual:
+
+> «Peso: cómputo preliminar de planos 2D (**Clase 4/5, banda ±15–20%**); requiere validación del
+> ingeniero.»
+
+Una cifra que viene con su clase y su banda es auditable; la misma cifra sola es una afirmación. Debería
+viajar así en el producto, no solo en el informe.
+
+---
 
 ## Hallazgo principal: J1.4 ya está entregado
 

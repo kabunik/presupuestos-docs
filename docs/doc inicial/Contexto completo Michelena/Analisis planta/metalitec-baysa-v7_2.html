@@ -1,0 +1,2734 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Metalitec · Baysa — El Acueducto · v6 narración fluida</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=JetBrains+Mono:wght@400;700&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#050d1a;
+    --water:#1e6fb8;
+    --water-light:#3da5e0;
+    --water-deep:#0a2845;
+    --steel:#7d8da4;
+    --steel-dark:#2a3849;
+    --warning:#ff5733;
+    --warning-deep:#a02818;
+    --gold:#e0b53a;
+    --cream:#f4ede0;
+    --paper:#1a2438;
+    --human:#9c5fc4;
+    --baysa:#0066b3;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{
+    width:100%;height:100%;overflow:hidden;
+    background:var(--ink);
+    font-family:'JetBrains Mono',monospace;
+    color:var(--cream);
+  }
+  body{
+    background:radial-gradient(ellipse at 50% 30%, #1a2438 0%, #050d1a 70%);
+  }
+  /* Cinematic vignette + grain */
+  .vignette{
+    position:fixed;inset:0;pointer-events:none;z-index:90;
+    background:radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,.6) 100%);
+  }
+  .grain{
+    position:fixed;inset:0;pointer-events:none;z-index:100;opacity:.08;mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+  }
+  /* Subtle moving light at top */
+  .light-rays{
+    position:fixed;inset:0;pointer-events:none;z-index:5;opacity:.3;
+    background:linear-gradient(180deg, rgba(224,181,58,.15) 0%, transparent 30%);
+  }
+
+  .stage{position:relative;width:100vw;height:78vh}
+  svg.scene{width:100%;height:100%;display:block}
+
+  .hud{
+    position:absolute;inset:0;pointer-events:none;
+    padding:20px 36px;display:flex;flex-direction:column;justify-content:space-between;
+    z-index:10;
+  }
+  .hud-top{display:flex;justify-content:space-between;align-items:flex-start}
+  .brand{
+    font-family:'Bebas Neue',sans-serif;
+    font-size:28px;letter-spacing:.18em;color:var(--cream);line-height:.9;
+    text-shadow:0 2px 8px rgba(0,0,0,.6);
+  }
+  .brand .baysa-mark{
+    display:inline-block;background:var(--baysa);color:#fff;padding:2px 10px;
+    margin-right:10px;font-size:18px;letter-spacing:.3em;
+    border:1px solid var(--gold);
+  }
+  .brand .sub{
+    display:block;font-family:'JetBrains Mono',monospace;
+    font-size:9px;letter-spacing:.4em;color:var(--gold);margin-top:6px;opacity:.85;
+  }
+  .meta{
+    text-align:right;font-size:9px;letter-spacing:.3em;
+    color:var(--cream);text-transform:uppercase;opacity:.7;
+    text-shadow:0 2px 6px rgba(0,0,0,.6);
+  }
+  .meta .scene-num{
+    font-family:'Bebas Neue',sans-serif;font-size:36px;letter-spacing:.05em;
+    color:var(--gold);line-height:.9;
+  }
+
+  /* Live indicator (top right) */
+  .live-indicator{
+    position:absolute;top:24px;right:36px;
+    display:flex;align-items:center;gap:8px;
+    background:rgba(0,0,0,.5);padding:6px 14px;
+    border:1px solid var(--gold);
+    z-index:65;
+  }
+  .live-dot{
+    width:10px;height:10px;background:#ff3030;border-radius:50%;
+    box-shadow:0 0 12px #ff3030;
+    animation:livePulse 1.2s ease-in-out infinite;
+  }
+  @keyframes livePulse{0%,100%{opacity:1}50%{opacity:.4}}
+  .live-text{
+    font-family:'Bebas Neue';letter-spacing:.3em;font-size:14px;color:var(--cream);
+  }
+
+  /* Narration bar */
+  .narration{
+    position:relative;width:100%;height:22vh;
+    background:linear-gradient(180deg, #050d1a 0%, #0a1830 100%);
+    color:var(--cream);
+    padding:24px 48px;
+    display:flex;align-items:center;gap:32px;
+    border-top:3px solid var(--gold);
+    z-index:50;
+  }
+  .narration::before{
+    content:"";position:absolute;left:0;right:0;top:0;height:3px;
+    background:repeating-linear-gradient(90deg,#e0b53a 0 20px,transparent 20px 40px);
+    opacity:.5;
+  }
+  .narrator-icon{
+    flex-shrink:0;width:84px;height:84px;
+    border:2px solid var(--gold);border-radius:50%;
+    display:flex;align-items:center;justify-content:center;position:relative;
+    background:radial-gradient(circle, rgba(224,181,58,.15) 0%, transparent 70%);
+  }
+  .narrator-icon::after{
+    content:"";position:absolute;inset:-6px;border:1px solid var(--gold);border-radius:50%;opacity:.4;
+    animation:pulseRing 2s ease-out infinite;
+  }
+  .narrator-icon.speaking::after{animation:pulseRing 0.6s ease-out infinite}
+  @keyframes pulseRing{0%{transform:scale(.95);opacity:.6}100%{transform:scale(1.3);opacity:0}}
+  .narrator-icon svg{width:38px;height:38px;fill:var(--gold)}
+
+  .narration-content{flex:1;min-width:0}
+  .scene-title{
+    font-family:'Bebas Neue',sans-serif;
+    font-size:14px;letter-spacing:.4em;color:var(--gold);margin-bottom:8px;
+  }
+  .scene-title .num{
+    display:inline-block;background:var(--gold);color:var(--ink);
+    padding:2px 10px;margin-right:12px;font-size:13px;
+  }
+  .narration-text{
+    font-family:'Playfair Display',serif;font-size:21px;line-height:1.45;
+    color:var(--cream);min-height:60px;
+    text-shadow:0 1px 3px rgba(0,0,0,.5);
+  }
+
+  .timeline{
+    position:absolute;bottom:0;left:0;right:0;height:6px;background:rgba(244,237,224,.1);
+  }
+  .timeline-fill{
+    height:100%;background:linear-gradient(90deg,var(--gold),#fff);width:0;
+    transition:width .3s linear;
+    box-shadow:0 0 12px var(--gold);
+  }
+  .timeline-markers{
+    position:absolute;bottom:6px;left:0;right:0;height:24px;
+    display:flex;font-family:'JetBrains Mono',monospace;font-size:9px;
+    color:rgba(244,237,224,.4);letter-spacing:.2em;
+  }
+  .marker{
+    flex:1;border-left:1px solid rgba(244,237,224,.15);padding:4px 0 0 8px;
+  }
+  .marker.active{color:var(--gold);border-left-color:var(--gold)}
+
+  .controls{
+    position:absolute;bottom:18px;right:24px;
+    display:flex;gap:8px;z-index:60;align-items:center;
+  }
+  .ctrl-btn{
+    background:rgba(5,13,26,.85);color:var(--cream);
+    border:1px solid var(--gold);font-family:'JetBrains Mono',monospace;
+    font-size:10px;letter-spacing:.2em;padding:8px 14px;
+    cursor:pointer;text-transform:uppercase;
+    transition:all .2s;
+  }
+  .ctrl-btn:hover{background:var(--gold);color:var(--ink)}
+  .ctrl-btn.playing{background:var(--gold);color:var(--ink)}
+  .ctrl-btn.primary{
+    background:var(--gold);color:var(--ink);
+    font-size:13px;padding:12px 20px;
+    box-shadow:0 0 20px rgba(224,181,58,.4);
+  }
+  .ctrl-btn.primary:hover{background:#fff}
+
+  .voice-info{
+    font-family:'JetBrains Mono';font-size:9px;letter-spacing:.2em;
+    color:var(--steel);text-transform:uppercase;margin-right:8px;
+  }
+  .voice-info span{color:var(--gold)}
+
+  .word{
+    display:inline-block;opacity:0;transform:translateY(8px);
+    transition:opacity .3s ease, transform .3s ease;margin-right:.25em;
+  }
+  .word.show{opacity:1;transform:translateY(0)}
+
+  .scene-wrap{position:absolute;inset:0;opacity:0;pointer-events:none;transition:opacity .8s ease}
+  .scene-wrap.active{opacity:1}
+
+  /* ============ TITLE SCENE ============ */
+  #s1 .title-block{
+    position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+    text-align:center;width:90%;
+  }
+  #s1 .baysa-presents{
+    font-family:'Bebas Neue',sans-serif;
+    letter-spacing:.5em;font-size:14px;color:var(--gold);margin-bottom:20px;
+    opacity:0;animation:fadeIn 1.2s .3s forwards;
+  }
+  #s1 .baysa-presents .baysa-logo{
+    display:inline-block;background:var(--baysa);color:#fff;
+    padding:4px 14px;margin-right:14px;border:1px solid var(--gold);
+  }
+  #s1 .kicker{
+    font-size:11px;letter-spacing:.5em;color:var(--steel);margin-bottom:24px;
+    opacity:0;animation:fadeIn 1.2s 1s forwards;
+  }
+  #s1 .title{
+    font-family:'Bebas Neue',sans-serif;
+    font-size:clamp(60px,11vw,160px);letter-spacing:.04em;line-height:.85;color:var(--cream);
+    opacity:0;animation:fadeInScale 1.8s 1.5s forwards;
+    text-shadow:0 4px 20px rgba(0,0,0,.8), 0 0 60px rgba(224,181,58,.2);
+  }
+  #s1 .title .accent{
+    color:var(--gold);font-style:italic;font-family:'Playfair Display',serif;font-weight:700;
+    text-shadow:0 4px 20px rgba(224,181,58,.4);
+  }
+  #s1 .underline{
+    width:60%;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent);
+    margin:24px auto;
+    opacity:0;animation:fadeIn 1s 3s forwards;
+  }
+  #s1 .deck{
+    font-family:'Playfair Display',serif;font-style:italic;
+    font-size:20px;color:var(--cream);max-width:700px;margin:0 auto;opacity:.85;
+    opacity:0;animation:fadeIn 1.2s 3.2s forwards;
+  }
+  @keyframes fadeIn{to{opacity:1}}
+  @keyframes fadeInScale{
+    0%{opacity:0;transform:scale(.95)}
+    100%{opacity:1;transform:scale(1)}
+  }
+
+  /* ============ ANIMATIONS ============ */
+  @keyframes waveShift{from{transform:translateX(0)}to{transform:translateX(-80px)}}
+  @keyframes waveShiftSlow{from{transform:translateX(0)}to{transform:translateX(-120px)}}
+  .wave-anim{animation:waveShift 4s linear infinite}
+  .wave-anim-slow{animation:waveShiftSlow 7s linear infinite}
+
+  @keyframes dropFall{
+    0%{transform:translateY(0);opacity:0}
+    10%{opacity:1}90%{opacity:1}
+    100%{transform:translateY(60px);opacity:0}
+  }
+  .drop{animation:dropFall 1.6s linear infinite}
+
+  @keyframes flowDash{to{stroke-dashoffset:-200}}
+  .flow{stroke-dasharray:6 8;animation:flowDash 4s linear infinite}
+  .flow-fast{stroke-dasharray:8 6;animation:flowDash 2s linear infinite}
+  .flow-slow{stroke-dasharray:6 10;animation:flowDash 6s linear infinite}
+
+  @keyframes tankRise{0%{transform:translateY(70px)}100%{transform:translateY(20px)}}
+  .tank-water-ok{animation:tankRise 6s ease-in-out infinite alternate}
+
+  @keyframes spill{0%{transform:translate(0,0);opacity:1}100%{transform:translate(var(--dx),120px);opacity:0}}
+  .spill-drop{animation:spill 1.8s ease-in infinite}
+
+  @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.04)}}
+  .pulse{animation:pulse 1.6s ease-in-out infinite;transform-origin:center}
+
+  @keyframes blink{0%,49%{opacity:1}50%,100%{opacity:.25}}
+  .blink{animation:blink 1s steps(2) infinite}
+
+  @keyframes shake{
+    0%,100%{transform:translate(0,0)}
+    25%{transform:translate(-2px,1px)}75%{transform:translate(2px,-1px)}
+  }
+  .shake{animation:shake .3s linear infinite}
+
+  /* PUMP IMPELLER ROTATION */
+  @keyframes impellerSpin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+  .impeller{
+    animation:impellerSpin 1.5s linear infinite;
+    transform-origin:center;transform-box:fill-box;
+  }
+  .impeller-fast{animation:impellerSpin .6s linear infinite;transform-origin:center;transform-box:fill-box}
+  .impeller-slow{animation:impellerSpin 3s linear infinite;transform-origin:center;transform-box:fill-box}
+  .impeller-stuck{animation:impellerSpin 8s linear infinite;transform-origin:center;transform-box:fill-box}
+
+  /* worker icon bounce */
+  @keyframes workerBob{
+    0%,100%{transform:translateY(0)}
+    50%{transform:translateY(-3px)}
+  }
+  .worker{animation:workerBob 1.2s ease-in-out infinite}
+
+  /* Pipe diameter expansion */
+  @keyframes diameterGrow{
+    0%{stroke-width:8}
+    50%{stroke-width:8}
+    100%{stroke-width:24}
+  }
+  .pipe-grow{animation:diameterGrow 3s ease-in-out forwards;animation-delay:1s}
+
+  /* VISCOUS FLOW - extra slow, sticky */
+  @keyframes flowDashViscous{to{stroke-dashoffset:-80}}
+  .flow-viscous{
+    stroke-dasharray:14 4;
+    animation:flowDashViscous 8s linear infinite;
+  }
+  /* Honey drips - slow falling */
+  @keyframes viscousDrip{
+    0%{transform:translateY(0) scaleY(1);opacity:0}
+    20%{opacity:1}
+    80%{opacity:1;transform:translateY(40px) scaleY(1.4)}
+    100%{transform:translateY(60px) scaleY(2);opacity:0}
+  }
+  .viscous-drip{animation:viscousDrip 4s ease-in infinite}
+
+  /* Water-like fast drip */
+  @keyframes fastDrip{
+    0%{transform:translateY(0);opacity:0}
+    15%{opacity:1}
+    100%{transform:translateY(70px);opacity:0}
+  }
+  .fast-drip{animation:fastDrip 1.2s linear infinite}
+
+  /* Ternium label warning glow */
+  @keyframes warningGlow{
+    0%,100%{filter:drop-shadow(0 0 4px #a02818)}
+    50%{filter:drop-shadow(0 0 12px #ff5733)}
+  }
+  .glow-warning{animation:warningGlow 2s ease-in-out infinite}
+
+  .diagram-label{
+    font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.25em;
+    text-transform:uppercase;fill:var(--cream);
+  }
+  .diagram-label.small{font-size:10px;letter-spacing:.2em}
+  .diagram-label.dark{fill:var(--ink)}
+  .diagram-callout{
+    font-family:'Playfair Display',serif;font-style:italic;font-size:14px;fill:var(--steel);
+  }
+
+  @keyframes highlightPulse{
+    0%,100%{stroke-opacity:.2;r:60}
+    50%{stroke-opacity:.9;r:75}
+  }
+  .spotlight{
+    fill:none;stroke:#e0b53a;stroke-width:3;
+    animation:highlightPulse 1.2s ease-in-out infinite;
+  }
+
+  .end-card{
+    position:absolute;inset:0;display:none;
+    align-items:center;justify-content:center;
+    background:rgba(5,13,26,.95);color:var(--cream);
+    z-index:70;flex-direction:column;gap:20px;
+    backdrop-filter:blur(8px);
+  }
+  .end-card.show{display:flex}
+  .end-card .baysa-end{
+    background:var(--baysa);color:#fff;padding:6px 18px;
+    font-family:'Bebas Neue';font-size:18px;letter-spacing:.4em;
+    border:1px solid var(--gold);
+  }
+  .end-card h2{font-family:'Bebas Neue';font-size:80px;letter-spacing:.1em;color:var(--gold);text-shadow:0 0 40px rgba(224,181,58,.4)}
+  .end-card p{font-family:'Playfair Display';font-style:italic;font-size:22px;max-width:600px;text-align:center;line-height:1.5}
+  .restart-btn{
+    background:var(--gold);color:var(--ink);border:none;
+    font-family:'Bebas Neue';font-size:20px;letter-spacing:.3em;
+    padding:16px 36px;cursor:pointer;
+    box-shadow:0 0 30px rgba(224,181,58,.3);
+    transition:all .2s;
+  }
+  .restart-btn:hover{background:var(--cream);transform:scale(1.05)}
+
+  @keyframes equationIn{
+    0%{opacity:0;transform:translateY(20px) scale(.9)}
+    100%{opacity:1;transform:translateY(0) scale(1)}
+  }
+  .equation-anim{animation:equationIn 1s .3s ease-out backwards}
+
+  /* Audio level visualization (when speaking) */
+  .audio-bars{
+    display:none;align-items:flex-end;gap:3px;height:30px;
+  }
+  .audio-bars.active{display:flex}
+  .audio-bar{
+    width:3px;background:var(--gold);
+    animation:audioBar .6s ease-in-out infinite;
+  }
+  .audio-bar:nth-child(1){animation-delay:0s;height:50%}
+  .audio-bar:nth-child(2){animation-delay:.1s;height:80%}
+  .audio-bar:nth-child(3){animation-delay:.2s;height:60%}
+  .audio-bar:nth-child(4){animation-delay:.3s;height:90%}
+  .audio-bar:nth-child(5){animation-delay:.4s;height:70%}
+  @keyframes audioBar{0%,100%{transform:scaleY(.5)}50%{transform:scaleY(1)}}
+
+  /* Splash screen for audio activation */
+  .splash{
+    position:fixed;inset:0;background:radial-gradient(ellipse at center,#1a2438 0%,#050d1a 70%);
+    display:flex;align-items:center;justify-content:center;flex-direction:column;gap:32px;
+    z-index:200;
+  }
+  .splash.hide{display:none}
+  .splash .baysa-presents{
+    font-family:'Bebas Neue';font-size:14px;letter-spacing:.5em;color:var(--gold);
+  }
+  .splash .baysa-presents .baysa-logo{
+    background:var(--baysa);color:#fff;padding:4px 14px;margin-right:14px;
+    border:1px solid var(--gold);
+  }
+  .splash .splash-title{
+    font-family:'Bebas Neue';font-size:clamp(48px,8vw,90px);
+    color:var(--cream);letter-spacing:.06em;line-height:.9;text-align:center;
+    text-shadow:0 4px 20px rgba(0,0,0,.8),0 0 60px rgba(224,181,58,.15);
+  }
+  .splash .splash-title .accent{color:var(--gold);font-family:'Playfair Display';font-style:italic}
+  .splash .splash-deck{
+    font-family:'Playfair Display';font-style:italic;font-size:18px;
+    color:var(--cream);opacity:.7;max-width:600px;text-align:center;line-height:1.5;
+  }
+  .splash .start-btn{
+    background:var(--gold);color:var(--ink);border:none;
+    font-family:'Bebas Neue';font-size:24px;letter-spacing:.4em;
+    padding:24px 48px;cursor:pointer;
+    box-shadow:0 0 40px rgba(224,181,58,.4);
+    transition:all .3s;display:flex;align-items:center;gap:16px;
+  }
+  .splash .start-btn:hover{background:#fff;transform:scale(1.04)}
+  .splash .start-btn svg{width:24px;height:24px;fill:var(--ink)}
+  .splash .audio-note{
+    font-family:'JetBrains Mono';font-size:10px;letter-spacing:.3em;
+    color:var(--steel);text-transform:uppercase;
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ SPLASH SCREEN (audio gate) ============ -->
+<div class="splash" id="splash">
+  <div class="baysa-presents"><span class="baysa-logo">BAYSA</span>PRESENTA</div>
+  <div class="splash-title">METALITEC<br><span class="accent">— el acueducto —</span></div>
+  <div class="splash-deck">
+    Una analogía sobre flujo, capacidad, horas-hombre y los dos cuellos de botella<br>
+    que ahogan las líneas de habilitado, armado y soldadura de Metalitec.
+  </div>
+  <button class="start-btn" id="startBtn">
+    <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+    INICIAR EXPERIENCIA
+  </button>
+  <div class="audio-note">▸ El video incluye narración con voz masculina y música ambiental · Active el sonido</div>
+</div>
+
+<div class="vignette"></div>
+<div class="grain"></div>
+<div class="light-rays"></div>
+
+<div class="stage">
+
+  <!-- Live indicator -->
+  <div class="live-indicator">
+    <span class="live-dot"></span>
+    <span class="live-text">BAYSA · LIVE</span>
+  </div>
+
+  <!-- ========== SCENE 1: TITLE ========== -->
+  <div class="scene-wrap" id="s1">
+    <svg class="scene" viewBox="0 0 1600 700" preserveAspectRatio="xMidYMid slice">
+      <defs>
+        <radialGradient id="bgGlow" cx="50%" cy="50%" r="60%">
+          <stop offset="0" stop-color="#1a2438"/>
+          <stop offset="1" stop-color="#050d1a"/>
+        </radialGradient>
+        <pattern id="grid" width="50" height="50" patternUnits="userSpaceOnUse">
+          <path d="M 50 0 L 0 0 0 50" fill="none" stroke="#e0b53a" stroke-width=".3" opacity=".15"/>
+        </pattern>
+        <linearGradient id="waterGradT" x1="0" x2="0" y1="0" y2="1">
+          <stop offset="0" stop-color="#3da5e0"/><stop offset="1" stop-color="#0a2845"/>
+        </linearGradient>
+      </defs>
+      <rect width="1600" height="700" fill="url(#bgGlow)"/>
+      <rect width="1600" height="700" fill="url(#grid)"/>
+      <g opacity=".25">
+        <path d="M0,560 Q400,520 800,560 T1600,560 L1600,700 L0,700 Z" fill="url(#waterGradT)"/>
+      </g>
+    </svg>
+    <div class="title-block">
+      <div class="baysa-presents"><span class="baysa-logo">BAYSA</span>PRESENTA</div>
+      <div class="kicker">CASO DE ESTUDIO · LEAN MANUFACTURING</div>
+      <h1 class="title">METALITEC<br><span class="accent">— el acueducto —</span></h1>
+      <div class="underline"></div>
+      <p class="deck">Flujo · Capacidad · Horas-Hombre · Materia Prima · Bombas · Cuellos de Botella</p>
+    </div>
+    <div class="hud">
+      <div class="hud-top">
+        <div class="brand"><span class="baysa-mark">BAYSA</span>METALITEC<span class="sub">FLOW · CAPACITY · LABOR · LOSS</span></div>
+        <div class="meta">BOBINA / ROLL<br><span class="scene-num">01</span>PRESENTACIÓN</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== SCENE 2: HEALTHY FLOW with PUMPS ========== -->
+  <div class="scene-wrap" id="s2">
+    <svg class="scene" viewBox="0 0 1600 700" preserveAspectRatio="xMidYMid slice">
+      <defs>
+        <!-- 3D-ish lake gradient -->
+        <radialGradient id="lakeG" cx="40%" cy="35%" r="70%">
+          <stop offset="0" stop-color="#5fc3f5"/>
+          <stop offset=".5" stop-color="#1e6fb8"/>
+          <stop offset="1" stop-color="#0a2845"/>
+        </radialGradient>
+        <linearGradient id="lakeShine" x1="0" x2="0" y1="0" y2="1">
+          <stop offset="0" stop-color="#a0d4ed" stop-opacity=".7"/>
+          <stop offset="1" stop-color="#a0d4ed" stop-opacity="0"/>
+        </linearGradient>
+        <!-- 3D pipe gradient -->
+        <linearGradient id="pipe3D" x1="0" x2="0" y1="0" y2="1">
+          <stop offset="0" stop-color="#3a4a60"/>
+          <stop offset=".3" stop-color="#7d8da4"/>
+          <stop offset=".6" stop-color="#5d6f86"/>
+          <stop offset="1" stop-color="#1a2838"/>
+        </linearGradient>
+        <linearGradient id="pipe3Dh" x1="0" x2="1" y1="0" y2="0">
+          <stop offset="0" stop-color="#3a4a60"/>
+          <stop offset=".3" stop-color="#7d8da4"/>
+          <stop offset=".7" stop-color="#5d6f86"/>
+          <stop offset="1" stop-color="#1a2838"/>
+        </linearGradient>
+        <!-- Tank with depth -->
+        <linearGradient id="tankShell" x1="0" x2="0" y1="0" y2="1">
+          <stop offset="0" stop-color="#a8b4c4"/>
+          <stop offset=".3" stop-color="#5d6f86"/>
+          <stop offset=".7" stop-color="#3d4d61"/>
+          <stop offset="1" stop-color="#1a2838"/>
+        </linearGradient>
+        <linearGradient id="tankWater" x1="0" x2="0" y1="0" y2="1">
+          <stop offset="0" stop-color="#5fc3f5" stop-opacity=".95"/>
+          <stop offset="1" stop-color="#0d3d6b"/>
+        </linearGradient>
+        <!-- Machine 3D -->
+        <linearGradient id="machine3D" x1="0" x2="1" y1="0" y2="0">
+          <stop offset="0" stop-color="#2a3849"/>
+          <stop offset=".3" stop-color="#5d6f86"/>
+          <stop offset="1" stop-color="#1a2838"/>
+        </linearGradient>
+        <!-- Pump body -->
+        <radialGradient id="pumpG" cx="40%" cy="40%" r="60%">
+          <stop offset="0" stop-color="#a8b4c4"/>
+          <stop offset=".7" stop-color="#3d4d61"/>
+          <stop offset="1" stop-color="#0a1628"/>
+        </radialGradient>
+        <pattern id="grid2" width="40" height="40" patternUnits="userSpaceOnUse">
+          <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#e0b53a" stroke-width=".3" opacity=".08"/>
+        </pattern>
+        <!-- Glow filter -->
+        <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+          <feGaussianBlur stdDeviation="3"/>
+          <feComponentTransfer><feFuncA type="linear" slope="2"/></feComponentTransfer>
+          <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+        <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+          <feGaussianBlur in="SourceAlpha" stdDeviation="3"/>
+          <feOffset dx="2" dy="4"/>
+          <feComponentTransfer><feFuncA type="linear" slope="0.6"/></feComponentTransfer>
+          <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+      </defs>
+      <rect width="1600" height="700" fill="url(#grid2)"/>
+
+      <!-- Ground line for depth -->
+      <line x1="0" y1="690" x2="1600" y2="690" stroke="#e0b53a" stroke-width=".5" opacity=".15"/>
+      <line x1="0" y1="660" x2="1600" y2="660" stroke="#e0b53a" stroke-width=".3" opacity=".1"/>
+
+      <!-- LAKE with 3D shading -->
+      <g id="lake-grp" filter="url(#shadow)">
+        <ellipse cx="180" cy="395" rx="170" ry="80" fill="#0a2845" opacity=".4"/>
+        <path d="M30,340 Q55,295 120,290 Q180,283 245,295 Q310,308 325,355 Q335,395 305,425 Q245,470 180,470 Q95,470 45,425 Q15,385 30,340 Z" fill="url(#lakeG)"/>
+        <path d="M55,335 Q120,310 200,318 Q280,326 310,355" fill="url(#lakeShine)" opacity=".7"/>
+        <g class="wave-anim-slow" opacity=".6">
+          <path d="M50,355 Q80,345 110,355 T170,355 T230,355 T290,355 T350,355" fill="none" stroke="#a0d4ed" stroke-width="1.5"/>
+          <path d="M50,375 Q80,365 110,375 T170,375 T230,375 T290,375 T350,375" fill="none" stroke="#a0d4ed" stroke-width="1.2"/>
+        </g>
+        <!-- Mountains 3D -->
+        <path d="M30,340 L75,225 L115,290 L155,210 L210,290 L265,250 L310,290 L325,355 Z" fill="#1a2838" opacity=".9"/>
+        <path d="M30,340 L60,265 L100,310 L140,240 L195,310 L255,265 L310,355 Z" fill="#3d4d61" opacity=".8"/>
+        <path d="M155,210 L175,235 L195,210" fill="#5d6f86" opacity=".7"/>
+        <text x="180" y="510" text-anchor="middle" class="diagram-label">LAGO DE ENTRADA</text>
+        <text x="180" y="528" text-anchor="middle" class="diagram-label small" fill="#5fc3f5">MATERIA PRIMA</text>
+        <circle id="spot-lake" class="spotlight" cx="180" cy="395" r="60" opacity="0"/>
+      </g>
+
+      <!-- intake pipe with 3D shading -->
+      <g filter="url(#shadow)">
+        <path d="M325,375 L460,375 L460,300 L560,300" fill="none" stroke="url(#pipe3Dh)" stroke-width="18" stroke-linecap="round"/>
+        <path d="M325,375 L460,375 L460,300 L560,300" fill="none" stroke="#1e6fb8" stroke-width="6" stroke-linecap="round" class="flow"/>
+      </g>
+
+      <!-- HABILITADO machines with 3D depth -->
+      <g id="machines-grp">
+        <text x="720" y="100" text-anchor="middle" class="diagram-label">MÁQUINAS DE HABILITADO</text>
+        <text x="720" y="118" text-anchor="middle" class="diagram-callout">— procesan el agua bruta —</text>
+
+        <g class="pulse" filter="url(#shadow)">
+          <!-- side panel for depth -->
+          <polygon points="650,310 660,300 660,170 650,180" fill="#1a2838"/>
+          <rect x="560" y="180" width="90" height="130" fill="url(#machine3D)"/>
+          <rect x="568" y="186" width="74" height="56" fill="#050d1a"/>
+          <rect x="572" y="192" width="20" height="14" fill="#5fc3f5" opacity=".95" filter="url(#glow)"/>
+          <rect x="595" y="192" width="20" height="14" fill="#5fc3f5" opacity=".7"/>
+          <rect x="618" y="192" width="20" height="14" fill="#5fc3f5" opacity=".5"/>
+          <circle cx="580" cy="270" r="10" fill="#0a1628" stroke="#7d8da4" stroke-width="1"/>
+          <circle cx="580" cy="270" r="5" fill="#e0b53a" filter="url(#glow)"/>
+          <circle cx="630" cy="270" r="10" fill="#0a1628" stroke="#7d8da4" stroke-width="1"/>
+          <rect x="565" y="305" width="80" height="6" fill="#3d4d61"/>
+          <text x="605" y="170" text-anchor="middle" font-family="JetBrains Mono" font-size="8" letter-spacing="2" fill="#e0b53a">HAB-01</text>
+        </g>
+        <g class="pulse" style="animation-delay:.3s" filter="url(#shadow)">
+          <polygon points="780,310 790,300 790,170 780,180" fill="#1a2838"/>
+          <rect x="690" y="180" width="90" height="130" fill="url(#machine3D)"/>
+          <rect x="698" y="186" width="74" height="56" fill="#050d1a"/>
+          <rect x="702" y="192" width="20" height="14" fill="#5fc3f5" opacity=".95" filter="url(#glow)"/>
+          <rect x="725" y="192" width="20" height="14" fill="#5fc3f5" opacity=".7"/>
+          <rect x="748" y="192" width="20" height="14" fill="#5fc3f5" opacity=".5"/>
+          <circle cx="710" cy="270" r="10" fill="#0a1628" stroke="#7d8da4" stroke-width="1"/>
+          <circle cx="710" cy="270" r="5" fill="#e0b53a" filter="url(#glow)"/>
+          <circle cx="760" cy="270" r="10" fill="#0a1628" stroke="#7d8da4" stroke-width="1"/>
+          <rect x="695" y="305" width="80" height="6" fill="#3d4d61"/>
+          <text x="735" y="170" text-anchor="middle" font-family="JetBrains Mono" font-size="8" letter-spacing="2" fill="#e0b53a">HAB-02</text>
+        </g>
+        <g class="pulse" style="animation-delay:.6s" filter="url(#shadow)">
+          <polygon points="910,310 920,300 920,170 910,180" fill="#1a2838"/>
+          <rect x="820" y="180" width="90" height="130" fill="url(#machine3D)"/>
+          <rect x="828" y="186" width="74" height="56" fill="#050d1a"/>
+          <rect x="832" y="192" width="20" height="14" fill="#5fc3f5" opacity=".95" filter="url(#glow)"/>
+          <rect x="855" y="192" width="20" height="14" fill="#5fc3f5" opacity=".7"/>
+          <rect x="878" y="192" width="20" height="14" fill="#5fc3f5" opacity=".5"/>
+          <circle cx="840" cy="270" r="10" fill="#0a1628" stroke="#7d8da4" stroke-width="1"/>
+          <circle cx="840" cy="270" r="5" fill="#e0b53a" filter="url(#glow)"/>
+          <circle cx="890" cy="270" r="10" fill="#0a1628" stroke="#7d8da4" stroke-width="1"/>
+          <rect x="825" y="305" width="80" height="6" fill="#3d4d61"/>
+          <text x="865" y="170" text-anchor="middle" font-family="JetBrains Mono" font-size="8" letter-spacing="2" fill="#e0b53a">HAB-03</text>
+        </g>
+        <circle id="spot-machines" class="spotlight" cx="735" cy="240" r="180" opacity="0"/>
+
+        <path d="M605,320 L605,360 L865,360 L865,320" fill="none" stroke="url(#pipe3Dh)" stroke-width="14" filter="url(#shadow)"/>
+        <path d="M735,320 L735,360" fill="none" stroke="url(#pipe3Dh)" stroke-width="14"/>
+        <path d="M735,360 L735,420" fill="none" stroke="url(#pipe3D)" stroke-width="18" filter="url(#shadow)"/>
+        <path d="M735,360 L735,420" fill="none" stroke="#1e6fb8" stroke-width="6" class="flow"/>
+      </g>
+
+      <!-- KANBAN TANK 3D -->
+      <g id="tank-grp">
+        <text x="735" y="445" text-anchor="middle" class="diagram-label">TANQUE KANBAN · WIP</text>
+        <!-- back face -->
+        <ellipse cx="735" cy="465" rx="85" ry="14" fill="#1a2838" opacity=".7"/>
+        <!-- main shell -->
+        <rect x="650" y="465" width="170" height="160" fill="url(#tankShell)" stroke="#0a1628" stroke-width="2" filter="url(#shadow)"/>
+        <!-- front bevel -->
+        <rect x="650" y="465" width="6" height="160" fill="#a8b4c4" opacity=".5"/>
+        <rect x="814" y="465" width="6" height="160" fill="#0a1628" opacity=".5"/>
+        <!-- inner -->
+        <rect x="660" y="475" width="150" height="140" fill="#0a1628" opacity=".7"/>
+        <clipPath id="tankClip"><rect x="662" y="477" width="146" height="136"/></clipPath>
+        <g clip-path="url(#tankClip)">
+          <g class="tank-water-ok">
+            <rect x="660" y="540" width="150" height="200" fill="url(#tankWater)"/>
+            <g class="wave-anim">
+              <path d="M620,540 Q650,530 680,540 T740,540 T800,540 T860,540 L860,580 L620,580 Z" fill="#5fc3f5" opacity=".5"/>
+            </g>
+          </g>
+        </g>
+        <!-- top opening -->
+        <ellipse cx="735" cy="465" rx="80" ry="10" fill="none" stroke="#0a1628" stroke-width="2"/>
+        <ellipse cx="735" cy="465" rx="80" ry="10" fill="#050d1a"/>
+        <!-- level marks -->
+        <g stroke="#e0b53a" stroke-width="1" opacity=".6">
+          <line x1="640" y1="495" x2="650" y2="495"/>
+          <line x1="640" y1="540" x2="650" y2="540"/>
+          <line x1="640" y1="585" x2="650" y2="585"/>
+        </g>
+        <text x="635" y="499" text-anchor="end" class="diagram-label small" fill="#e0b53a">MAX</text>
+        <text x="635" y="589" text-anchor="end" class="diagram-label small" fill="#e0b53a">MIN</text>
+        <!-- valve at bottom -->
+        <circle cx="735" cy="625" r="14" fill="url(#pumpG)" stroke="#0a1628" stroke-width="2"/>
+        <circle cx="735" cy="625" r="5" fill="#e0b53a" filter="url(#glow)"/>
+        <circle id="spot-tank" class="spotlight" cx="735" cy="545" r="120" opacity="0"/>
+      </g>
+
+      <!-- 3 lines + PUMPS -->
+      <g id="lines-grp">
+        <!-- Manifold pipe -->
+        <path d="M735,625 L735,665 L1080,665" fill="none" stroke="url(#pipe3Dh)" stroke-width="14" filter="url(#shadow)"/>
+        <path d="M735,625 L735,665 L1080,665" fill="none" stroke="#1e6fb8" stroke-width="6" class="flow"/>
+
+        <!-- Branch pipes -->
+        <path d="M1080,665 L1080,580 L1180,580" fill="none" stroke="url(#pipe3Dh)" stroke-width="14"/>
+        <path d="M1080,665 L1180,665" fill="none" stroke="url(#pipe3Dh)" stroke-width="14"/>
+
+        <path d="M1080,665 L1080,580 L1180,580" fill="none" stroke="#1e6fb8" stroke-width="5" class="flow-fast"/>
+        <path d="M1080,665 L1180,665" fill="none" stroke="#1e6fb8" stroke-width="5" class="flow-fast"/>
+
+        <!-- ============ PUMPS at end of pipes ============ -->
+        <!-- Pump 1 (L1) -->
+        <g transform="translate(1230,580)" filter="url(#shadow)">
+          <!-- pump body cylinder -->
+          <ellipse cx="0" cy="0" rx="36" ry="36" fill="url(#pumpG)" stroke="#0a1628" stroke-width="2"/>
+          <!-- impeller (rotating) -->
+          <g class="impeller">
+            <path d="M0,-22 L6,-6 L22,-3 L8,5 L14,22 L0,12 L-14,22 L-8,5 L-22,-3 L-6,-6 Z" fill="#e0b53a" opacity=".9" filter="url(#glow)"/>
+          </g>
+          <circle cx="0" cy="0" r="6" fill="#0a1628"/>
+          <!-- HP label -->
+          <text x="0" y="-50" text-anchor="middle" font-family="Bebas Neue" font-size="14" fill="#e0b53a" letter-spacing="2">5 HP</text>
+          <!-- Output pipe -->
+          <rect x="32" y="-8" width="28" height="16" fill="url(#pipe3Dh)"/>
+        </g>
+        <text x="1300" y="585" class="diagram-label small">L1 · ARMADO</text>
+
+        <!-- Pump 2 (L2) -->
+        <g transform="translate(1230,665)" filter="url(#shadow)">
+          <ellipse cx="0" cy="0" rx="36" ry="36" fill="url(#pumpG)" stroke="#0a1628" stroke-width="2"/>
+          <g class="impeller" style="animation-delay:.3s">
+            <path d="M0,-22 L6,-6 L22,-3 L8,5 L14,22 L0,12 L-14,22 L-8,5 L-22,-3 L-6,-6 Z" fill="#e0b53a" opacity=".9" filter="url(#glow)"/>
+          </g>
+          <circle cx="0" cy="0" r="6" fill="#0a1628"/>
+          <text x="0" y="-50" text-anchor="middle" font-family="Bebas Neue" font-size="14" fill="#e0b53a" letter-spacing="2">5 HP</text>
+          <rect x="32" y="-8" width="28" height="16" fill="url(#pipe3Dh)"/>
+        </g>
+        <text x="1300" y="670" class="diagram-label small">L2 · SOLDADURA</text>
+
+        <text x="1240" y="555" text-anchor="middle" class="diagram-label">BOMBAS · SUCCIONAN DEL TANQUE</text>
+        <text x="1240" y="700" text-anchor="middle" class="diagram-callout">los HP dependen de las HH</text>
+        <circle id="spot-lines" class="spotlight" cx="1240" cy="630" r="160" opacity="0"/>
+      </g>
+    </svg>
+    <div class="hud">
+      <div class="hud-top">
+        <div class="brand"><span class="baysa-mark">BAYSA</span>METALITEC<span class="sub">FLOW · CAPACITY · LABOR · LOSS</span></div>
+        <div class="meta">BOBINA / ROLL<br><span class="scene-num">02</span>EL ACUEDUCTO IDEAL</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== SCENE 3: HH = DIAMETER + PUMP HP ========== -->
+  <div class="scene-wrap" id="s3">
+    <svg class="scene" viewBox="0 0 1600 700" preserveAspectRatio="xMidYMid slice">
+      <defs>
+        <radialGradient id="pumpGB" cx="40%" cy="40%" r="60%">
+          <stop offset="0" stop-color="#a8b4c4"/>
+          <stop offset=".7" stop-color="#3d4d61"/>
+          <stop offset="1" stop-color="#0a1628"/>
+        </radialGradient>
+        <linearGradient id="pipeBlue" x1="0" x2="0" y1="0" y2="1">
+          <stop offset="0" stop-color="#7d8da4"/>
+          <stop offset=".5" stop-color="#3d4d61"/>
+          <stop offset="1" stop-color="#1a2838"/>
+        </linearGradient>
+        <pattern id="grid3" width="40" height="40" patternUnits="userSpaceOnUse">
+          <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#e0b53a" stroke-width=".3" opacity=".08"/>
+        </pattern>
+      </defs>
+      <rect width="1600" height="700" fill="url(#grid3)"/>
+
+      <g>
+        <text x="100" y="80" font-family="Bebas Neue" font-size="50" fill="#f4ede0" letter-spacing="6">EL DIÁMETRO ES LA GENTE</text>
+        <text x="100" y="110" font-family="Playfair Display" font-style="italic" font-size="20" fill="#a8b4c4">la capacidad de cada tubería = horas-hombre · los HP de cada bomba = HH instaladas</text>
+        <line x1="100" y1="130" x2="700" y2="130" stroke="#e0b53a" stroke-width="2"/>
+      </g>
+
+      <!-- Equation -->
+      <g class="equation-anim" transform="translate(800,220)" text-anchor="middle">
+        <rect x="-400" y="-60" width="800" height="100" rx="6" fill="#0a1628" stroke="#e0b53a" stroke-width="1"/>
+        <text y="-22" font-family="Bebas Neue" font-size="26" fill="#e0b53a" letter-spacing="4">ECUACIÓN DEL ACUEDUCTO METALITEC</text>
+        <text y="22" font-family="Bebas Neue" font-size="36" fill="#f4ede0" letter-spacing="3">
+          <tspan fill="#5fc3f5">CAUDAL</tspan>
+          <tspan> = </tspan>
+          <tspan fill="#e0b53a">DIÁMETRO</tspan>
+          <tspan> × </tspan>
+          <tspan fill="#9c5fc4">POTENCIA DE BOMBA</tspan>
+        </text>
+      </g>
+      <g class="equation-anim" transform="translate(800,310)" text-anchor="middle" style="animation-delay:1.2s">
+        <text y="0" font-family="Playfair Display" font-style="italic" font-size="20" fill="#a8b4c4">y ambas dependen de lo mismo:</text>
+        <text y="36" font-family="Bebas Neue" font-size="32" fill="#f4ede0" letter-spacing="3">
+          <tspan fill="#9c5fc4">HORAS-HOMBRE</tspan>
+          <tspan> EN LA LÍNEA</tspan>
+        </text>
+      </g>
+
+      <!-- 3 LINE COMPARISONS with pipes + pumps -->
+      <g transform="translate(0,420)">
+        <text x="800" y="0" text-anchor="middle" font-family="JetBrains Mono" font-size="11" letter-spacing="3" fill="#e0b53a">MÁS PERSONAS = MÁS DIÁMETRO = MÁS HP = MÁS CAUDAL</text>
+
+        <!-- Skinny pipe + small pump -->
+        <g transform="translate(120,80)">
+          <rect x="0" y="-8" width="240" height="16" fill="url(#pipeBlue)" stroke="#0a1628" stroke-width=".5"/>
+          <rect x="0" y="-3" width="240" height="6" fill="#1e6fb8" class="flow-slow"/>
+          <!-- small pump -->
+          <g transform="translate(280,0)">
+            <ellipse cx="0" cy="0" rx="22" ry="22" fill="url(#pumpGB)" stroke="#0a1628" stroke-width="1.5"/>
+            <g class="impeller-stuck">
+              <path d="M0,-12 L4,-3 L12,-2 L4,3 L8,12 L0,7 L-8,12 L-4,3 L-12,-2 L-4,-3 Z" fill="#a02818"/>
+            </g>
+            <circle cx="0" cy="0" r="3" fill="#0a1628"/>
+            <text x="0" y="-32" text-anchor="middle" font-family="Bebas Neue" font-size="14" fill="#a02818">2 HP</text>
+          </g>
+          <!-- workers -->
+          <g transform="translate(330,0)" class="worker">
+            <circle cx="0" cy="-15" r="8" fill="#9c5fc4"/>
+            <rect x="-7" y="-7" width="14" height="20" fill="#9c5fc4"/>
+            <line x1="-10" y1="0" x2="-15" y2="10" stroke="#9c5fc4" stroke-width="3"/>
+            <line x1="10" y1="0" x2="15" y2="10" stroke="#9c5fc4" stroke-width="3"/>
+          </g>
+          <text x="170" y="36" text-anchor="middle" font-family="JetBrains Mono" font-size="10" letter-spacing="2" fill="#a8b4c4">1 PERSONA · 8 HH/DÍA</text>
+          <text x="170" y="54" text-anchor="middle" font-family="Playfair Display" font-style="italic" font-size="13" fill="#a02818">tubería angosta · bomba débil</text>
+        </g>
+
+        <!-- Medium pipe + medium pump -->
+        <g transform="translate(580,80)">
+          <rect x="0" y="-15" width="240" height="30" fill="url(#pipeBlue)" stroke="#0a1628" stroke-width=".5"/>
+          <rect x="0" y="-7" width="240" height="14" fill="#1e6fb8" class="flow"/>
+          <g transform="translate(280,0)">
+            <ellipse cx="0" cy="0" rx="28" ry="28" fill="url(#pumpGB)" stroke="#0a1628" stroke-width="2"/>
+            <g class="impeller-slow">
+              <path d="M0,-16 L5,-4 L16,-2 L6,4 L10,16 L0,10 L-10,16 L-6,4 L-16,-2 L-5,-4 Z" fill="#e0b53a"/>
+            </g>
+            <circle cx="0" cy="0" r="4" fill="#0a1628"/>
+            <text x="0" y="-40" text-anchor="middle" font-family="Bebas Neue" font-size="14" fill="#e0b53a">5 HP</text>
+          </g>
+          <g transform="translate(335,0)" class="worker">
+            <circle cx="0" cy="-15" r="8" fill="#9c5fc4"/>
+            <rect x="-7" y="-7" width="14" height="20" fill="#9c5fc4"/>
+            <line x1="-10" y1="0" x2="-15" y2="10" stroke="#9c5fc4" stroke-width="3"/>
+            <line x1="10" y1="0" x2="15" y2="10" stroke="#9c5fc4" stroke-width="3"/>
+          </g>
+          <g transform="translate(355,0)" class="worker" style="animation-delay:.3s">
+            <circle cx="0" cy="-15" r="8" fill="#9c5fc4"/>
+            <rect x="-7" y="-7" width="14" height="20" fill="#9c5fc4"/>
+            <line x1="-10" y1="0" x2="-15" y2="10" stroke="#9c5fc4" stroke-width="3"/>
+            <line x1="10" y1="0" x2="15" y2="10" stroke="#9c5fc4" stroke-width="3"/>
+          </g>
+          <text x="170" y="44" text-anchor="middle" font-family="JetBrains Mono" font-size="10" letter-spacing="2" fill="#a8b4c4">2 PERSONAS · 16 HH/DÍA</text>
+          <text x="170" y="62" text-anchor="middle" font-family="Playfair Display" font-style="italic" font-size="13" fill="#e0b53a">capacidad media</text>
+        </g>
+
+        <!-- Wide pipe + big pump -->
+        <g transform="translate(1040,80)">
+          <rect x="0" y="-25" width="240" height="50" fill="url(#pipeBlue)" stroke="#0a1628" stroke-width=".5"/>
+          <rect x="0" y="-12" width="240" height="24" fill="#1e6fb8" class="flow-fast"/>
+          <g transform="translate(280,0)">
+            <ellipse cx="0" cy="0" rx="38" ry="38" fill="url(#pumpGB)" stroke="#0a1628" stroke-width="2"/>
+            <g class="impeller-fast">
+              <path d="M0,-22 L6,-6 L22,-3 L8,5 L14,22 L0,12 L-14,22 L-8,5 L-22,-3 L-6,-6 Z" fill="#5fc3f5" filter="url(#glow)"/>
+            </g>
+            <circle cx="0" cy="0" r="6" fill="#0a1628"/>
+            <text x="0" y="-50" text-anchor="middle" font-family="Bebas Neue" font-size="16" fill="#5fc3f5" letter-spacing="2">10 HP</text>
+          </g>
+          <g transform="translate(345,0)" class="worker">
+            <circle cx="0" cy="-15" r="8" fill="#9c5fc4"/>
+            <rect x="-7" y="-7" width="14" height="20" fill="#9c5fc4"/>
+            <line x1="-10" y1="0" x2="-15" y2="10" stroke="#9c5fc4" stroke-width="3"/>
+            <line x1="10" y1="0" x2="15" y2="10" stroke="#9c5fc4" stroke-width="3"/>
+          </g>
+          <g transform="translate(365,0)" class="worker" style="animation-delay:.2s">
+            <circle cx="0" cy="-15" r="8" fill="#9c5fc4"/>
+            <rect x="-7" y="-7" width="14" height="20" fill="#9c5fc4"/>
+            <line x1="-10" y1="0" x2="-15" y2="10" stroke="#9c5fc4" stroke-width="3"/>
+            <line x1="10" y1="0" x2="15" y2="10" stroke="#9c5fc4" stroke-width="3"/>
+          </g>
+          <g transform="translate(385,0)" class="worker" style="animation-delay:.4s">
+            <circle cx="0" cy="-15" r="8" fill="#9c5fc4"/>
+            <rect x="-7" y="-7" width="14" height="20" fill="#9c5fc4"/>
+            <line x1="-10" y1="0" x2="-15" y2="10" stroke="#9c5fc4" stroke-width="3"/>
+            <line x1="10" y1="0" x2="15" y2="10" stroke="#9c5fc4" stroke-width="3"/>
+          </g>
+          <g transform="translate(405,0)" class="worker" style="animation-delay:.6s">
+            <circle cx="0" cy="-15" r="8" fill="#9c5fc4"/>
+            <rect x="-7" y="-7" width="14" height="20" fill="#9c5fc4"/>
+            <line x1="-10" y1="0" x2="-15" y2="10" stroke="#9c5fc4" stroke-width="3"/>
+            <line x1="10" y1="0" x2="15" y2="10" stroke="#9c5fc4" stroke-width="3"/>
+          </g>
+          <text x="170" y="54" text-anchor="middle" font-family="JetBrains Mono" font-size="10" letter-spacing="2" fill="#a8b4c4">4 PERSONAS · 32 HH/DÍA</text>
+          <text x="170" y="72" text-anchor="middle" font-family="Playfair Display" font-style="italic" font-size="13" fill="#5fc3f5">capacidad máxima</text>
+        </g>
+      </g>
+    </svg>
+    <div class="hud">
+      <div class="hud-top">
+        <div class="brand"><span class="baysa-mark">BAYSA</span>METALITEC<span class="sub">FLOW · CAPACITY · LABOR · LOSS</span></div>
+        <div class="meta">BOBINA / ROLL<br><span class="scene-num">03</span>HH = DIÁMETRO + HP</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== SCENE 4: VISCOSITY = HH/TON (Ternium vs Frezco) ========== -->
+  <div class="scene-wrap" id="s4">
+    <svg class="scene" viewBox="0 0 1600 700" preserveAspectRatio="xMidYMid slice">
+      <defs>
+        <pattern id="grid4v" width="40" height="40" patternUnits="userSpaceOnUse">
+          <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#e0b53a" stroke-width=".3" opacity=".08"/>
+        </pattern>
+        <!-- Honey/heavy fluid for Ternium -->
+        <linearGradient id="terniumFluid" x1="0" x2="0" y1="0" y2="1">
+          <stop offset="0" stop-color="#a02818"/>
+          <stop offset=".5" stop-color="#ff5733"/>
+          <stop offset="1" stop-color="#7a1f12"/>
+        </linearGradient>
+        <linearGradient id="terniumPipe" x1="0" x2="0" y1="0" y2="1">
+          <stop offset="0" stop-color="#7d8da4"/>
+          <stop offset=".5" stop-color="#3d4d61"/>
+          <stop offset="1" stop-color="#1a2838"/>
+        </linearGradient>
+        <!-- Water-like Frezco -->
+        <linearGradient id="frezcoFluid" x1="0" x2="0" y1="0" y2="1">
+          <stop offset="0" stop-color="#5fc3f5"/>
+          <stop offset=".5" stop-color="#1e6fb8"/>
+          <stop offset="1" stop-color="#0a2845"/>
+        </linearGradient>
+        <radialGradient id="dropletG" cx="40%" cy="30%" r="60%">
+          <stop offset="0" stop-color="#a0d4ed"/>
+          <stop offset="1" stop-color="#1e6fb8"/>
+        </radialGradient>
+        <radialGradient id="dropletGR" cx="40%" cy="30%" r="60%">
+          <stop offset="0" stop-color="#ff8a6b"/>
+          <stop offset="1" stop-color="#a02818"/>
+        </radialGradient>
+      </defs>
+      <rect width="1600" height="700" fill="url(#grid4v)"/>
+
+      <!-- Title -->
+      <g>
+        <text x="100" y="80" font-family="Bebas Neue" font-size="50" fill="#f4ede0" letter-spacing="6">LA VISCOSIDAD ES EL ESFUERZO</text>
+        <text x="100" y="110" font-family="Playfair Display" font-style="italic" font-size="20" fill="#a8b4c4">cada pieza tiene su densidad: HH/ton  ·  más HH/ton, más viscosa, más lento fluye</text>
+        <line x1="100" y1="130" x2="700" y2="130" stroke="#e0b53a" stroke-width="2"/>
+      </g>
+
+      <!-- Equation block -->
+      <g class="equation-anim" transform="translate(800,200)" text-anchor="middle">
+        <rect x="-420" y="-50" width="840" height="80" rx="6" fill="#0a1628" stroke="#e0b53a" stroke-width="1"/>
+        <text y="-15" font-family="Bebas Neue" font-size="22" fill="#e0b53a" letter-spacing="4">PRINCIPIO HIDRÁULICO</text>
+        <text y="18" font-family="Bebas Neue" font-size="32" fill="#f4ede0" letter-spacing="3">
+          <tspan fill="#a02818">VISCOSIDAD ALTA</tspan>
+          <tspan> = </tspan>
+          <tspan fill="#ff5733">FLUJO LENTO</tspan>
+          <tspan>  ·  </tspan>
+          <tspan fill="#5fc3f5">VISCOSIDAD BAJA</tspan>
+          <tspan> = </tspan>
+          <tspan fill="#5fc3f5">FLUJO RÁPIDO</tspan>
+        </text>
+      </g>
+
+      <!-- Comparison: TWO TUBES side by side -->
+      <g transform="translate(0,300)">
+
+        <!-- ============ TERNIUM tube (heavy, slow) ============ -->
+        <g transform="translate(80,0)" class="glow-warning">
+          <!-- project header -->
+          <g>
+            <rect x="0" y="0" width="700" height="56" fill="#a02818" stroke="#0a1628" stroke-width="2"/>
+            <text x="20" y="36" font-family="Bebas Neue" font-size="28" fill="#f4ede0" letter-spacing="3">PROYECTO TERNIUM</text>
+            <text x="690" y="36" text-anchor="end" font-family="Bebas Neue" font-size="32" fill="#e0b53a" letter-spacing="2">90 HH/TON</text>
+          </g>
+
+          <!-- pipe -->
+          <g transform="translate(0,90)">
+            <rect x="20" y="-22" width="640" height="44" fill="url(#terniumPipe)" stroke="#0a1628" stroke-width="1"/>
+            <!-- viscous fluid (slow flow with thick dashes) -->
+            <rect x="22" y="-18" width="636" height="36" fill="url(#terniumFluid)"/>
+            <line x1="22" y1="0" x2="658" y2="0" stroke="#7a1f12" stroke-width="34" class="flow-viscous" opacity=".5"/>
+            <!-- viscous drips falling slowly -->
+            <ellipse cx="100" cy="22" rx="6" ry="9" fill="url(#dropletGR)" class="viscous-drip" style="animation-duration:5s"/>
+            <ellipse cx="280" cy="22" rx="7" ry="11" fill="url(#dropletGR)" class="viscous-drip" style="animation-duration:5.5s;animation-delay:1.2s"/>
+            <ellipse cx="450" cy="22" rx="6" ry="10" fill="url(#dropletGR)" class="viscous-drip" style="animation-duration:5s;animation-delay:2.4s"/>
+            <ellipse cx="600" cy="22" rx="7" ry="11" fill="url(#dropletGR)" class="viscous-drip" style="animation-duration:6s;animation-delay:.6s"/>
+            <!-- pump at end -->
+            <ellipse cx="680" cy="0" rx="22" ry="22" fill="#3d4d61" stroke="#0a1628" stroke-width="2"/>
+            <g class="impeller-stuck">
+              <path d="M0,-12 L4,-3 L12,-2 L4,3 L8,12 L0,7 L-8,12 L-4,3 L-12,-2 L-4,-3 Z" fill="#a02818" transform="translate(680,0)"/>
+            </g>
+            <text x="680" y="-32" text-anchor="middle" font-family="Bebas Neue" font-size="12" fill="#a02818">LENTA</text>
+          </g>
+
+          <!-- attributes -->
+          <g transform="translate(0,150)" font-family="JetBrains Mono" font-size="11" fill="#f4ede0">
+            <text x="20" y="0" letter-spacing="2">▸ DENSIDAD</text>
+            <text x="200" y="0" font-family="Bebas Neue" font-size="14" fill="#ff5733">ALTA</text>
+            <text x="280" y="0" letter-spacing="2">▸ VELOCIDAD</text>
+            <text x="460" y="0" font-family="Bebas Neue" font-size="14" fill="#ff5733">↓ BAJA</text>
+            <text x="20" y="22" letter-spacing="2">▸ ESFUERZO POR PIEZA</text>
+            <text x="200" y="22" font-family="Bebas Neue" font-size="14" fill="#ff5733">ALTO</text>
+            <text x="280" y="22" letter-spacing="2">▸ TIEMPO DE PROCESO</text>
+            <text x="460" y="22" font-family="Bebas Neue" font-size="14" fill="#ff5733">3.7x MÁS</text>
+          </g>
+
+          <!-- speedometer-style velocity bar -->
+          <g transform="translate(0,210)">
+            <rect x="20" y="0" width="640" height="14" fill="#0a1628" stroke="#3d4d61" stroke-width="1"/>
+            <rect x="22" y="2" width="170" height="10" fill="#a02818"/>
+            <text x="20" y="36" font-family="JetBrains Mono" font-size="9" letter-spacing="3" fill="#a8b4c4">VELOCIDAD DE FLUJO</text>
+            <text x="660" y="36" text-anchor="end" font-family="Bebas Neue" font-size="14" fill="#ff5733">25%</text>
+          </g>
+        </g>
+      </g>
+
+      <!-- Vertical divider -->
+      <line x1="800" y1="320" x2="800" y2="630" stroke="#3d4d61" stroke-width="1" stroke-dasharray="4 4" opacity=".5"/>
+
+      <!-- ============ FREZCO tube (light, fast) ============ -->
+      <g transform="translate(820,300)">
+        <g>
+          <rect x="0" y="0" width="700" height="56" fill="#1e6fb8" stroke="#0a1628" stroke-width="2"/>
+          <text x="20" y="36" font-family="Bebas Neue" font-size="28" fill="#f4ede0" letter-spacing="3">PROYECTO FREZCO</text>
+          <text x="690" y="36" text-anchor="end" font-family="Bebas Neue" font-size="32" fill="#e0b53a" letter-spacing="2">24 HH/TON</text>
+        </g>
+
+        <!-- pipe -->
+        <g transform="translate(0,90)">
+          <rect x="20" y="-22" width="640" height="44" fill="url(#terniumPipe)" stroke="#0a1628" stroke-width="1"/>
+          <rect x="22" y="-18" width="636" height="36" fill="url(#frezcoFluid)"/>
+          <line x1="22" y1="0" x2="658" y2="0" stroke="#5fc3f5" stroke-width="34" class="flow-fast" opacity=".4"/>
+          <!-- fast water drips -->
+          <circle cx="80" cy="22" r="4" fill="url(#dropletG)" class="fast-drip"/>
+          <circle cx="160" cy="22" r="3" fill="url(#dropletG)" class="fast-drip" style="animation-delay:.2s"/>
+          <circle cx="240" cy="22" r="4" fill="url(#dropletG)" class="fast-drip" style="animation-delay:.4s"/>
+          <circle cx="320" cy="22" r="3" fill="url(#dropletG)" class="fast-drip" style="animation-delay:.6s"/>
+          <circle cx="400" cy="22" r="4" fill="url(#dropletG)" class="fast-drip" style="animation-delay:.8s"/>
+          <circle cx="480" cy="22" r="3" fill="url(#dropletG)" class="fast-drip" style="animation-delay:1s"/>
+          <circle cx="560" cy="22" r="4" fill="url(#dropletG)" class="fast-drip" style="animation-delay:1.2s"/>
+          <circle cx="620" cy="22" r="3" fill="url(#dropletG)" class="fast-drip" style="animation-delay:1.4s"/>
+          <!-- fast pump -->
+          <ellipse cx="680" cy="0" rx="22" ry="22" fill="#3d4d61" stroke="#0a1628" stroke-width="2"/>
+          <g class="impeller-fast">
+            <path d="M0,-14 L5,-4 L14,-2 L5,3 L10,14 L0,8 L-10,14 L-5,3 L-14,-2 L-5,-4 Z" fill="#5fc3f5" filter="url(#glow)" transform="translate(680,0)"/>
+          </g>
+          <text x="680" y="-32" text-anchor="middle" font-family="Bebas Neue" font-size="12" fill="#5fc3f5">RÁPIDA</text>
+        </g>
+
+        <!-- attributes -->
+        <g transform="translate(0,150)" font-family="JetBrains Mono" font-size="11" fill="#f4ede0">
+          <text x="20" y="0" letter-spacing="2">▸ DENSIDAD</text>
+          <text x="200" y="0" font-family="Bebas Neue" font-size="14" fill="#5fc3f5">BAJA</text>
+          <text x="280" y="0" letter-spacing="2">▸ VELOCIDAD</text>
+          <text x="460" y="0" font-family="Bebas Neue" font-size="14" fill="#5fc3f5">↑ ALTA</text>
+          <text x="20" y="22" letter-spacing="2">▸ ESFUERZO POR PIEZA</text>
+          <text x="200" y="22" font-family="Bebas Neue" font-size="14" fill="#5fc3f5">BAJO</text>
+          <text x="280" y="22" letter-spacing="2">▸ TIEMPO DE PROCESO</text>
+          <text x="460" y="22" font-family="Bebas Neue" font-size="14" fill="#5fc3f5">REFERENCIA</text>
+        </g>
+
+        <!-- velocity bar -->
+        <g transform="translate(0,210)">
+          <rect x="20" y="0" width="640" height="14" fill="#0a1628" stroke="#3d4d61" stroke-width="1"/>
+          <rect x="22" y="2" width="630" height="10" fill="#5fc3f5" filter="url(#glow)"/>
+          <text x="20" y="36" font-family="JetBrains Mono" font-size="9" letter-spacing="3" fill="#a8b4c4">VELOCIDAD DE FLUJO</text>
+          <text x="660" y="36" text-anchor="end" font-family="Bebas Neue" font-size="14" fill="#5fc3f5">95%</text>
+        </g>
+      </g>
+
+      <!-- Bottom insight strip -->
+      <g transform="translate(80,650)">
+        <text x="0" y="0" font-family="Playfair Display" font-style="italic" font-size="16" fill="#e0b53a">la misma planta · las mismas tuberías · pero un fluido casi cuatro veces más espeso</text>
+      </g>
+    </svg>
+    <div class="hud">
+      <div class="hud-top">
+        <div class="brand"><span class="baysa-mark">BAYSA</span>METALITEC<span class="sub">FLOW · CAPACITY · LABOR · LOSS</span></div>
+        <div class="meta">BOBINA / ROLL<br><span class="scene-num">04</span>VISCOSIDAD = HH/TON</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== SCENE 5: DROUGHT — RAW MATERIAL LATE / INCOMPLETE ========== -->
+  <div class="scene-wrap" id="s5">
+    <svg class="scene" viewBox="0 0 1600 700" preserveAspectRatio="xMidYMid slice">
+      <defs>
+        <pattern id="grid5d" width="40" height="40" patternUnits="userSpaceOnUse">
+          <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#e0b53a" stroke-width=".3" opacity=".08"/>
+        </pattern>
+        <!-- Cracked dry lake gradient -->
+        <radialGradient id="dryLake" cx="40%" cy="35%" r="70%">
+          <stop offset="0" stop-color="#7a6450"/>
+          <stop offset=".5" stop-color="#5a4a38"/>
+          <stop offset="1" stop-color="#2a2018"/>
+        </radialGradient>
+        <linearGradient id="pipe3DhD" x1="0" x2="1" y1="0" y2="0">
+          <stop offset="0" stop-color="#3a4a60"/>
+          <stop offset=".3" stop-color="#7d8da4"/>
+          <stop offset=".7" stop-color="#5d6f86"/>
+          <stop offset="1" stop-color="#1a2838"/>
+        </linearGradient>
+        <linearGradient id="machineDryG" x1="0" x2="1" y1="0" y2="0">
+          <stop offset="0" stop-color="#2a3849"/>
+          <stop offset=".3" stop-color="#4d5d72"/>
+          <stop offset="1" stop-color="#1a2838"/>
+        </linearGradient>
+        <filter id="shadowD" x="-20%" y="-20%" width="140%" height="140%">
+          <feGaussianBlur in="SourceAlpha" stdDeviation="3"/>
+          <feOffset dx="2" dy="4"/>
+          <feComponentTransfer><feFuncA type="linear" slope="0.6"/></feComponentTransfer>
+          <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+        <filter id="glowD" x="-50%" y="-50%" width="200%" height="200%">
+          <feGaussianBlur stdDeviation="3"/>
+          <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+      </defs>
+      <rect width="1600" height="700" fill="url(#grid5d)"/>
+
+      <!-- Title banner -->
+      <g>
+        <text x="800" y="60" text-anchor="middle" font-family="Bebas Neue" font-size="42" fill="#ff5733" letter-spacing="6" class="blink">CUELLO DE BOTELLA Nº 1</text>
+        <text x="800" y="92" text-anchor="middle" font-family="Playfair Display" font-style="italic" font-size="20" fill="#f4ede0">la materia prima no llega completa · ni a tiempo</text>
+      </g>
+
+      <!-- ========== DRIED-UP LAKE ========== -->
+      <g filter="url(#shadowD)">
+        <!-- Cracked earth bed where lake should be -->
+        <ellipse cx="180" cy="395" rx="170" ry="80" fill="#3a2d20" opacity=".5"/>
+        <path d="M30,340 Q55,295 120,290 Q180,283 245,295 Q310,308 325,355 Q335,395 305,425 Q245,470 180,470 Q95,470 45,425 Q15,385 30,340 Z" fill="url(#dryLake)"/>
+        <!-- Cracks in the dry bed -->
+        <g stroke="#1a1208" stroke-width="2" fill="none" opacity=".7">
+          <path d="M60,360 L120,380 L100,420 L150,440"/>
+          <path d="M180,310 L200,360 L240,380 L260,430"/>
+          <path d="M280,330 L260,370 L290,400"/>
+          <path d="M80,400 L130,420 L160,450"/>
+          <path d="M200,400 L230,420 L210,460"/>
+        </g>
+        <!-- Tiny puddle remaining at bottom -->
+        <ellipse cx="180" cy="450" rx="40" ry="8" fill="#1e6fb8" opacity=".4"/>
+        <ellipse cx="180" cy="450" rx="25" ry="4" fill="#5fc3f5" opacity=".5"/>
+        <!-- Sad dead mountains in background -->
+        <path d="M30,340 L75,225 L115,290 L155,210 L210,290 L265,250 L310,290 L325,355 Z" fill="#1a1612" opacity=".9"/>
+        <path d="M30,340 L60,265 L100,310 L140,240 L195,310 L255,265 L310,355 Z" fill="#3a2d20" opacity=".8"/>
+        <text x="180" y="510" text-anchor="middle" class="diagram-label" fill="#ff5733">LAGO EN SEQUÍA</text>
+        <text x="180" y="528" text-anchor="middle" class="diagram-label small" fill="#a02818">SIN MATERIA PRIMA</text>
+      </g>
+
+      <!-- Truck struggling to arrive (top right of lake) -->
+      <g transform="translate(50,180)" class="shake" style="animation-duration:.6s">
+        <!-- truck body -->
+        <rect x="0" y="20" width="80" height="40" fill="#a02818" stroke="#0a1628" stroke-width="2"/>
+        <rect x="80" y="30" width="30" height="30" fill="#5d6f86" stroke="#0a1628" stroke-width="2"/>
+        <!-- windows -->
+        <rect x="84" y="34" width="22" height="14" fill="#0a1628"/>
+        <!-- wheels -->
+        <circle cx="20" cy="62" r="8" fill="#0a1628"/>
+        <circle cx="20" cy="62" r="3" fill="#3d4d61"/>
+        <circle cx="60" cy="62" r="8" fill="#0a1628"/>
+        <circle cx="60" cy="62" r="3" fill="#3d4d61"/>
+        <circle cx="95" cy="62" r="8" fill="#0a1628"/>
+        <circle cx="95" cy="62" r="3" fill="#3d4d61"/>
+        <!-- empty bed indicator -->
+        <text x="40" y="44" text-anchor="middle" font-family="Bebas Neue" font-size="14" fill="#f4ede0">VACÍO</text>
+        <text x="40" y="14" text-anchor="middle" font-family="Bebas Neue" font-size="10" fill="#ff5733" class="blink">¡TARDE!</text>
+        <!-- exhaust smoke -->
+        <circle cx="-8" cy="38" r="5" fill="#5d6f86" opacity=".5"/>
+        <circle cx="-16" cy="34" r="4" fill="#5d6f86" opacity=".4"/>
+        <circle cx="-22" cy="30" r="3" fill="#5d6f86" opacity=".3"/>
+      </g>
+
+      <!-- A second waiting truck even further out -->
+      <g transform="translate(20,260)" opacity=".6">
+        <rect x="0" y="10" width="60" height="30" fill="#a02818" stroke="#0a1628" stroke-width="1.5"/>
+        <rect x="60" y="18" width="22" height="22" fill="#5d6f86" stroke="#0a1628" stroke-width="1.5"/>
+        <circle cx="15" cy="42" r="6" fill="#0a1628"/>
+        <circle cx="45" cy="42" r="6" fill="#0a1628"/>
+        <circle cx="72" cy="42" r="6" fill="#0a1628"/>
+        <text x="35" y="6" text-anchor="middle" font-family="Bebas Neue" font-size="9" fill="#ff5733">ESPERANDO</text>
+      </g>
+
+      <!-- ========== INTAKE PIPE — DRIPPING, NOT FLOWING ========== -->
+      <g filter="url(#shadowD)">
+        <path d="M325,375 L460,375 L460,300 L560,300" fill="none" stroke="url(#pipe3DhD)" stroke-width="18" stroke-linecap="round"/>
+        <!-- only tiny intermittent drops, no continuous flow -->
+        <circle cx="380" cy="375" r="3" fill="#5fc3f5" class="drop" style="animation-duration:3s;animation-delay:0s" opacity=".7"/>
+        <circle cx="460" cy="340" r="3" fill="#5fc3f5" class="drop" style="animation-duration:3.5s;animation-delay:1.5s" opacity=".7"/>
+        <circle cx="510" cy="300" r="3" fill="#5fc3f5" class="drop" style="animation-duration:3.2s;animation-delay:2.4s" opacity=".7"/>
+        <!-- Cobweb on pipe = unused -->
+        <g stroke="#a8b4c4" stroke-width=".5" opacity=".6" fill="none">
+          <path d="M390,366 L405,358 L420,366 L405,374 Z"/>
+          <path d="M395,360 L405,366 M405,366 L415,360 M395,372 L405,366 M405,366 L415,372"/>
+        </g>
+      </g>
+
+      <!-- ========== HABILITADO MACHINES — IDLE, RED LIGHTS ========== -->
+      <g>
+        <text x="720" y="135" text-anchor="middle" class="diagram-label" fill="#ff5733">HABILITADO · DETENIDO</text>
+        <text x="720" y="153" text-anchor="middle" font-family="Playfair Display" font-style="italic" font-size="13" fill="#a8b4c4">esperando armables · sin acero · sin programa</text>
+
+        <!-- Machine HAB-01 idle -->
+        <g filter="url(#shadowD)" opacity=".9">
+          <polygon points="650,310 660,300 660,170 650,180" fill="#1a1612"/>
+          <rect x="560" y="180" width="90" height="130" fill="url(#machineDryG)"/>
+          <rect x="568" y="186" width="74" height="56" fill="#0a0805"/>
+          <!-- Red OFF lights -->
+          <rect x="572" y="192" width="20" height="14" fill="#3a1a10"/>
+          <rect x="595" y="192" width="20" height="14" fill="#3a1a10"/>
+          <rect x="618" y="192" width="20" height="14" fill="#3a1a10"/>
+          <!-- IDLE indicator -->
+          <text x="605" y="222" text-anchor="middle" font-family="Bebas Neue" font-size="11" fill="#ff5733" class="blink">IDLE</text>
+          <circle cx="580" cy="270" r="10" fill="#0a1628" stroke="#5d6f86" stroke-width="1"/>
+          <circle cx="630" cy="270" r="10" fill="#0a1628" stroke="#5d6f86" stroke-width="1"/>
+          <rect x="565" y="305" width="80" height="6" fill="#3d4d61"/>
+          <text x="605" y="170" text-anchor="middle" font-family="JetBrains Mono" font-size="8" letter-spacing="2" fill="#a02818">HAB-01 · OFF</text>
+        </g>
+
+        <!-- Machine HAB-02 idle -->
+        <g filter="url(#shadowD)" opacity=".9">
+          <polygon points="780,310 790,300 790,170 780,180" fill="#1a1612"/>
+          <rect x="690" y="180" width="90" height="130" fill="url(#machineDryG)"/>
+          <rect x="698" y="186" width="74" height="56" fill="#0a0805"/>
+          <rect x="702" y="192" width="20" height="14" fill="#3a1a10"/>
+          <rect x="725" y="192" width="20" height="14" fill="#3a1a10"/>
+          <rect x="748" y="192" width="20" height="14" fill="#3a1a10"/>
+          <text x="735" y="222" text-anchor="middle" font-family="Bebas Neue" font-size="11" fill="#ff5733" class="blink" style="animation-delay:.3s">IDLE</text>
+          <circle cx="710" cy="270" r="10" fill="#0a1628" stroke="#5d6f86" stroke-width="1"/>
+          <rect x="695" y="305" width="80" height="6" fill="#3d4d61"/>
+          <text x="735" y="170" text-anchor="middle" font-family="JetBrains Mono" font-size="8" letter-spacing="2" fill="#a02818">HAB-02 · OFF</text>
+        </g>
+
+        <!-- Machine HAB-03 idle -->
+        <g filter="url(#shadowD)" opacity=".9">
+          <polygon points="910,310 920,300 920,170 910,180" fill="#1a1612"/>
+          <rect x="820" y="180" width="90" height="130" fill="url(#machineDryG)"/>
+          <rect x="828" y="186" width="74" height="56" fill="#0a0805"/>
+          <rect x="832" y="192" width="20" height="14" fill="#3a1a10"/>
+          <rect x="855" y="192" width="20" height="14" fill="#3a1a10"/>
+          <rect x="878" y="192" width="20" height="14" fill="#3a1a10"/>
+          <text x="865" y="222" text-anchor="middle" font-family="Bebas Neue" font-size="11" fill="#ff5733" class="blink" style="animation-delay:.6s">IDLE</text>
+          <circle cx="840" cy="270" r="10" fill="#0a1628" stroke="#5d6f86" stroke-width="1"/>
+          <rect x="825" y="305" width="80" height="6" fill="#3d4d61"/>
+          <text x="865" y="170" text-anchor="middle" font-family="JetBrains Mono" font-size="8" letter-spacing="2" fill="#a02818">HAB-03 · OFF</text>
+        </g>
+
+        <!-- Operator standing idle next to machines -->
+        <g transform="translate(960,260)">
+          <circle cx="0" cy="-15" r="8" fill="#9c5fc4" opacity=".7"/>
+          <rect x="-7" y="-7" width="14" height="20" fill="#9c5fc4" opacity=".7"/>
+          <line x1="-10" y1="0" x2="-15" y2="10" stroke="#9c5fc4" stroke-width="3" opacity=".7"/>
+          <line x1="10" y1="0" x2="15" y2="10" stroke="#9c5fc4" stroke-width="3" opacity=".7"/>
+          <!-- thought bubble -->
+          <ellipse cx="20" cy="-30" rx="22" ry="14" fill="#0a1628" stroke="#a02818" stroke-width="1"/>
+          <text x="20" y="-26" text-anchor="middle" font-family="Bebas Neue" font-size="10" fill="#ff5733">¿Y EL ACERO?</text>
+        </g>
+      </g>
+
+      <!-- Empty pipes downstream -->
+      <path d="M605,320 L605,360 L865,360 L865,320" fill="none" stroke="url(#pipe3DhD)" stroke-width="14" opacity=".6"/>
+      <path d="M735,320 L735,360" fill="none" stroke="url(#pipe3DhD)" stroke-width="14" opacity=".6"/>
+      <path d="M735,360 L735,420" fill="none" stroke="url(#pipe3DhD)" stroke-width="18" opacity=".6"/>
+
+      <!-- Almost empty kanban tank -->
+      <g>
+        <text x="735" y="445" text-anchor="middle" class="diagram-label" fill="#a8b4c4">TANQUE KANBAN · CASI VACÍO</text>
+        <ellipse cx="735" cy="465" rx="85" ry="14" fill="#1a2838" opacity=".7"/>
+        <rect x="650" y="465" width="170" height="160" fill="#5d6f86" stroke="#0a1628" stroke-width="2" filter="url(#shadowD)"/>
+        <rect x="660" y="475" width="150" height="140" fill="#0a1628" opacity=".8"/>
+        <!-- only a tiny puddle at bottom -->
+        <rect x="660" y="595" width="150" height="20" fill="#1e6fb8" opacity=".7"/>
+        <ellipse cx="735" cy="465" rx="80" ry="10" fill="#050d1a"/>
+        <!-- min level marker glowing -->
+        <line x1="640" y1="585" x2="650" y2="585" stroke="#ff5733" stroke-width="2" class="blink"/>
+        <text x="635" y="589" text-anchor="end" font-family="JetBrains Mono" font-size="9" letter-spacing="2" fill="#ff5733" class="blink">¡MIN!</text>
+      </g>
+
+      <!-- ========== SCHEDULE / PROGRAM PROBLEMS PANEL ========== -->
+      <g transform="translate(1080,180)">
+        <rect x="0" y="0" width="460" height="380" fill="#0a1628" stroke="#ff5733" stroke-width="2" filter="url(#shadowD)"/>
+        <rect x="0" y="0" width="460" height="40" fill="#a02818"/>
+        <text x="230" y="28" text-anchor="middle" font-family="Bebas Neue" font-size="18" fill="#f4ede0" letter-spacing="3">PROGRAMA DE ENTREGAS</text>
+
+        <!-- Schedule rows -->
+        <g font-family="JetBrains Mono" font-size="11" fill="#f4ede0">
+          <!-- Row 1: late -->
+          <rect x="10" y="56" width="440" height="48" fill="#3a1a10" stroke="#ff5733" stroke-width="1"/>
+          <text x="20" y="76" letter-spacing="2" fill="#f4ede0">LOTE A · ARMABLES TIPO 1</text>
+          <text x="20" y="94" font-family="Playfair Display" font-style="italic" fill="#a8b4c4">Ternium · 12 toneladas</text>
+          <text x="440" y="76" text-anchor="end" font-family="Bebas Neue" font-size="14" fill="#ff5733" class="blink">+5 DÍAS TARDE</text>
+          <text x="440" y="94" text-anchor="end" font-family="JetBrains Mono" font-size="10" fill="#ff5733">▲ ESPERANDO</text>
+
+          <!-- Row 2: incomplete -->
+          <rect x="10" y="114" width="440" height="48" fill="#3a1a10" stroke="#ff5733" stroke-width="1"/>
+          <text x="20" y="134" letter-spacing="2" fill="#f4ede0">LOTE B · PLACA 3/8"</text>
+          <text x="20" y="152" font-family="Playfair Display" font-style="italic" fill="#a8b4c4">solo 60% del pedido recibido</text>
+          <text x="440" y="134" text-anchor="end" font-family="Bebas Neue" font-size="14" fill="#ff5733">INCOMPLETO</text>
+          <text x="440" y="152" text-anchor="end" font-family="JetBrains Mono" font-size="10" fill="#ff5733">▲ FALTAN 4 TON</text>
+
+          <!-- Row 3: missing -->
+          <rect x="10" y="172" width="440" height="48" fill="#3a1a10" stroke="#ff5733" stroke-width="1"/>
+          <text x="20" y="192" letter-spacing="2" fill="#f4ede0">LOTE C · PERFILES IPR</text>
+          <text x="20" y="210" font-family="Playfair Display" font-style="italic" fill="#a8b4c4">no hay confirmación de embarque</text>
+          <text x="440" y="192" text-anchor="end" font-family="Bebas Neue" font-size="14" fill="#ff5733" class="blink" style="animation-delay:.4s">SIN ETA</text>
+          <text x="440" y="210" text-anchor="end" font-family="JetBrains Mono" font-size="10" fill="#ff5733">▲ DESCONOCIDO</text>
+
+          <!-- Row 4: complete -->
+          <rect x="10" y="230" width="440" height="48" fill="#0d2d1a" stroke="#5fc3f5" stroke-width="1" opacity=".6"/>
+          <text x="20" y="250" letter-spacing="2" fill="#a8b4c4">LOTE D · TUBERÍA 4"</text>
+          <text x="20" y="268" font-family="Playfair Display" font-style="italic" fill="#5d6f86">recibido completo</text>
+          <text x="440" y="250" text-anchor="end" font-family="Bebas Neue" font-size="14" fill="#5fc3f5">OK</text>
+          <text x="440" y="268" text-anchor="end" font-family="JetBrains Mono" font-size="10" fill="#5fc3f5">✓ EN ALMACÉN</text>
+        </g>
+
+        <!-- Summary stat -->
+        <g transform="translate(0,300)">
+          <rect x="10" y="0" width="440" height="70" fill="#0a1628" stroke="#e0b53a" stroke-width="1"/>
+          <text x="230" y="22" text-anchor="middle" font-family="JetBrains Mono" font-size="10" letter-spacing="3" fill="#a8b4c4">CUMPLIMIENTO DE ENTREGAS</text>
+          <text x="230" y="58" text-anchor="middle" font-family="Bebas Neue" font-size="40" fill="#ff5733" letter-spacing="4">25%</text>
+        </g>
+      </g>
+
+      <!-- Bottom insight -->
+      <g transform="translate(80,650)">
+        <text x="0" y="0" font-family="Playfair Display" font-style="italic" font-size="16" fill="#e0b53a">sin agua en el lago, no hay nada que bombear · habilitado se queda parado, las líneas se quedan sedientas</text>
+      </g>
+    </svg>
+    <div class="hud">
+      <div class="hud-top">
+        <div class="brand"><span class="baysa-mark">BAYSA</span>METALITEC<span class="sub">FLOW · CAPACITY · LABOR · LOSS</span></div>
+        <div class="meta">BOBINA / ROLL<br><span class="scene-num">05</span>SEQUÍA · MP TARDE</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== SCENE 6: THIRST — NOT ENOUGH HH IN ARMADO/SOLDADURA ========== -->
+  <div class="scene-wrap" id="s6">
+    <svg class="scene" viewBox="0 0 1600 700" preserveAspectRatio="xMidYMid slice">
+      <defs>
+        <pattern id="grid6t" width="40" height="40" patternUnits="userSpaceOnUse">
+          <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#e0b53a" stroke-width=".3" opacity=".08"/>
+        </pattern>
+        <linearGradient id="pipe3DhT" x1="0" x2="1" y1="0" y2="0">
+          <stop offset="0" stop-color="#3a4a60"/>
+          <stop offset=".3" stop-color="#7d8da4"/>
+          <stop offset=".7" stop-color="#5d6f86"/>
+          <stop offset="1" stop-color="#1a2838"/>
+        </linearGradient>
+        <radialGradient id="pumpGT" cx="40%" cy="40%" r="60%">
+          <stop offset="0" stop-color="#a8b4c4"/>
+          <stop offset=".7" stop-color="#3d4d61"/>
+          <stop offset="1" stop-color="#0a1628"/>
+        </radialGradient>
+        <linearGradient id="tankFullT" x1="0" x2="0" y1="0" y2="1">
+          <stop offset="0" stop-color="#ff5733" stop-opacity=".95"/>
+          <stop offset="1" stop-color="#a02818"/>
+        </linearGradient>
+        <filter id="shadowT" x="-20%" y="-20%" width="140%" height="140%">
+          <feGaussianBlur in="SourceAlpha" stdDeviation="3"/>
+          <feOffset dx="2" dy="4"/>
+          <feComponentTransfer><feFuncA type="linear" slope="0.6"/></feComponentTransfer>
+          <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+        <filter id="glowT" x="-50%" y="-50%" width="200%" height="200%">
+          <feGaussianBlur stdDeviation="3"/>
+          <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+      </defs>
+      <rect width="1600" height="700" fill="url(#grid6t)"/>
+
+      <!-- Title -->
+      <g>
+        <text x="800" y="60" text-anchor="middle" font-family="Bebas Neue" font-size="42" fill="#ff5733" letter-spacing="6" class="blink">CUELLO DE BOTELLA Nº 2</text>
+        <text x="800" y="92" text-anchor="middle" font-family="Playfair Display" font-style="italic" font-size="20" fill="#f4ede0">no hay suficientes horas-hombre en armado y soldadura</text>
+      </g>
+
+      <!-- ========== KANBAN OVERFLOWING (TOP) ========== -->
+      <g transform="translate(60,140)">
+        <text x="120" y="0" text-anchor="middle" class="diagram-label" fill="#ff5733">KANBAN LLENO</text>
+        <ellipse cx="120" cy="20" rx="85" ry="14" fill="#1a2838" opacity=".7"/>
+        <rect x="35" y="20" width="170" height="160" fill="#5d6f86" stroke="#ff5733" stroke-width="3" filter="url(#shadowT)" class="blink"/>
+        <rect x="45" y="30" width="150" height="140" fill="#0a1628" opacity=".7"/>
+        <clipPath id="tankClipT"><rect x="47" y="32" width="146" height="136"/></clipPath>
+        <g clip-path="url(#tankClipT)">
+          <rect x="45" y="20" width="150" height="200" fill="url(#tankFullT)"/>
+          <g class="wave-anim">
+            <path d="M5,30 Q35,20 65,30 T125,30 T185,30 T245,30 L245,80 L5,80 Z" fill="#ff8a6b" opacity=".7"/>
+          </g>
+        </g>
+        <ellipse cx="120" cy="20" rx="80" ry="10" fill="#ff5733"/>
+      </g>
+
+      <!-- Manifold pipe FLOWING DOWN with healthy supply -->
+      <g filter="url(#shadowT)">
+        <path d="M180,320 L180,400 L320,400" fill="none" stroke="url(#pipe3DhT)" stroke-width="20"/>
+        <path d="M180,320 L180,400 L320,400" fill="none" stroke="#1e6fb8" stroke-width="8" class="flow-fast"/>
+      </g>
+      <text x="180" y="360" text-anchor="start" font-family="JetBrains Mono" font-size="10" letter-spacing="2" fill="#5fc3f5" transform="translate(15,0)">SUMINISTRO OK</text>
+
+      <!-- ========== THREE LINES — STARVED OF PEOPLE ========== -->
+      <!-- Each line: a wide pipe (high theoretical capacity) but pump drowning because not enough HH -->
+
+      <!-- Header for the three lines area -->
+      <g>
+        <text x="980" y="200" text-anchor="middle" font-family="Bebas Neue" font-size="20" fill="#ff5733" letter-spacing="3">ARMADO · SOLDADURA · ENSAMBLE</text>
+        <text x="980" y="222" text-anchor="middle" font-family="Playfair Display" font-style="italic" font-size="14" fill="#a8b4c4">tubos amplios, pero apenas hay quien los opere</text>
+      </g>
+
+      <!-- ============ LÍNEA 1 ============ -->
+      <g transform="translate(0,290)">
+        <!-- Branch pipe from manifold -->
+        <path d="M320,110 L320,30 L600,30" fill="none" stroke="url(#pipe3DhT)" stroke-width="20" filter="url(#shadowT)"/>
+        <path d="M320,110 L320,30 L600,30" fill="none" stroke="#1e6fb8" stroke-width="8" class="flow-fast"/>
+
+        <!-- Wide line pipe (capacity exists) -->
+        <rect x="600" y="20" width="320" height="22" fill="url(#pipe3DhT)" filter="url(#shadowT)"/>
+        <!-- BUT flow is throttled — choking effect -->
+        <rect x="600" y="26" width="320" height="10" fill="#1e6fb8" class="flow-slow" opacity=".5"/>
+
+        <!-- Workstations: should have 4 people, has 1 -->
+        <g transform="translate(640,50)">
+          <!-- Station 1: PRESENT -->
+          <rect x="0" y="-2" width="60" height="32" fill="none" stroke="#5fc3f5" stroke-width="1" stroke-dasharray="3 3"/>
+          <g transform="translate(30,8)" class="worker">
+            <circle cx="0" cy="-10" r="6" fill="#9c5fc4"/>
+            <rect x="-5" y="-4" width="10" height="14" fill="#9c5fc4"/>
+            <line x1="-7" y1="0" x2="-10" y2="6" stroke="#9c5fc4" stroke-width="2"/>
+            <line x1="7" y1="0" x2="10" y2="6" stroke="#9c5fc4" stroke-width="2"/>
+          </g>
+          <!-- Station 2: EMPTY -->
+          <rect x="70" y="-2" width="60" height="32" fill="#3a1a10" stroke="#ff5733" stroke-width="1.5" stroke-dasharray="3 3" class="blink"/>
+          <text x="100" y="18" text-anchor="middle" font-family="Bebas Neue" font-size="11" fill="#ff5733" class="blink">VACANTE</text>
+          <!-- Station 3: EMPTY -->
+          <rect x="140" y="-2" width="60" height="32" fill="#3a1a10" stroke="#ff5733" stroke-width="1.5" stroke-dasharray="3 3" class="blink" style="animation-delay:.3s"/>
+          <text x="170" y="18" text-anchor="middle" font-family="Bebas Neue" font-size="11" fill="#ff5733" class="blink" style="animation-delay:.3s">VACANTE</text>
+          <!-- Station 4: EMPTY -->
+          <rect x="210" y="-2" width="60" height="32" fill="#3a1a10" stroke="#ff5733" stroke-width="1.5" stroke-dasharray="3 3" class="blink" style="animation-delay:.6s"/>
+          <text x="240" y="18" text-anchor="middle" font-family="Bebas Neue" font-size="11" fill="#ff5733" class="blink" style="animation-delay:.6s">VACANTE</text>
+        </g>
+
+        <!-- Weak pump at end -->
+        <g transform="translate(950,30)" filter="url(#shadowT)">
+          <ellipse cx="0" cy="0" rx="22" ry="22" fill="url(#pumpGT)" stroke="#a02818" stroke-width="2"/>
+          <g class="impeller-stuck">
+            <path d="M0,-12 L4,-3 L12,-2 L4,3 L8,12 L0,7 L-8,12 L-4,3 L-12,-2 L-4,-3 Z" fill="#a02818"/>
+          </g>
+          <circle cx="0" cy="0" r="4" fill="#0a1628"/>
+        </g>
+
+        <!-- Output trickle -->
+        <rect x="970" y="22" width="40" height="16" fill="url(#pipe3DhT)"/>
+        <rect x="972" y="26" width="36" height="8" fill="#1e6fb8" class="flow-slow" opacity=".4"/>
+
+        <!-- Line label -->
+        <g transform="translate(1030,30)">
+          <text x="0" y="-30" font-family="Bebas Neue" font-size="18" fill="#f4ede0" letter-spacing="3">L1 · ARMADO</text>
+          <g font-family="JetBrains Mono" font-size="10" fill="#a8b4c4">
+            <text x="0" y="-12" letter-spacing="2">DOTACIÓN ESTÁNDAR</text>
+            <text x="180" y="-12" font-family="Bebas Neue" font-size="14" fill="#5fc3f5" text-anchor="end">4 HH</text>
+            <text x="0" y="6" letter-spacing="2">DOTACIÓN REAL</text>
+            <text x="180" y="6" font-family="Bebas Neue" font-size="14" fill="#ff5733" class="blink" text-anchor="end">1 HH</text>
+            <text x="0" y="24" letter-spacing="2">CAPACIDAD UTILIZADA</text>
+            <text x="180" y="24" font-family="Bebas Neue" font-size="14" fill="#ff5733" text-anchor="end">25%</text>
+          </g>
+        </g>
+      </g>
+
+      <!-- ============ LÍNEA 2 ============ -->
+      <g transform="translate(0,420)">
+        <path d="M320,30 L600,30" fill="none" stroke="url(#pipe3DhT)" stroke-width="20" filter="url(#shadowT)"/>
+        <path d="M320,30 L600,30" fill="none" stroke="#1e6fb8" stroke-width="8" class="flow-fast"/>
+
+        <rect x="600" y="20" width="320" height="22" fill="url(#pipe3DhT)" filter="url(#shadowT)"/>
+        <rect x="600" y="26" width="320" height="10" fill="#1e6fb8" class="flow-slow" opacity=".5"/>
+
+        <g transform="translate(640,50)">
+          <rect x="0" y="-2" width="60" height="32" fill="none" stroke="#5fc3f5" stroke-width="1" stroke-dasharray="3 3"/>
+          <g transform="translate(30,8)" class="worker" style="animation-delay:.2s">
+            <circle cx="0" cy="-10" r="6" fill="#9c5fc4"/>
+            <rect x="-5" y="-4" width="10" height="14" fill="#9c5fc4"/>
+            <line x1="-7" y1="0" x2="-10" y2="6" stroke="#9c5fc4" stroke-width="2"/>
+            <line x1="7" y1="0" x2="10" y2="6" stroke="#9c5fc4" stroke-width="2"/>
+          </g>
+          <rect x="70" y="-2" width="60" height="32" fill="none" stroke="#5fc3f5" stroke-width="1" stroke-dasharray="3 3"/>
+          <g transform="translate(100,8)" class="worker" style="animation-delay:.4s">
+            <circle cx="0" cy="-10" r="6" fill="#9c5fc4"/>
+            <rect x="-5" y="-4" width="10" height="14" fill="#9c5fc4"/>
+            <line x1="-7" y1="0" x2="-10" y2="6" stroke="#9c5fc4" stroke-width="2"/>
+            <line x1="7" y1="0" x2="10" y2="6" stroke="#9c5fc4" stroke-width="2"/>
+          </g>
+          <rect x="140" y="-2" width="60" height="32" fill="#3a1a10" stroke="#ff5733" stroke-width="1.5" stroke-dasharray="3 3" class="blink"/>
+          <text x="170" y="18" text-anchor="middle" font-family="Bebas Neue" font-size="11" fill="#ff5733" class="blink">VACANTE</text>
+          <rect x="210" y="-2" width="60" height="32" fill="#3a1a10" stroke="#ff5733" stroke-width="1.5" stroke-dasharray="3 3" class="blink" style="animation-delay:.5s"/>
+          <text x="240" y="18" text-anchor="middle" font-family="Bebas Neue" font-size="11" fill="#ff5733" class="blink" style="animation-delay:.5s">VACANTE</text>
+        </g>
+
+        <g transform="translate(950,30)" filter="url(#shadowT)">
+          <ellipse cx="0" cy="0" rx="22" ry="22" fill="url(#pumpGT)" stroke="#a02818" stroke-width="2"/>
+          <g class="impeller-stuck" style="animation-delay:.4s">
+            <path d="M0,-12 L4,-3 L12,-2 L4,3 L8,12 L0,7 L-8,12 L-4,3 L-12,-2 L-4,-3 Z" fill="#a02818"/>
+          </g>
+          <circle cx="0" cy="0" r="4" fill="#0a1628"/>
+        </g>
+
+        <rect x="970" y="22" width="40" height="16" fill="url(#pipe3DhT)"/>
+        <rect x="972" y="26" width="36" height="8" fill="#1e6fb8" class="flow-slow" opacity=".4"/>
+
+        <g transform="translate(1030,30)">
+          <text x="0" y="-30" font-family="Bebas Neue" font-size="18" fill="#f4ede0" letter-spacing="3">L2 · SOLDADURA</text>
+          <g font-family="JetBrains Mono" font-size="10" fill="#a8b4c4">
+            <text x="0" y="-12" letter-spacing="2">DOTACIÓN ESTÁNDAR</text>
+            <text x="180" y="-12" font-family="Bebas Neue" font-size="14" fill="#5fc3f5" text-anchor="end">4 HH</text>
+            <text x="0" y="6" letter-spacing="2">DOTACIÓN REAL</text>
+            <text x="180" y="6" font-family="Bebas Neue" font-size="14" fill="#ff5733" class="blink" text-anchor="end">2 HH</text>
+            <text x="0" y="24" letter-spacing="2">CAPACIDAD UTILIZADA</text>
+            <text x="180" y="24" font-family="Bebas Neue" font-size="14" fill="#ff5733" text-anchor="end">50%</text>
+          </g>
+        </g>
+      </g>
+
+      <!-- ============ LÍNEA 3 ============ -->
+      <g transform="translate(0,540)">
+        <path d="M320,30 L320,80 L600,80" fill="none" stroke="url(#pipe3DhT)" stroke-width="20" filter="url(#shadowT)"/>
+        <path d="M320,30 L320,80 L600,80" fill="none" stroke="#1e6fb8" stroke-width="8" class="flow-fast"/>
+
+        <rect x="600" y="70" width="320" height="22" fill="url(#pipe3DhT)" filter="url(#shadowT)"/>
+        <rect x="600" y="76" width="320" height="10" fill="#1e6fb8" class="flow-slow" opacity=".5"/>
+
+        <g transform="translate(640,100)">
+          <rect x="0" y="-2" width="60" height="32" fill="none" stroke="#5fc3f5" stroke-width="1" stroke-dasharray="3 3"/>
+          <g transform="translate(30,8)" class="worker">
+            <circle cx="0" cy="-10" r="6" fill="#9c5fc4"/>
+            <rect x="-5" y="-4" width="10" height="14" fill="#9c5fc4"/>
+            <line x1="-7" y1="0" x2="-10" y2="6" stroke="#9c5fc4" stroke-width="2"/>
+            <line x1="7" y1="0" x2="10" y2="6" stroke="#9c5fc4" stroke-width="2"/>
+          </g>
+          <rect x="70" y="-2" width="60" height="32" fill="#3a1a10" stroke="#ff5733" stroke-width="1.5" stroke-dasharray="3 3" class="blink"/>
+          <text x="100" y="18" text-anchor="middle" font-family="Bebas Neue" font-size="11" fill="#ff5733" class="blink">VACANTE</text>
+          <rect x="140" y="-2" width="60" height="32" fill="#3a1a10" stroke="#ff5733" stroke-width="1.5" stroke-dasharray="3 3" class="blink" style="animation-delay:.3s"/>
+          <text x="170" y="18" text-anchor="middle" font-family="Bebas Neue" font-size="11" fill="#ff5733" class="blink" style="animation-delay:.3s">VACANTE</text>
+          <rect x="210" y="-2" width="60" height="32" fill="#3a1a10" stroke="#ff5733" stroke-width="1.5" stroke-dasharray="3 3" class="blink" style="animation-delay:.6s"/>
+          <text x="240" y="18" text-anchor="middle" font-family="Bebas Neue" font-size="11" fill="#ff5733" class="blink" style="animation-delay:.6s">VACANTE</text>
+        </g>
+
+        <g transform="translate(950,80)" filter="url(#shadowT)">
+          <ellipse cx="0" cy="0" rx="22" ry="22" fill="url(#pumpGT)" stroke="#a02818" stroke-width="2"/>
+          <g class="impeller-stuck" style="animation-delay:.6s">
+            <path d="M0,-12 L4,-3 L12,-2 L4,3 L8,12 L0,7 L-8,12 L-4,3 L-12,-2 L-4,-3 Z" fill="#a02818"/>
+          </g>
+          <circle cx="0" cy="0" r="4" fill="#0a1628"/>
+        </g>
+
+        <rect x="970" y="72" width="40" height="16" fill="url(#pipe3DhT)"/>
+        <rect x="972" y="76" width="36" height="8" fill="#1e6fb8" class="flow-slow" opacity=".4"/>
+
+        <g transform="translate(1030,80)">
+          <text x="0" y="-30" font-family="Bebas Neue" font-size="18" fill="#f4ede0" letter-spacing="3">L3 · ENSAMBLE</text>
+          <g font-family="JetBrains Mono" font-size="10" fill="#a8b4c4">
+            <text x="0" y="-12" letter-spacing="2">DOTACIÓN ESTÁNDAR</text>
+            <text x="180" y="-12" font-family="Bebas Neue" font-size="14" fill="#5fc3f5" text-anchor="end">4 HH</text>
+            <text x="0" y="6" letter-spacing="2">DOTACIÓN REAL</text>
+            <text x="180" y="6" font-family="Bebas Neue" font-size="14" fill="#ff5733" class="blink" text-anchor="end">1 HH</text>
+            <text x="0" y="24" letter-spacing="2">CAPACIDAD UTILIZADA</text>
+            <text x="180" y="24" font-family="Bebas Neue" font-size="14" fill="#ff5733" text-anchor="end">25%</text>
+          </g>
+        </g>
+      </g>
+
+      <!-- Bottom warning bar -->
+      <g transform="translate(0,670)">
+        <rect x="0" y="0" width="1600" height="30" fill="#a02818"/>
+        <text x="800" y="20" text-anchor="middle" font-family="Bebas Neue" font-size="16" fill="#f4ede0" letter-spacing="4">8 PUESTOS VACANTES DE 12 · LAS LÍNEAS NO PUEDEN ABSORBER LO QUE EL TANQUE LES OFRECE</text>
+      </g>
+    </svg>
+    <div class="hud">
+      <div class="hud-top">
+        <div class="brand"><span class="baysa-mark">BAYSA</span>METALITEC<span class="sub">FLOW · CAPACITY · LABOR · LOSS</span></div>
+        <div class="meta">BOBINA / ROLL<br><span class="scene-num">06</span>SED · FALTAN HH</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== SCENE 7: OVERFLOW with WEAK PUMPS ========== -->
+  <div class="scene-wrap" id="s7">
+    <svg class="scene" viewBox="0 0 1600 700" preserveAspectRatio="xMidYMid slice">
+      <defs>
+        <radialGradient id="lakeR" cx="40%" cy="35%" r="70%">
+          <stop offset="0" stop-color="#5fc3f5"/>
+          <stop offset=".5" stop-color="#1e6fb8"/>
+          <stop offset="1" stop-color="#0a2845"/>
+        </radialGradient>
+        <linearGradient id="tankRedG" x1="0" x2="0" y1="0" y2="1">
+          <stop offset="0" stop-color="#ff5733" stop-opacity=".95"/>
+          <stop offset="1" stop-color="#a02818"/>
+        </linearGradient>
+        <linearGradient id="pipe3DhR" x1="0" x2="1" y1="0" y2="0">
+          <stop offset="0" stop-color="#3a4a60"/>
+          <stop offset=".3" stop-color="#7d8da4"/>
+          <stop offset=".7" stop-color="#5d6f86"/>
+          <stop offset="1" stop-color="#1a2838"/>
+        </linearGradient>
+        <radialGradient id="pumpRedG" cx="40%" cy="40%" r="60%">
+          <stop offset="0" stop-color="#a8b4c4"/>
+          <stop offset=".7" stop-color="#3d4d61"/>
+          <stop offset="1" stop-color="#0a1628"/>
+        </radialGradient>
+        <pattern id="grid4" width="40" height="40" patternUnits="userSpaceOnUse">
+          <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#e0b53a" stroke-width=".3" opacity=".08"/>
+        </pattern>
+        <filter id="shadowR" x="-20%" y="-20%" width="140%" height="140%">
+          <feGaussianBlur in="SourceAlpha" stdDeviation="3"/>
+          <feOffset dx="2" dy="4"/>
+          <feComponentTransfer><feFuncA type="linear" slope="0.6"/></feComponentTransfer>
+          <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+        <filter id="glowR" x="-50%" y="-50%" width="200%" height="200%">
+          <feGaussianBlur stdDeviation="3"/>
+          <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+      </defs>
+      <rect width="1600" height="700" fill="url(#grid4)"/>
+
+      <!-- LAKE -->
+      <g filter="url(#shadowR)">
+        <ellipse cx="180" cy="395" rx="170" ry="80" fill="#0a2845" opacity=".4"/>
+        <path d="M30,340 Q55,295 120,290 Q180,283 245,295 Q310,308 325,355 Q335,395 305,425 Q245,470 180,470 Q95,470 45,425 Q15,385 30,340 Z" fill="url(#lakeR)"/>
+        <path d="M30,340 L75,225 L115,290 L155,210 L210,290 L265,250 L310,290 L325,355 Z" fill="#1a2838" opacity=".9"/>
+      </g>
+
+      <!-- intake (FAT) -->
+      <g filter="url(#shadowR)">
+        <path d="M325,375 L460,375 L460,300 L560,300" fill="none" stroke="url(#pipe3DhR)" stroke-width="22" stroke-linecap="round"/>
+        <path d="M325,375 L460,375 L460,300 L560,300" fill="none" stroke="#ff5733" stroke-width="11" stroke-linecap="round" class="flow-fast" filter="url(#glowR)"/>
+      </g>
+
+      <!-- HOT machines -->
+      <g class="shake">
+        <text x="720" y="100" text-anchor="middle" class="diagram-label" fill="#ff5733">HABILITADO · RITMO EXCESIVO</text>
+
+        <g class="pulse" style="animation-duration:.5s" filter="url(#shadowR)">
+          <polygon points="650,310 660,300 660,170 650,180" fill="#1a2838"/>
+          <rect x="560" y="180" width="90" height="130" fill="#5d6f86"/>
+          <rect x="568" y="186" width="74" height="56" fill="#0a1628"/>
+          <rect x="572" y="192" width="20" height="14" fill="#ff5733" filter="url(#glowR)"/>
+          <rect x="595" y="192" width="20" height="14" fill="#ff5733"/>
+          <rect x="618" y="192" width="20" height="14" fill="#ff5733"/>
+          <circle cx="580" cy="270" r="10" fill="#0a1628"/>
+          <circle cx="580" cy="270" r="5" fill="#ff5733" class="blink"/>
+          <circle cx="630" cy="270" r="10" fill="#0a1628"/>
+          <text x="605" y="170" text-anchor="middle" font-family="Bebas Neue" font-size="12" fill="#e0b53a">+OT</text>
+        </g>
+        <g class="pulse" style="animation-duration:.45s;animation-delay:.1s" filter="url(#shadowR)">
+          <polygon points="780,310 790,300 790,170 780,180" fill="#1a2838"/>
+          <rect x="690" y="180" width="90" height="130" fill="#5d6f86"/>
+          <rect x="698" y="186" width="74" height="56" fill="#0a1628"/>
+          <rect x="702" y="192" width="20" height="14" fill="#ff5733"/>
+          <rect x="725" y="192" width="20" height="14" fill="#ff5733"/>
+          <rect x="748" y="192" width="20" height="14" fill="#ff5733"/>
+          <circle cx="710" cy="270" r="10" fill="#0a1628"/>
+          <circle cx="710" cy="270" r="5" fill="#ff5733" class="blink"/>
+          <text x="735" y="170" text-anchor="middle" font-family="Bebas Neue" font-size="12" fill="#e0b53a">+OT</text>
+        </g>
+        <g class="pulse" style="animation-duration:.4s;animation-delay:.2s" filter="url(#shadowR)">
+          <polygon points="910,310 920,300 920,170 910,180" fill="#1a2838"/>
+          <rect x="820" y="180" width="90" height="130" fill="#5d6f86"/>
+          <rect x="828" y="186" width="74" height="56" fill="#0a1628"/>
+          <rect x="832" y="192" width="20" height="14" fill="#ff5733"/>
+          <rect x="855" y="192" width="20" height="14" fill="#ff5733"/>
+          <rect x="878" y="192" width="20" height="14" fill="#ff5733"/>
+          <circle cx="840" cy="270" r="10" fill="#0a1628"/>
+          <circle cx="840" cy="270" r="5" fill="#ff5733" class="blink"/>
+          <text x="865" y="170" text-anchor="middle" font-family="Bebas Neue" font-size="12" fill="#e0b53a">+OT</text>
+        </g>
+      </g>
+
+      <path d="M605,320 L605,360 L865,360 L865,320" fill="none" stroke="url(#pipe3DhR)" stroke-width="14"/>
+      <path d="M735,320 L735,360" fill="none" stroke="url(#pipe3DhR)" stroke-width="14"/>
+      <path d="M735,360 L735,420" fill="none" stroke="url(#pipe3DhR)" stroke-width="20" filter="url(#shadowR)"/>
+      <path d="M735,360 L735,420" fill="none" stroke="#ff5733" stroke-width="10" class="flow-fast" filter="url(#glowR)"/>
+
+      <!-- DESBORDADO TANK -->
+      <g>
+        <text x="735" y="445" text-anchor="middle" class="diagram-label" fill="#ff5733">¡KANBAN DESBORDADO!</text>
+        <ellipse cx="735" cy="465" rx="85" ry="14" fill="#1a2838" opacity=".7"/>
+        <rect x="650" y="465" width="170" height="160" fill="#5d6f86" stroke="#ff5733" stroke-width="3" filter="url(#shadowR)" class="blink"/>
+        <rect x="660" y="475" width="150" height="140" fill="#0a1628" opacity=".7"/>
+        <clipPath id="tankClipB"><rect x="662" y="477" width="146" height="136"/></clipPath>
+        <g clip-path="url(#tankClipB)">
+          <rect x="660" y="465" width="150" height="200" fill="url(#tankRedG)"/>
+          <g class="wave-anim">
+            <path d="M620,470 Q650,460 680,470 T740,470 T800,470 T860,470 L860,520 L620,520 Z" fill="#ff8a6b" opacity=".7"/>
+          </g>
+        </g>
+        <ellipse cx="735" cy="465" rx="80" ry="10" fill="#ff5733"/>
+
+        <!-- overflow streams -->
+        <path d="M660,465 Q655,490 640,520 Q625,560 615,620" fill="none" stroke="#ff5733" stroke-width="8" opacity=".85" filter="url(#glowR)"/>
+        <path d="M650,465 Q640,495 620,530 Q600,570 590,630" fill="none" stroke="#ff5733" stroke-width="6" opacity=".7"/>
+        <path d="M810,465 Q815,490 830,520 Q845,560 855,620" fill="none" stroke="#ff5733" stroke-width="8" opacity=".85" filter="url(#glowR)"/>
+        <path d="M820,465 Q830,495 850,530 Q870,570 880,630" fill="none" stroke="#ff5733" stroke-width="6" opacity=".7"/>
+
+        <circle cx="635" cy="480" r="6" fill="#ff5733" class="spill-drop" style="--dx:-30px"/>
+        <circle cx="625" cy="480" r="5" fill="#ff5733" class="spill-drop" style="--dx:-50px;animation-delay:.3s"/>
+        <circle cx="645" cy="480" r="4" fill="#ff5733" class="spill-drop" style="--dx:-20px;animation-delay:.6s"/>
+        <circle cx="835" cy="480" r="6" fill="#ff5733" class="spill-drop" style="--dx:30px"/>
+        <circle cx="845" cy="480" r="5" fill="#ff5733" class="spill-drop" style="--dx:50px;animation-delay:.3s"/>
+        <circle cx="825" cy="480" r="4" fill="#ff5733" class="spill-drop" style="--dx:20px;animation-delay:.6s"/>
+
+        <ellipse cx="600" cy="680" rx="80" ry="10" fill="#ff5733" opacity=".5"/>
+        <ellipse cx="600" cy="680" rx="60" ry="6" fill="#a02818" opacity=".7"/>
+        <ellipse cx="870" cy="680" rx="80" ry="10" fill="#ff5733" opacity=".5"/>
+        <ellipse cx="870" cy="680" rx="60" ry="6" fill="#a02818" opacity=".7"/>
+      </g>
+
+      <!-- starved THIN lines + WEAK PUMPS -->
+      <path d="M735,625 L735,665 L1080,665" fill="none" stroke="url(#pipe3DhR)" stroke-width="14"/>
+      <path d="M735,625 L735,665 L1080,665" fill="none" stroke="#1e6fb8" stroke-width="3" class="flow" opacity=".5"/>
+
+      <!-- L1 thin -->
+      <path d="M1080,665 L1080,580 L1180,580" fill="none" stroke="url(#pipe3DhR)" stroke-width="6"/>
+      <path d="M1080,665 L1080,580 L1180,580" fill="none" stroke="#1e6fb8" stroke-width="2" class="flow" opacity=".4"/>
+      <!-- L2 thin -->
+      <path d="M1080,665 L1180,665" fill="none" stroke="url(#pipe3DhR)" stroke-width="6"/>
+      <path d="M1080,665 L1180,665" fill="none" stroke="#1e6fb8" stroke-width="2" class="flow" opacity=".4"/>
+
+      <!-- WEAK pumps (slow rotation, small) -->
+      <g transform="translate(1230,580)" filter="url(#shadowR)">
+        <ellipse cx="0" cy="0" rx="22" ry="22" fill="url(#pumpRedG)" stroke="#a02818" stroke-width="2"/>
+        <g class="impeller-stuck">
+          <path d="M0,-12 L4,-3 L12,-2 L4,3 L8,12 L0,7 L-8,12 L-4,3 L-12,-2 L-4,-3 Z" fill="#a02818"/>
+        </g>
+        <circle cx="0" cy="0" r="4" fill="#0a1628"/>
+        <text x="0" y="-32" text-anchor="middle" font-family="Bebas Neue" font-size="14" fill="#a02818" class="blink">2 HP</text>
+        <rect x="20" y="-6" width="22" height="12" fill="url(#pipe3DhR)"/>
+      </g>
+      <text x="1280" y="585" class="diagram-label small" fill="#ff5733">L1 · DÉBIL</text>
+
+      <g transform="translate(1230,665)" filter="url(#shadowR)">
+        <ellipse cx="0" cy="0" rx="22" ry="22" fill="url(#pumpRedG)" stroke="#a02818" stroke-width="2"/>
+        <g class="impeller-stuck" style="animation-delay:.3s">
+          <path d="M0,-12 L4,-3 L12,-2 L4,3 L8,12 L0,7 L-8,12 L-4,3 L-12,-2 L-4,-3 Z" fill="#a02818"/>
+        </g>
+        <circle cx="0" cy="0" r="4" fill="#0a1628"/>
+        <text x="0" y="-32" text-anchor="middle" font-family="Bebas Neue" font-size="14" fill="#a02818" class="blink">2 HP</text>
+        <rect x="20" y="-6" width="22" height="12" fill="url(#pipe3DhR)"/>
+      </g>
+      <text x="1280" y="670" class="diagram-label small" fill="#ff5733">L2 · DÉBIL</text>
+
+      <text x="1240" y="555" text-anchor="middle" class="diagram-label" fill="#ff5733">BOMBAS SUBDIMENSIONADAS</text>
+      <text x="1240" y="700" text-anchor="middle" class="diagram-callout" fill="#ff5733">no logran succionar lo que llega</text>
+
+      <!-- Warning -->
+      <g transform="translate(1380,140)">
+        <polygon points="0,-50 60,50 -60,50" fill="#ff5733" stroke="#0a1628" stroke-width="4" class="blink" filter="url(#glowR)"/>
+        <text x="0" y="30" text-anchor="middle" font-family="Bebas Neue" font-size="50" fill="#0a1628">!</text>
+        <text x="0" y="80" text-anchor="middle" class="diagram-label" fill="#e0b53a">DESBALANCE</text>
+      </g>
+    </svg>
+    <div class="hud">
+      <div class="hud-top">
+        <div class="brand"><span class="baysa-mark">BAYSA</span>METALITEC<span class="sub">FLOW · CAPACITY · LABOR · LOSS</span></div>
+        <div class="meta">BOBINA / ROLL<br><span class="scene-num">07</span>EL DESBORDE</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== SCENE 8: DOUBLE COST ========== -->
+  <div class="scene-wrap" id="s8">
+    <svg class="scene" viewBox="0 0 1600 700" preserveAspectRatio="xMidYMid slice">
+      <defs>
+        <pattern id="grid5" width="40" height="40" patternUnits="userSpaceOnUse">
+          <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#e0b53a" stroke-width=".3" opacity=".08"/>
+        </pattern>
+      </defs>
+      <rect width="1600" height="700" fill="url(#grid5)"/>
+
+      <g transform="translate(60,360)">
+        <line x1="-50" y1="200" x2="640" y2="200" stroke="#e0b53a" stroke-width="1" opacity=".4"/>
+        <ellipse cx="320" cy="200" rx="300" ry="38" fill="#ff5733" opacity=".4"/>
+        <ellipse cx="320" cy="200" rx="260" ry="30" fill="#ff5733" opacity=".7"/>
+        <ellipse cx="320" cy="200" rx="220" ry="24" fill="#a02818"/>
+        <g class="wave-anim" opacity=".6">
+          <path d="M120,190 Q160,185 200,190 T280,190 T360,190 T440,190 T520,190" fill="none" stroke="#ff8a6b" stroke-width="1.5"/>
+        </g>
+
+        <g><circle cx="180" cy="195" r="14" fill="#e0b53a" stroke="#0a1628" stroke-width="2"/>
+          <text x="180" y="200" text-anchor="middle" font-family="Bebas Neue" font-size="16" fill="#0a1628">$</text></g>
+        <g><circle cx="300" cy="200" r="18" fill="#e0b53a" stroke="#0a1628" stroke-width="2"/>
+          <text x="300" y="206" text-anchor="middle" font-family="Bebas Neue" font-size="20" fill="#0a1628">$</text></g>
+        <g><circle cx="420" cy="195" r="14" fill="#e0b53a" stroke="#0a1628" stroke-width="2"/>
+          <text x="420" y="200" text-anchor="middle" font-family="Bebas Neue" font-size="16" fill="#0a1628">$</text></g>
+        <g><circle cx="500" cy="200" r="12" fill="#e0b53a" stroke="#0a1628" stroke-width="2"/>
+          <text x="500" y="204" text-anchor="middle" font-family="Bebas Neue" font-size="14" fill="#0a1628">$</text></g>
+
+        <circle cx="160" cy="0" r="8" fill="#ff5733" class="drop" style="animation-duration:1.4s"/>
+        <circle cx="280" cy="0" r="10" fill="#ff5733" class="drop" style="animation-duration:1.2s;animation-delay:.3s"/>
+        <circle cx="400" cy="0" r="7" fill="#ff5733" class="drop" style="animation-duration:1.6s;animation-delay:.6s"/>
+        <circle cx="500" cy="0" r="9" fill="#ff5733" class="drop" style="animation-duration:1.5s;animation-delay:.9s"/>
+
+        <text x="320" y="260" text-anchor="middle" class="diagram-label">EL DESBORDE QUE SE VUELVE COSTO</text>
+      </g>
+
+      <g>
+        <text x="800" y="80" font-family="Bebas Neue" font-size="44" fill="#f4ede0" letter-spacing="4">DOBLE DESPERDICIO</text>
+        <text x="800" y="110" font-family="Playfair Display" font-style="italic" font-size="18" fill="#a8b4c4">Metalitec paga dos veces por el mismo problema</text>
+      </g>
+
+      <g transform="translate(820,160)">
+        <g>
+          <rect x="0" y="0" width="700" height="160" fill="#0a1628" stroke="#ff5733" stroke-width="2"/>
+          <rect x="6" y="6" width="700" height="160" fill="none" stroke="#ff5733" stroke-width="1"/>
+          <text x="20" y="40" font-family="Bebas Neue" font-size="28" fill="#ff5733" letter-spacing="3">1 · DESPERDICIO POR DESBORDE</text>
+          <text x="20" y="62" font-family="Playfair Display" font-style="italic" font-size="14" fill="#a8b4c4">el agua/material que se sale del tanque</text>
+          <g font-family="JetBrains Mono" font-size="11" fill="#f4ede0">
+            <text x="20" y="92" letter-spacing="2">▸ MATERIA PRIMA INMOVILIZADA</text>
+            <text x="20" y="112" letter-spacing="2">▸ ESPACIO DE PISO OCUPADO</text>
+            <text x="20" y="132" letter-spacing="2">▸ DEFECTOS · SCRAP · OBSOLESCENCIA</text>
+            <text x="380" y="92" letter-spacing="2" fill="#ff5733" font-weight="700">CAPITAL CONGELADO</text>
+            <text x="380" y="112" letter-spacing="2" fill="#ff5733" font-weight="700">RENTA / ALMACENAJE</text>
+            <text x="380" y="132" letter-spacing="2" fill="#ff5733" font-weight="700">PÉRDIDA DIRECTA</text>
+          </g>
+        </g>
+
+        <g transform="translate(0,180)">
+          <rect x="0" y="0" width="700" height="160" fill="#0a1628" stroke="#9c5fc4" stroke-width="2"/>
+          <rect x="6" y="6" width="700" height="160" fill="none" stroke="#9c5fc4" stroke-width="1"/>
+          <text x="20" y="40" font-family="Bebas Neue" font-size="28" fill="#9c5fc4" letter-spacing="3">2 · SOBRETIEMPO INNECESARIO</text>
+          <text x="20" y="62" font-family="Playfair Display" font-style="italic" font-size="14" fill="#a8b4c4">horas extra en habilitado para producir lo que nadie absorbe</text>
+          <g font-family="JetBrains Mono" font-size="11" fill="#f4ede0">
+            <text x="20" y="92" letter-spacing="2">▸ HH EXTRA EN HABILITADO</text>
+            <text x="20" y="112" letter-spacing="2">▸ FATIGA · ERRORES · ROTACIÓN</text>
+            <text x="20" y="132" letter-spacing="2">▸ ENERGÍA · DEPRECIACIÓN MÁQUINA</text>
+            <text x="380" y="92" letter-spacing="2" fill="#9c5fc4" font-weight="700">SALARIO 1.5x – 2x</text>
+            <text x="380" y="112" letter-spacing="2" fill="#9c5fc4" font-weight="700">CALIDAD A LA BAJA</text>
+            <text x="380" y="132" letter-spacing="2" fill="#9c5fc4" font-weight="700">COSTO INDIRECTO</text>
+          </g>
+        </g>
+
+        <g transform="translate(0,360)">
+          <rect x="0" y="0" width="700" height="56" fill="#e0b53a"/>
+          <text x="20" y="34" font-family="Bebas Neue" font-size="20" fill="#0a1628" letter-spacing="3">PAGAMOS HORAS EXTRA PARA PRODUCIR LO QUE LUEGO TIRAMOS</text>
+        </g>
+      </g>
+    </svg>
+    <div class="hud">
+      <div class="hud-top">
+        <div class="brand"><span class="baysa-mark">BAYSA</span>METALITEC<span class="sub">FLOW · CAPACITY · LABOR · LOSS</span></div>
+        <div class="meta">BOBINA / ROLL<br><span class="scene-num">08</span>DOBLE COSTO</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== SCENE 9: SOLUTION with stronger pumps ========== -->
+  <div class="scene-wrap" id="s9">
+    <svg class="scene" viewBox="0 0 1600 700" preserveAspectRatio="xMidYMid slice">
+      <defs>
+        <pattern id="grid6" width="40" height="40" patternUnits="userSpaceOnUse">
+          <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#e0b53a" stroke-width=".3" opacity=".08"/>
+        </pattern>
+        <linearGradient id="tankGOK" x1="0" x2="0" y1="0" y2="1">
+          <stop offset="0" stop-color="#5fc3f5" stop-opacity=".95"/><stop offset="1" stop-color="#1e6fb8"/>
+        </linearGradient>
+        <linearGradient id="pipeGS" x1="0" x2="0" y1="0" y2="1">
+          <stop offset="0" stop-color="#7d8da4"/>
+          <stop offset=".5" stop-color="#3d4d61"/>
+          <stop offset="1" stop-color="#1a2838"/>
+        </linearGradient>
+        <radialGradient id="pumpGS" cx="40%" cy="40%" r="60%">
+          <stop offset="0" stop-color="#a8b4c4"/>
+          <stop offset=".7" stop-color="#3d4d61"/>
+          <stop offset="1" stop-color="#0a1628"/>
+        </radialGradient>
+      </defs>
+      <rect width="1600" height="700" fill="url(#grid6)"/>
+
+      <g>
+        <text x="100" y="80" font-family="Bebas Neue" font-size="46" fill="#f4ede0" letter-spacing="6">REPARAR EL ACUEDUCTO</text>
+        <text x="100" y="108" font-family="Playfair Display" font-style="italic" font-size="18" fill="#a8b4c4">balancear el caudal · ampliar diámetros · subir HP de las bombas</text>
+        <line x1="100" y1="125" x2="700" y2="125" stroke="#e0b53a" stroke-width="2"/>
+      </g>
+
+      <g transform="translate(150,260)">
+        <circle cx="0" cy="0" r="42" fill="#5fc3f5" stroke="#0a1628" stroke-width="3"/>
+        <path d="M-22,0 L22,0 M0,-22 L0,22" stroke="#0a1628" stroke-width="3"/>
+        <text x="0" y="80" text-anchor="middle" class="diagram-label small">REGULAR</text>
+
+        <line x1="45" y1="0" x2="320" y2="0" stroke="url(#pipeGS)" stroke-width="18"/>
+        <line x1="45" y1="0" x2="320" y2="0" stroke="#1e6fb8" stroke-width="7" class="flow"/>
+
+        <rect x="320" y="-80" width="150" height="160" fill="#5d6f86" stroke="#0a1628" stroke-width="3"/>
+        <rect x="322" y="0" width="146" height="80" fill="url(#tankGOK)"/>
+        <text x="395" y="105" text-anchor="middle" class="diagram-label small">KANBAN</text>
+
+        <line x1="470" y1="0" x2="780" y2="0" stroke="url(#pipeGS)" stroke-width="18"/>
+        <line x1="470" y1="0" x2="780" y2="0" stroke="#1e6fb8" stroke-width="7" class="flow"/>
+
+        <g transform="translate(780,0)">
+          <circle r="34" fill="#e0b53a" stroke="#0a1628" stroke-width="3"/>
+          <text y="6" text-anchor="middle" font-family="Bebas Neue" font-size="20" fill="#0a1628">TAKT</text>
+        </g>
+        <text x="780" y="65" text-anchor="middle" class="diagram-label small">RITMO</text>
+
+        <line x1="815" y1="0" x2="950" y2="0" stroke="url(#pipeGS)" stroke-width="14"/>
+        <line x1="950" y1="-90" x2="950" y2="90" stroke="url(#pipeGS)" stroke-width="12"/>
+
+        <!-- Wider pipes that grow -->
+        <g>
+          <text x="1100" y="-110" text-anchor="middle" font-family="Bebas Neue" font-size="14" fill="#9c5fc4" letter-spacing="2">+ HORAS-HOMBRE = + HP</text>
+          <line x1="950" y1="-90" x2="1180" y2="-90" stroke="url(#pipeGS)" stroke-width="22" class="pipe-grow"/>
+          <line x1="950" y1="-90" x2="1180" y2="-90" stroke="#5fc3f5" stroke-width="6" class="flow-fast"/>
+        </g>
+        <g>
+          <line x1="950" y1="0" x2="1180" y2="0" stroke="url(#pipeGS)" stroke-width="22" class="pipe-grow" style="animation-delay:1.3s"/>
+          <line x1="950" y1="0" x2="1180" y2="0" stroke="#5fc3f5" stroke-width="6" class="flow-fast"/>
+        </g>
+        <g>
+          <line x1="950" y1="90" x2="1180" y2="90" stroke="url(#pipeGS)" stroke-width="22" class="pipe-grow" style="animation-delay:1.6s"/>
+          <line x1="950" y1="90" x2="1180" y2="90" stroke="#5fc3f5" stroke-width="6" class="flow-fast"/>
+        </g>
+
+        <!-- workers on each pipe -->
+        <g class="worker" transform="translate(1080,-115)"><circle r="5" fill="#9c5fc4"/><rect x="-4" y="2" width="8" height="10" fill="#9c5fc4"/></g>
+        <g class="worker" transform="translate(1110,-115)" style="animation-delay:.2s"><circle r="5" fill="#9c5fc4"/><rect x="-4" y="2" width="8" height="10" fill="#9c5fc4"/></g>
+        <g class="worker" transform="translate(1140,-115)" style="animation-delay:.4s"><circle r="5" fill="#9c5fc4"/><rect x="-4" y="2" width="8" height="10" fill="#9c5fc4"/></g>
+
+        <g class="worker" transform="translate(1080,-25)"><circle r="5" fill="#9c5fc4"/><rect x="-4" y="2" width="8" height="10" fill="#9c5fc4"/></g>
+        <g class="worker" transform="translate(1110,-25)" style="animation-delay:.2s"><circle r="5" fill="#9c5fc4"/><rect x="-4" y="2" width="8" height="10" fill="#9c5fc4"/></g>
+        <g class="worker" transform="translate(1140,-25)" style="animation-delay:.4s"><circle r="5" fill="#9c5fc4"/><rect x="-4" y="2" width="8" height="10" fill="#9c5fc4"/></g>
+
+        <g class="worker" transform="translate(1080,65)"><circle r="5" fill="#9c5fc4"/><rect x="-4" y="2" width="8" height="10" fill="#9c5fc4"/></g>
+        <g class="worker" transform="translate(1110,65)" style="animation-delay:.2s"><circle r="5" fill="#9c5fc4"/><rect x="-4" y="2" width="8" height="10" fill="#9c5fc4"/></g>
+        <g class="worker" transform="translate(1140,65)" style="animation-delay:.4s"><circle r="5" fill="#9c5fc4"/><rect x="-4" y="2" width="8" height="10" fill="#9c5fc4"/></g>
+
+        <!-- BIG, FAST PUMPS -->
+        <g transform="translate(1210,-90)">
+          <ellipse cx="0" cy="0" rx="32" ry="32" fill="url(#pumpGS)" stroke="#0a1628" stroke-width="2"/>
+          <g class="impeller-fast">
+            <path d="M0,-18 L5,-5 L18,-2 L6,4 L12,18 L0,11 L-12,18 L-6,4 L-18,-2 L-5,-5 Z" fill="#5fc3f5"/>
+          </g>
+          <circle cx="0" cy="0" r="5" fill="#0a1628"/>
+          <text x="0" y="-44" text-anchor="middle" font-family="Bebas Neue" font-size="14" fill="#5fc3f5">10 HP</text>
+        </g>
+        <g transform="translate(1210,0)">
+          <ellipse cx="0" cy="0" rx="32" ry="32" fill="url(#pumpGS)" stroke="#0a1628" stroke-width="2"/>
+          <g class="impeller-fast" style="animation-delay:.2s">
+            <path d="M0,-18 L5,-5 L18,-2 L6,4 L12,18 L0,11 L-12,18 L-6,4 L-18,-2 L-5,-5 Z" fill="#5fc3f5"/>
+          </g>
+          <circle cx="0" cy="0" r="5" fill="#0a1628"/>
+          <text x="0" y="-44" text-anchor="middle" font-family="Bebas Neue" font-size="14" fill="#5fc3f5">10 HP</text>
+        </g>
+        <g transform="translate(1210,90)">
+          <ellipse cx="0" cy="0" rx="32" ry="32" fill="url(#pumpGS)" stroke="#0a1628" stroke-width="2"/>
+          <g class="impeller-fast" style="animation-delay:.4s">
+            <path d="M0,-18 L5,-5 L18,-2 L6,4 L12,18 L0,11 L-12,18 L-6,4 L-18,-2 L-5,-5 Z" fill="#5fc3f5"/>
+          </g>
+          <circle cx="0" cy="0" r="5" fill="#0a1628"/>
+          <text x="0" y="-44" text-anchor="middle" font-family="Bebas Neue" font-size="14" fill="#5fc3f5">10 HP</text>
+        </g>
+
+        <rect x="1245" y="-100" width="60" height="20" fill="#5d6f86" stroke="#0a1628" stroke-width="2"/>
+        <text x="1275" y="-87" text-anchor="middle" class="diagram-label small" fill="#f4ede0">L1</text>
+        <rect x="1245" y="-10" width="60" height="20" fill="#5d6f86" stroke="#0a1628" stroke-width="2"/>
+        <text x="1275" y="3" text-anchor="middle" class="diagram-label small" fill="#f4ede0">L2</text>
+        <rect x="1245" y="80" width="60" height="20" fill="#5d6f86" stroke="#0a1628" stroke-width="2"/>
+        <text x="1275" y="93" text-anchor="middle" class="diagram-label small" fill="#f4ede0">L3</text>
+      </g>
+
+      <g font-family="JetBrains Mono" transform="translate(0,500)">
+        <g transform="translate(50,0)">
+          <rect width="200" height="130" fill="#0a1628" stroke="#e0b53a" stroke-width="2"/>
+          <text x="16" y="44" font-family="Bebas Neue" font-size="36" fill="#5fc3f5">01</text>
+          <text x="16" y="68" font-family="Bebas Neue" font-size="14" letter-spacing="2" fill="#f4ede0">RITMO DE TAKT</text>
+          <text x="16" y="90" font-family="Playfair Display" font-style="italic" font-size="11" fill="#a8b4c4">habilitado al ritmo</text>
+          <text x="16" y="106" font-family="Playfair Display" font-style="italic" font-size="11" fill="#a8b4c4">de la línea más lenta.</text>
+        </g>
+        <g transform="translate(270,0)">
+          <rect width="200" height="130" fill="#0a1628" stroke="#e0b53a" stroke-width="2"/>
+          <text x="16" y="44" font-family="Bebas Neue" font-size="36" fill="#5fc3f5">02</text>
+          <text x="16" y="68" font-family="Bebas Neue" font-size="14" letter-spacing="2" fill="#f4ede0">PULL, NO PUSH</text>
+          <text x="16" y="90" font-family="Playfair Display" font-style="italic" font-size="11" fill="#a8b4c4">la línea jala el agua,</text>
+          <text x="16" y="106" font-family="Playfair Display" font-style="italic" font-size="11" fill="#a8b4c4">no se le empuja.</text>
+        </g>
+        <g transform="translate(490,0)">
+          <rect width="200" height="130" fill="#0a1628" stroke="#e0b53a" stroke-width="2"/>
+          <text x="16" y="44" font-family="Bebas Neue" font-size="36" fill="#5fc3f5">03</text>
+          <text x="16" y="68" font-family="Bebas Neue" font-size="14" letter-spacing="2" fill="#f4ede0">TOPES MAX/MIN</text>
+          <text x="16" y="90" font-family="Playfair Display" font-style="italic" font-size="11" fill="#a8b4c4">si toca techo,</text>
+          <text x="16" y="106" font-family="Playfair Display" font-style="italic" font-size="11" fill="#a8b4c4">la máquina para.</text>
+        </g>
+        <g transform="translate(710,0)">
+          <rect width="200" height="130" fill="#0a1628" stroke="#9c5fc4" stroke-width="3"/>
+          <text x="16" y="44" font-family="Bebas Neue" font-size="36" fill="#9c5fc4">04</text>
+          <text x="16" y="68" font-family="Bebas Neue" font-size="14" letter-spacing="2" fill="#f4ede0">+ HH = + HP</text>
+          <text x="16" y="90" font-family="Playfair Display" font-style="italic" font-size="11" fill="#a8b4c4">ampliar diámetro</text>
+          <text x="16" y="106" font-family="Playfair Display" font-style="italic" font-size="11" fill="#a8b4c4">y potencia de bombas.</text>
+        </g>
+        <g transform="translate(930,0)">
+          <rect width="200" height="130" fill="#0a1628" stroke="#e0b53a" stroke-width="2"/>
+          <text x="16" y="44" font-family="Bebas Neue" font-size="36" fill="#5fc3f5">05</text>
+          <text x="16" y="68" font-family="Bebas Neue" font-size="14" letter-spacing="2" fill="#f4ede0">BALANCEAR L1·L2·L3</text>
+          <text x="16" y="90" font-family="Playfair Display" font-style="italic" font-size="11" fill="#a8b4c4">igualar capacidad</text>
+          <text x="16" y="106" font-family="Playfair Display" font-style="italic" font-size="11" fill="#a8b4c4">de las tres tuberías.</text>
+        </g>
+        <g transform="translate(1150,0)">
+          <rect width="200" height="130" fill="#e0b53a" stroke="#e0b53a" stroke-width="2"/>
+          <text x="16" y="44" font-family="Bebas Neue" font-size="36" fill="#0a1628">06</text>
+          <text x="16" y="68" font-family="Bebas Neue" font-size="14" letter-spacing="2" fill="#0a1628">FLUJO CONTINUO</text>
+          <text x="16" y="90" font-family="Playfair Display" font-style="italic" font-size="11" fill="#0a1628">sin botes,</text>
+          <text x="16" y="106" font-family="Playfair Display" font-style="italic" font-size="11" fill="#0a1628">sin sed, sin OT.</text>
+        </g>
+      </g>
+    </svg>
+    <div class="hud">
+      <div class="hud-top">
+        <div class="brand"><span class="baysa-mark">BAYSA</span>METALITEC<span class="sub">FLOW · CAPACITY · LABOR · LOSS</span></div>
+        <div class="meta">BOBINA / ROLL<br><span class="scene-num">09</span>SOLUCIÓN</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- end card -->
+  <div class="end-card" id="endCard">
+    <div class="baysa-end">UNA PRODUCCIÓN BAYSA</div>
+    <h2>FIN DE LA TRANSMISIÓN</h2>
+    <p>Metalitec — el acueducto que aprendió a respirar al ritmo de su cliente,<br>de su gente y de la potencia de sus bombas.</p>
+    <button class="restart-btn" id="endRestart">↻ VOLVER A REPRODUCIR</button>
+  </div>
+</div>
+
+<!-- ========== NARRATION BAR ========== -->
+<div class="narration">
+  <div class="narrator-icon" id="narratorIcon">
+    <svg viewBox="0 0 24 24"><path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5.91-3c-.49 0-.9.36-.98.85C16.52 14.2 14.47 16 12 16s-4.52-1.8-4.93-4.15c-.08-.49-.49-.85-.98-.85-.61 0-1.09.54-1 1.14.49 3 2.89 5.35 5.91 5.78V20c0 .55.45 1 1 1s1-.45 1-1v-2.08c3.02-.43 5.42-2.78 5.91-5.78.1-.6-.39-1.14-1-1.14z"/></svg>
+  </div>
+  <div class="narration-content">
+    <div class="scene-title" id="sceneTitle"><span class="num">00</span>EN ESPERA</div>
+    <div class="narration-text" id="narrationText">Active el sonido y presione <strong style="color:#e0b53a">▶ INICIAR</strong> para escuchar la narración.</div>
+  </div>
+  <div class="audio-bars" id="audioBars">
+    <div class="audio-bar"></div>
+    <div class="audio-bar"></div>
+    <div class="audio-bar"></div>
+    <div class="audio-bar"></div>
+    <div class="audio-bar"></div>
+  </div>
+  <div class="controls">
+    <span class="voice-info">VOZ <span id="voiceName">--</span></span>
+    <button class="ctrl-btn primary" id="playPauseBtn">▶ INICIAR</button>
+    <button class="ctrl-btn" id="restartBtn">↻ REINICIAR</button>
+    <button class="ctrl-btn" id="muteBtn">🔊 VOZ</button>
+    <button class="ctrl-btn" id="musicBtn">🎵 MÚSICA</button>
+  </div>
+  <div class="timeline-markers" id="markers">
+    <div class="marker">01<br>INTRO</div>
+    <div class="marker">02<br>IDEAL</div>
+    <div class="marker">03<br>HH=HP</div>
+    <div class="marker">04<br>VISCOSIDAD</div>
+    <div class="marker">05<br>SEQUÍA MP</div>
+    <div class="marker">06<br>SED HH</div>
+    <div class="marker">07<br>DESBORDE</div>
+    <div class="marker">08<br>COSTO 2X</div>
+    <div class="marker">09<br>SOLUCIÓN</div>
+  </div>
+  <div class="timeline"><div class="timeline-fill" id="timelineFill"></div></div>
+</div>
+
+<script>
+// ============ DISCOVERY-CHANNEL STYLE NARRATION ============
+// Each line has: text, optional spot (spotlight), pauseAfter (extra silence in ms)
+// Scene transitions get longer pauseAfter for breathing room
+const script = [
+  // SCENE 1 — Intro
+  { sceneId:'s1', num:'01', title:'PRESENTACIÓN', endPause: 1500,
+    lines:[
+      {text:"En el corazón industrial de Baysa... existe una planta donde el acero corre como agua.", pauseAfter:1200},
+      {text:"Su nombre... es Metalitec.", pauseAfter:1500},
+      {text:"Y hoy... vamos a entrar en su acueducto.", pauseAfter:800}
+    ]
+  },
+  // SCENE 2 — Healthy flow
+  { sceneId:'s2', num:'02', title:'EL ACUEDUCTO IDEAL', endPause: 1500,
+    lines:[
+      {text:"Imaginen Metalitec... no como una planta, sino como un sistema hidráulico viviente.", pauseAfter:1200},
+      {text:"A la izquierda... el lago. La materia prima que llega cada amanecer.", spot:'spot-lake', pauseAfter:1100},
+      {text:"En el centro... las máquinas de habilitado, que procesan el agua bruta y la convierten en flujo aprovechable.", spot:'spot-machines', pauseAfter:1100},
+      {text:"Lo procesado cae al tanque kanban... el pulmón del sistema, donde el WIP espera con paciencia.", spot:'spot-tank', pauseAfter:1100},
+      {text:"Y al final... tres bombas, con sus impulsores girando, succionan ese caudal hacia armado, soldadura y ensamble.", spot:'spot-lines', pauseAfter:800}
+    ]
+  },
+  // SCENE 3 — HH = Diameter + HP
+  { sceneId:'s3', num:'03', title:'HH = DIÁMETRO + HP', endPause: 1500,
+    lines:[
+      {text:"Pero hay un secreto... oculto en la ingeniería de este acueducto.", pauseAfter:1200},
+      {text:"El diámetro de cada tubería... no es de acero. Es de gente.", pauseAfter:1300},
+      {text:"Y la potencia de cada bomba... medida en caballos de fuerza... también depende directamente de las horas-hombre instaladas en su línea.", pauseAfter:1200},
+      {text:"Más personas... más diámetro. Más caballos. Más caudal. La ecuación... es implacable.", pauseAfter:800}
+    ]
+  },
+  // SCENE 4 — VISCOSITY = HH/TON
+  { sceneId:'s4', num:'04', title:'VISCOSIDAD = HH/TON', endPause: 1500,
+    lines:[
+      {text:"Pero hay otro factor... que cambia todo el juego.", pauseAfter:1200},
+      {text:"No todas las piezas que pasan por Metalitec son iguales. Algunas... son agua. Otras... son miel.", pauseAfter:1400},
+      {text:"Esa densidad tiene un nombre: horas-hombre por tonelada. Y se comporta exactamente como la viscosidad de un fluido.", pauseAfter:1300},
+      {text:"El proyecto Ternium, con noventa horas-hombre por tonelada, fluye espeso, lento, casi resistiéndose por la tubería.", pauseAfter:1300},
+      {text:"En cambio, el proyecto Frezco, con apenas veinticuatro horas-hombre por tonelada, corre como agua por la línea. Casi cuatro veces más rápido.", pauseAfter:800}
+    ]
+  },
+  // SCENE 5 — DROUGHT — Raw Material late / incomplete
+  { sceneId:'s5', num:'05', title:'SEQUÍA · MP TARDE', endPause: 1500,
+    lines:[
+      {text:"Pero la primera grieta del acueducto Metalitec... aparece antes incluso del lago.", pauseAfter:1400},
+      {text:"La materia prima... no llega a tiempo. Y cuando llega... llega incompleta.", pauseAfter:1300},
+      {text:"El acero del proyecto Ternium, cinco días tarde. La placa de tres octavos, solo el sesenta por ciento del pedido. Los perfiles, sin fecha confirmada de embarque.", pauseAfter:1400},
+      {text:"El lago se seca. La tubería de entrada... gotea, en lugar de fluir.", pauseAfter:1200},
+      {text:"Y las máquinas de habilitado... se quedan mirando hacia el cielo. Detenidas. Operadores parados. Encendido apagado. Y la pregunta que recorre la planta... ¿dónde está el acero?", pauseAfter:1000}
+    ]
+  },
+  // SCENE 6 — THIRST — Not enough HH in armado/soldadura
+  { sceneId:'s6', num:'06', title:'SED · FALTAN HH', endPause: 1500,
+    lines:[
+      {text:"Y mientras el lago se seca... aparece la segunda grieta. Aún más cruel.", pauseAfter:1400},
+      {text:"Aguas abajo, en armado y soldadura, las tuberías son anchas. La capacidad existe. El diseño está ahí.", pauseAfter:1300},
+      {text:"Pero los puestos... están vacíos.", pauseAfter:1500},
+      {text:"De cuatro operadores que cada línea necesita... apenas hay uno o dos. Ocho puestos vacantes de doce.", pauseAfter:1400},
+      {text:"Sin gente, no hay diámetro. Sin diámetro, no hay caballos de fuerza. Y sin caballos... el caudal se ahoga.", pauseAfter:1200},
+      {text:"Las líneas están sedientas... no porque falte agua, sino porque no hay manos para recibirla.", pauseAfter:1000}
+    ]
+  },
+  // SCENE 7 — Overflow (was scene 5)
+  { sceneId:'s7', num:'07', title:'EL DESBORDE', endPause: 1500,
+    lines:[
+      {text:"Y aquí... ocurre lo impensable. Los dos cuellos de botella se encuentran.", pauseAfter:1400},
+      {text:"Cuando por fin llega un lote completo de materia prima... habilitado se acelera. Bombea con furia. Pide horas extra para recuperar el tiempo perdido.", pauseAfter:1300},
+      {text:"Pero las bombas de salida siguen débiles. Las líneas siguen sin gente. Las tuberías de armado y soldadura siguen sedientas.", pauseAfter:1400},
+      {text:"El tanque kanban no puede contenerlo todo... y se desborda.", pauseAfter:1000}
+    ]
+  },
+  // SCENE 8 — Double Cost (was scene 6)
+  { sceneId:'s8', num:'08', title:'DOBLE DESPERDICIO', endPause: 1500,
+    lines:[
+      {text:"Y aquí... está la cruel verdad.", pauseAfter:1400},
+      {text:"Metalitec... está pagando dos veces por el mismo problema.", pauseAfter:1400},
+      {text:"Primero, el desborde. Material que se almacena, se daña, se convierte en chatarra.", pauseAfter:1300},
+      {text:"Segundo... el sobretiempo. Horas extra a uno punto cinco veces el salario...", pauseAfter:1100},
+      {text:"Para producir un agua... que ningún tubo puede absorber.", pauseAfter:800}
+    ]
+  },
+  // SCENE 9 — Solution (was scene 7)
+  { sceneId:'s9', num:'09', title:'REPARAR EL ACUEDUCTO', endPause: 2000,
+    lines:[
+      {text:"La solución no está en bombear más. Está en sincronizar.", pauseAfter:1300},
+      {text:"Uno: asegurar el lago. Programa de entregas confiable, materia prima a tiempo y completa.", pauseAfter:1200},
+      {text:"Dos: llenar los puestos vacantes en armado y soldadura. Sin gente, no hay caudal.", pauseAfter:1300},
+      {text:"Tres: ritmo de takt. Cuatro: jalar, no empujar. Cinco: topes visuales en el kanban.", pauseAfter:1200},
+      {text:"Seis: ajustar el caudal a la viscosidad de cada proyecto. Ternium pesado, Frezco ligero.", pauseAfter:1200},
+      {text:"Más horas-hombre... más diámetro... más caballos. El kanban deja de ser un dique... y vuelve a ser... un pulmón.", pauseAfter:1500}
+    ]
+  }
+];
+
+// Build a flat queue of cues with metadata
+function buildCueQueue(){
+  const queue = [];
+  script.forEach((scene, sceneIdx) => {
+    scene.lines.forEach((line, lineIdx) => {
+      queue.push({
+        sceneId: scene.sceneId,
+        sceneNum: scene.num,
+        sceneTitle: scene.title,
+        sceneIdx: sceneIdx,
+        isFirstOfScene: lineIdx === 0,
+        isLastOfScene: lineIdx === scene.lines.length - 1,
+        text: line.text,
+        spot: line.spot || null,
+        pauseAfter: line.pauseAfter || 800,
+        endPause: scene.endPause || 1500
+      });
+    });
+  });
+  return queue;
+}
+
+const cueQueue = buildCueQueue();
+
+const sceneEls = {};
+['s1','s2','s3','s4','s5','s6','s7','s8','s9'].forEach(id => sceneEls[id] = document.getElementById(id));
+
+const splash = document.getElementById('splash');
+const startBtn = document.getElementById('startBtn');
+const playBtn = document.getElementById('playPauseBtn');
+const restartBtn = document.getElementById('restartBtn');
+const muteBtn = document.getElementById('muteBtn');
+const musicBtn = document.getElementById('musicBtn');
+const endRestart = document.getElementById('endRestart');
+const endCard = document.getElementById('endCard');
+const sceneTitle = document.getElementById('sceneTitle');
+const narrationText = document.getElementById('narrationText');
+const timelineFill = document.getElementById('timelineFill');
+const markers = document.getElementById('markers').children;
+const narratorIcon = document.getElementById('narratorIcon');
+const audioBars = document.getElementById('audioBars');
+const voiceNameEl = document.getElementById('voiceName');
+
+let isPlaying = false;
+let isMuted = false;
+let selectedVoice = null;
+
+// ========== VOICE SELECTION — MALE ONLY ==========
+// Curated list of known male Spanish voices across browsers/OS
+const MALE_VOICE_PATTERNS = [
+  // Microsoft (Windows/Edge)
+  /Microsoft Jorge/i,
+  /Microsoft Pablo/i,
+  /Microsoft Diego/i,
+  /Microsoft Raul/i,
+  /Microsoft Alvaro/i,
+  /Microsoft Andres/i,
+  /Microsoft Jorge\b/i,
+  /Microsoft Sebastián/i,
+  // Apple (macOS / iOS)
+  /Diego.*\(Spanish\)/i,
+  /Jorge.*\(Spanish\)/i,
+  /Juan.*\(Spanish\)/i,
+  /Carlos.*\(Spanish\)/i,
+  // Google Chrome (often only one Spanish, hard to filter — generic)
+  /Google.*español.*Estados Unidos/i,  // tends to be male in Chrome desktop
+  /Google.*español de Estados Unidos/i,
+];
+// Female names to EXPLICITLY exclude
+const FEMALE_VOICE_PATTERNS = [
+  /Helena/i, /Sabina/i, /Paulina/i, /Esperanza/i, /Marisol/i,
+  /Lucia/i, /Elvira/i, /Mónica/i, /Monica/i, /Laura/i,
+  /Penelope/i, /Penélope/i, /Soledad/i, /Camila/i, /Paloma/i,
+  /Maria/i, /María/i, /Ximena/i, /Dalia/i, /Beatriz/i,
+  /female/i, /\bf\b/i
+];
+
+function pickBestMaleSpanishVoice(){
+  const voices = speechSynthesis.getVoices();
+  if(!voices.length) return null;
+
+  // Filter only Spanish voices
+  const spanishVoices = voices.filter(v =>
+    v.lang.toLowerCase().startsWith('es')
+  );
+  if(!spanishVoices.length) return null;
+
+  // Reject known-female names
+  const notFemale = spanishVoices.filter(v =>
+    !FEMALE_VOICE_PATTERNS.some(p => p.test(v.name))
+  );
+
+  // First pass: match preferred male names
+  for(const pattern of MALE_VOICE_PATTERNS){
+    const v = notFemale.find(voice => pattern.test(voice.name));
+    if(v) return v;
+  }
+
+  // Second pass: any non-female Spanish voice
+  if(notFemale.length) return notFemale[0];
+
+  // Last resort: first Spanish voice
+  return spanishVoices[0];
+}
+
+function initVoice(){
+  selectedVoice = pickBestMaleSpanishVoice();
+  if(selectedVoice){
+    voiceNameEl.textContent = selectedVoice.name.length > 24
+      ? selectedVoice.name.substring(0,24)+'…'
+      : selectedVoice.name;
+  } else {
+    voiceNameEl.textContent = 'NO DISPONIBLE';
+  }
+}
+
+// Voice loading is async in some browsers
+if('speechSynthesis' in window){
+  speechSynthesis.onvoiceschanged = initVoice;
+  initVoice();
+}
+
+// ============ AMBIENT MUSIC ENGINE (Web Audio API) ============
+let audioCtx = null;
+let musicEnabled = true;
+let currentMood = null;       // 'calm' | 'drama' | null
+let musicNodes = [];          // active nodes to stop on mood change
+let masterGain = null;
+
+function initAudio(){
+  if(audioCtx) return;
+  const Ctx = window.AudioContext || window.webkitAudioContext;
+  if(!Ctx) return;
+  audioCtx = new Ctx();
+  masterGain = audioCtx.createGain();
+  masterGain.gain.value = 0.18; // music well below voice
+  masterGain.connect(audioCtx.destination);
+}
+
+function stopMusic(){
+  musicNodes.forEach(node => {
+    try {
+      if(node.stop) node.stop();
+      if(node.disconnect) node.disconnect();
+    } catch(e){}
+  });
+  musicNodes = [];
+}
+
+// Helper: create a soft sine pad oscillator
+function makePadVoice(freq, gainVal, panVal, detune = 0){
+  const osc = audioCtx.createOscillator();
+  const gain = audioCtx.createGain();
+  const pan = audioCtx.createStereoPanner ? audioCtx.createStereoPanner() : null;
+  const filter = audioCtx.createBiquadFilter();
+
+  osc.type = 'sine';
+  osc.frequency.value = freq;
+  osc.detune.value = detune;
+
+  filter.type = 'lowpass';
+  filter.frequency.value = 1200;
+  filter.Q.value = 0.7;
+
+  gain.gain.value = 0;
+  gain.gain.linearRampToValueAtTime(gainVal, audioCtx.currentTime + 2);
+
+  // Slow LFO for movement
+  const lfo = audioCtx.createOscillator();
+  const lfoGain = audioCtx.createGain();
+  lfo.frequency.value = 0.1 + Math.random() * 0.15;
+  lfoGain.gain.value = gainVal * 0.3;
+  lfo.connect(lfoGain).connect(gain.gain);
+  lfo.start();
+
+  osc.connect(filter).connect(gain);
+  if(pan){
+    pan.pan.value = panVal;
+    gain.connect(pan).connect(masterGain);
+  } else {
+    gain.connect(masterGain);
+  }
+
+  osc.start();
+  return [osc, lfo, gain, filter, pan].filter(Boolean);
+}
+
+// Calm music: C major pad — peaceful, hopeful
+function playCalmMusic(){
+  if(!audioCtx || !musicEnabled) return;
+  stopMusic();
+  if(masterGain) masterGain.gain.cancelScheduledValues(audioCtx.currentTime);
+  if(masterGain) masterGain.gain.linearRampToValueAtTime(0.18, audioCtx.currentTime + 1.5);
+
+  // C major triad with octaves: C3, E3, G3, C4, E4
+  const chord = [
+    {f: 130.81, g: 0.18, p: -0.3, d: 0},   // C3
+    {f: 164.81, g: 0.14, p:  0.3, d: 4},   // E3 (slight detune)
+    {f: 196.00, g: 0.12, p: -0.2, d: -3},  // G3
+    {f: 261.63, g: 0.10, p:  0.4, d: 2},   // C4
+    {f: 329.63, g: 0.07, p:  0.0, d: -5},  // E4
+  ];
+  chord.forEach(n => {
+    musicNodes = musicNodes.concat(makePadVoice(n.f, n.g, n.p, n.d));
+  });
+
+  // Add a soft high shimmer (5th octave)
+  const shimmer = audioCtx.createOscillator();
+  const shimmerGain = audioCtx.createGain();
+  shimmer.type = 'triangle';
+  shimmer.frequency.value = 783.99; // G5
+  shimmerGain.gain.value = 0;
+  shimmerGain.gain.linearRampToValueAtTime(0.03, audioCtx.currentTime + 4);
+  shimmer.connect(shimmerGain).connect(masterGain);
+  shimmer.start();
+  musicNodes.push(shimmer, shimmerGain);
+
+  currentMood = 'calm';
+}
+
+// Dramatic music: C minor with sub-bass pulse
+function playDramaMusic(){
+  if(!audioCtx || !musicEnabled) return;
+  stopMusic();
+  if(masterGain) masterGain.gain.cancelScheduledValues(audioCtx.currentTime);
+  if(masterGain) masterGain.gain.linearRampToValueAtTime(0.22, audioCtx.currentTime + 1);
+
+  // C minor triad with darker low end: C2, C3, Eb3, G3, Eb4
+  const chord = [
+    {f:  65.41, g: 0.22, p:  0.0, d: 0},    // C2 sub
+    {f: 130.81, g: 0.18, p: -0.2, d: -2},   // C3
+    {f: 155.56, g: 0.15, p:  0.3, d: 5},    // Eb3 — minor third
+    {f: 196.00, g: 0.10, p: -0.3, d: 0},    // G3
+    {f: 311.13, g: 0.07, p:  0.2, d: -4},   // Eb4
+  ];
+  chord.forEach(n => {
+    musicNodes = musicNodes.concat(makePadVoice(n.f, n.g, n.p, n.d));
+  });
+
+  // Sub-bass heartbeat pulse every ~1.2s
+  const pulseInterval = setInterval(() => {
+    if(currentMood !== 'drama' || !audioCtx || !musicEnabled) return;
+    const now = audioCtx.currentTime;
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = 'sine';
+    osc.frequency.value = 55; // very low
+    gain.gain.setValueAtTime(0, now);
+    gain.gain.linearRampToValueAtTime(0.35, now + 0.05);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.5);
+    osc.connect(gain).connect(masterGain);
+    osc.start(now);
+    osc.stop(now + 0.55);
+  }, 1200);
+  // Track interval to clear on stop
+  musicNodes.push({ stop: () => clearInterval(pulseInterval), disconnect: () => {} });
+
+  // Add tension swell every 6s
+  const tensionInterval = setInterval(() => {
+    if(currentMood !== 'drama' || !audioCtx || !musicEnabled) return;
+    const now = audioCtx.currentTime;
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = 'sawtooth';
+    osc.frequency.setValueAtTime(110, now);
+    osc.frequency.linearRampToValueAtTime(220, now + 4);
+    gain.gain.setValueAtTime(0, now);
+    gain.gain.linearRampToValueAtTime(0.04, now + 2);
+    gain.gain.linearRampToValueAtTime(0, now + 4);
+    const filter = audioCtx.createBiquadFilter();
+    filter.type = 'lowpass';
+    filter.frequency.value = 600;
+    osc.connect(filter).connect(gain).connect(masterGain);
+    osc.start(now);
+    osc.stop(now + 4.1);
+  }, 6000);
+  musicNodes.push({ stop: () => clearInterval(tensionInterval), disconnect: () => {} });
+
+  currentMood = 'drama';
+}
+
+function setMood(mood){
+  if(!audioCtx || !musicEnabled) return;
+  if(mood === currentMood) return;
+  if(mood === 'calm') playCalmMusic();
+  else if(mood === 'drama') playDramaMusic();
+}
+
+// Map each scene to a mood
+const SCENE_MOOD = {
+  s1: 'calm',     // intro
+  s2: 'calm',     // ideal flow
+  s3: 'calm',     // HH=HP — knowledge
+  s4: 'calm',     // viscosity comparison — neutral/curious
+  s5: 'drama',    // drought — bottleneck #1 (raw material)
+  s6: 'drama',    // thirst — bottleneck #2 (HH in lines)
+  s7: 'drama',    // overflow — both problems collide
+  s8: 'drama',    // double cost — problem deepens
+  s9: 'calm',     // solution — resolution
+};
+
+// ========== VOICE-DRIVEN NARRATION ENGINE ==========
+// The voice drives the timing, not the clock. Each line waits for the previous
+// to finish + a configured pause before starting. Scene changes get a longer
+// breath. The progress bar advances based on the cue index, not seconds.
+
+let currentCueIdx = -1;
+let pauseTimer = null;       // timeout between cues
+let pendingUtterance = null; // currently speaking utterance
+let isWaitingPause = false;  // true while in inter-cue pause
+let pauseStartedAt = 0;
+let pauseDurationMs = 0;
+
+function setSpotlight(id){
+  document.querySelectorAll('.spotlight').forEach(s => s.style.opacity = '0');
+  if(id){
+    const s = document.getElementById(id);
+    if(s) s.style.opacity = '1';
+  }
+}
+
+function renderText(text){
+  const words = text.split(' ');
+  narrationText.innerHTML = words.map(w => `<span class="word">${w}</span>`).join(' ');
+  const wordEls = narrationText.querySelectorAll('.word');
+  wordEls.forEach((el, i) => setTimeout(() => el.classList.add('show'), i * 50));
+}
+
+function applySceneVisuals(cue){
+  // Activate the right scene SVG
+  Object.keys(sceneEls).forEach(id => {
+    if(id === cue.sceneId) sceneEls[id].classList.add('active');
+    else sceneEls[id].classList.remove('active');
+  });
+  // Update HUD title
+  sceneTitle.innerHTML = `<span class="num">${cue.sceneNum}</span>${cue.sceneTitle}`;
+  // Update markers
+  Array.from(markers).forEach((m,i) => {
+    m.classList.toggle('active', i === cue.sceneIdx);
+  });
+  // Music mood (with fade handled inside setMood)
+  const targetMood = SCENE_MOOD[cue.sceneId];
+  if(targetMood) setMood(targetMood);
+}
+
+function speakCue(cue, onDone){
+  // If muted, just show the text + visuals and use a fixed reading delay
+  if(isMuted || !('speechSynthesis' in window)){
+    renderText(cue.text);
+    setSpotlight(cue.spot || null);
+    // estimate reading time: ~12 chars/second
+    const readMs = Math.max(2500, cue.text.length * 80);
+    setTimeout(onDone, readMs);
+    return;
+  }
+
+  // Build utterance
+  const utter = new SpeechSynthesisUtterance(cue.text);
+  if(selectedVoice) utter.voice = selectedVoice;
+  utter.lang = selectedVoice ? selectedVoice.lang : 'es-ES';
+  utter.rate = 0.92;   // slightly slower for documentary feel
+  utter.pitch = 0.85;  // deeper voice (Discovery-style)
+  utter.volume = 1;
+
+  let started = false;
+  let ended = false;
+
+  utter.onstart = () => {
+    started = true;
+    narratorIcon.classList.add('speaking');
+    audioBars.classList.add('active');
+    // Sync visuals with the actual moment voice begins
+    renderText(cue.text);
+    setSpotlight(cue.spot || null);
+  };
+
+  const finish = () => {
+    if(ended) return;
+    ended = true;
+    narratorIcon.classList.remove('speaking');
+    audioBars.classList.remove('active');
+    onDone();
+  };
+
+  utter.onend = finish;
+  utter.onerror = finish;
+
+  pendingUtterance = utter;
+
+  // Failsafe: some browsers occasionally swallow onstart/onend silently.
+  // We compute an upper bound based on text length and rate, plus 4 seconds buffer.
+  const charCount = cue.text.length;
+  const expectedSec = (charCount / 14) / utter.rate; // ~14 chars/sec at rate=1
+  const failsafeMs = Math.ceil(expectedSec * 1000) + 4000;
+  setTimeout(() => {
+    if(!ended){
+      // If voice never started OR got stuck, force progression
+      try { speechSynthesis.cancel(); } catch(e){}
+      finish();
+    }
+  }, failsafeMs);
+
+  // Small delay before speaking to ensure spotlights/scene swap have rendered
+  setTimeout(() => {
+    if(!isPlaying) return;
+    try { speechSynthesis.speak(utter); } catch(e){ finish(); }
+  }, 60);
+}
+
+function playNextCue(){
+  if(!isPlaying) return;
+
+  currentCueIdx++;
+  if(currentCueIdx >= cueQueue.length){
+    // End of show
+    finishShow();
+    return;
+  }
+
+  const cue = cueQueue[currentCueIdx];
+  const prevCue = currentCueIdx > 0 ? cueQueue[currentCueIdx - 1] : null;
+
+  // Update progress bar based on cue position
+  timelineFill.style.width = ((currentCueIdx + 1) / cueQueue.length * 100) + '%';
+
+  // If this is the first cue of a new scene, swap the scene visuals BEFORE the voice
+  // starts, with a small breath of silence first so the audience can register the new image.
+  const isSceneChange = !prevCue || prevCue.sceneId !== cue.sceneId;
+
+  if(isSceneChange){
+    // Show new scene visuals immediately
+    applySceneVisuals(cue);
+    // Add an extra breath at scene change (1 second on top of normal pause)
+    const extraBreath = 1000;
+    isWaitingPause = true;
+    pauseStartedAt = performance.now();
+    pauseDurationMs = extraBreath;
+    pauseTimer = setTimeout(() => {
+      isWaitingPause = false;
+      if(!isPlaying) return;
+      speakCue(cue, () => {
+        // After the voice finishes, wait pauseAfter then advance
+        isWaitingPause = true;
+        pauseStartedAt = performance.now();
+        pauseDurationMs = cue.pauseAfter;
+        pauseTimer = setTimeout(() => {
+          isWaitingPause = false;
+          playNextCue();
+        }, cue.pauseAfter);
+      });
+    }, extraBreath);
+  } else {
+    // Same scene — just speak, no scene swap
+    speakCue(cue, () => {
+      isWaitingPause = true;
+      pauseStartedAt = performance.now();
+      pauseDurationMs = cue.pauseAfter;
+      pauseTimer = setTimeout(() => {
+        isWaitingPause = false;
+        playNextCue();
+      }, cue.pauseAfter);
+    });
+  }
+}
+
+function finishShow(){
+  isPlaying = false;
+  playBtn.textContent = '▶ INICIAR';
+  playBtn.classList.remove('playing');
+  timelineFill.style.width = '100%';
+  endCard.classList.add('show');
+  speechSynthesis.cancel();
+  stopMusic();
+  currentMood = null;
+}
+
+function play(){
+  if(currentCueIdx >= cueQueue.length || currentCueIdx === -1){
+    // Fresh start
+    currentCueIdx = -1;
+    endCard.classList.remove('show');
+  }
+  isPlaying = true;
+  playBtn.textContent = '⏸ PAUSAR';
+  playBtn.classList.add('playing');
+  if(audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+
+  if(currentCueIdx === -1){
+    // First time
+    playNextCue();
+  } else if(isWaitingPause){
+    // Resume from pause: restart timeout for remaining time
+    const remaining = Math.max(200, pauseDurationMs - (performance.now() - pauseStartedAt));
+    pauseTimer = setTimeout(() => {
+      isWaitingPause = false;
+      // Determine: were we pausing AFTER speaking (advance to next) or BEFORE (speak current)?
+      // Simpler: advance to next cue
+      playNextCue();
+    }, remaining);
+  }
+}
+
+function pause(){
+  isPlaying = false;
+  speechSynthesis.cancel();
+  if(pauseTimer){ clearTimeout(pauseTimer); pauseTimer = null; }
+  if(audioCtx && audioCtx.state === 'running') audioCtx.suspend();
+  playBtn.textContent = '▶ CONTINUAR';
+  playBtn.classList.remove('playing');
+  narratorIcon.classList.remove('speaking');
+  audioBars.classList.remove('active');
+}
+
+function restart(){
+  speechSynthesis.cancel();
+  if(pauseTimer){ clearTimeout(pauseTimer); pauseTimer = null; }
+  stopMusic();
+  currentMood = null;
+  if(audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+  isPlaying = false;
+  currentCueIdx = -1;
+  isWaitingPause = false;
+  endCard.classList.remove('show');
+  Object.values(sceneEls).forEach(e => e.classList.remove('active'));
+  setSpotlight(null);
+  timelineFill.style.width = '0';
+  sceneTitle.innerHTML = '<span class="num">00</span>EN ESPERA';
+  narrationText.innerHTML = 'Active el sonido y presione <strong style="color:#e0b53a">▶ INICIAR</strong> para escuchar la narración.';
+  Array.from(markers).forEach(m => m.classList.remove('active'));
+  playBtn.textContent = '▶ INICIAR';
+  playBtn.classList.remove('playing');
+  narratorIcon.classList.remove('speaking');
+  audioBars.classList.remove('active');
+}
+
+// ========== EVENT HANDLERS ==========
+startBtn.addEventListener('click', () => {
+  splash.classList.add('hide');
+  // Initialize audio context (must happen on user gesture)
+  initAudio();
+  // Browser audio gesture: speak a tiny silent prime to unlock TTS
+  if('speechSynthesis' in window){
+    const prime = new SpeechSynthesisUtterance(' ');
+    prime.volume = 0;
+    speechSynthesis.speak(prime);
+  }
+  setTimeout(() => play(), 400);
+});
+
+playBtn.addEventListener('click', () => {
+  if(!audioCtx) initAudio();
+  if(isPlaying) pause();
+  else play();
+});
+restartBtn.addEventListener('click', () => { restart(); play(); });
+endRestart.addEventListener('click', () => { restart(); play(); });
+
+muteBtn.addEventListener('click', () => {
+  isMuted = !isMuted;
+  muteBtn.textContent = isMuted ? '🔇 VOZ' : '🔊 VOZ';
+  if(isMuted) speechSynthesis.cancel();
+});
+
+musicBtn.addEventListener('click', () => {
+  musicEnabled = !musicEnabled;
+  musicBtn.textContent = musicEnabled ? '🎵 MÚSICA' : '🎵̸ MÚSICA';
+  if(!musicEnabled){
+    stopMusic();
+    currentMood = null;
+  } else if(isPlaying && currentCueIdx >= 0 && currentCueIdx < cueQueue.length){
+    // Resume music for current scene
+    const cue = cueQueue[currentCueIdx];
+    const targetMood = SCENE_MOOD[cue.sceneId];
+    if(targetMood){
+      currentMood = null; // force re-trigger
+      setMood(targetMood);
+    }
+  }
+});
+
+// Cancel speech & music when page is hidden (tab switch)
+document.addEventListener('visibilitychange', () => {
+  if(document.hidden && isPlaying) pause();
+});
+</script>
+</body>
+</html>
