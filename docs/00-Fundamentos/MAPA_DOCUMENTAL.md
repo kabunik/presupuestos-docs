@@ -1,7 +1,11 @@
 # Mapa documental
 
 > Inventario de todas las fuentes del repositorio, con su naturaleza, su autoridad y su uso.
-> Revisado el **2026-08-06** contra el contenido real de cada archivo.
+> Revisado el **2026-08-19** contra el contenido real de cada archivo.
+
+> **Reorganización del 19-ago.** Todo el material del consultor vive ahora bajo
+> `docs/doc inicial/Contexto completo Michelena/`, repartido en seis carpetas temáticas. Las rutas de
+> las secciones 1 y 2 cambiaron; si un documento cita la ruta vieja, está roto.
 
 ## Cómo leer la columna «Autoridad»
 
@@ -13,7 +17,7 @@
 
 ---
 
-## 1 · `docs/Contexto completo Michelena/` — paquete Sistema DM v1.7
+## 1 · `docs/doc inicial/Contexto completo Michelena/Sistema completo/` — paquete Sistema DM v1.7
 
 Entrega del consultor del **2026-08-01**. Es la fuente normativa de toda la aritmética.
 
@@ -61,6 +65,57 @@ Material previo (ene–jun 2026), anterior al paquete v1.7. Contiene los **casos
 | `Como_Funciona_el_Software (3).pptx` | Guía en 4 capas para equipos de Ofertas y Planta | Comercial | Modelo mental del usuario final |
 | `Lean_ML_METALITEC_Habilitado (1).pdf` | Lean aplicado al habilitado (32 pág.) | Referencia | Sustento del ahorro HH/ton (inv. 9) |
 | `files (5).zip` | Sin inventariar | — | Revisar y clasificar |
+
+---
+
+## 2b · Las cinco carpetas nuevas del 19-ago
+
+Entrega del **14–19 de agosto**, reorganizada por el equipo en carpetas temáticas. Es el material que
+más mueve la aguja desde el paquete original: aquí aparecen la calibración con la planta **real** y el
+primer par IFC + planos.
+
+### `Modulo presupuestos/` — Sistema de Presupuesto Automático v1.3
+
+| Archivo | Naturaleza | Autoridad | Uso |
+|---|---|---|---|
+| `Especificacion_Tecnica_Sistema_Presupuestos_v1.3.docx` | Motores M1–M7, modos A/B/C, reglas R1–R26, pipeline de verificación V1–V7, fórmulas normativas | **Normativa** | Es la especificación de la aritmética *comercial y de planta*. Complementa al kit, no lo sustituye — ver [SISTEMA_PRESUPUESTOS_v1.3.md](SISTEMA_PRESUPUESTOS_v1.3.md) |
+| `Documento_Maestro_Conceptos_Presupuesto_v1.3.docx` | 27 conceptos + 18 correcciones de coherencia + glosario | Normativa (narrativa) | El *por qué*. Su §26 es una lista de contradicciones que el consultor mismo detectó y corrigió |
+| `Paquete_Base_Desarrollo_Sistema_Presupuestos_v1.3.zip` | 6 semillas JSON + 5 archivos fuente + LEEME | **Normativa (semillas)** | `parametros_modelo_y_verificador.json` **cierra el mapeo de tipologías**; `factores_desperdicio.json` y `rendimientos_budget_engine_v41.json` son las tablas paramétricas |
+| `Motor_Pintura_Desperdicios (1).xlsx` | 15 hojas: catálogo TDS, factores F1–F7, ambiente A1–A6, perfil de anclaje R0–R4, cálculo por capa, abrasivo, ignífugo por Hp/A, APU por familia, **contrato de datos** | **Normativa** | No eran campos que faltaban: es un **motor entero** con su interfaz. Ver [MOTOR_PINTURA.md](MOTOR_PINTURA.md) |
+| `Grafico_Rentabilidad_Presupuesto.html` | Tablero interactivo de referencia, 2 pestañas | Referencia de UI | Insumo de diseño de la curva de rentabilidad |
+| `Documento_Maestro_Conceptos_Presupuesto.docx` | Versión anterior sin numerar | Obsoleto/derivado | No citar: existe la v1.3 |
+
+### `Proyectos ejemplo/` — el par IFC + planos que faltaba
+
+| Archivo | Naturaleza | Autoridad | Uso |
+|---|---|---|---|
+| `Ampliacion_Bodega_50.ifc` | IFC4, mm, **409 elementos estructurales**. Generado con IfcOpenShell 0.8.5 el 13-ago | Referencia | **Desbloquea la percepción**: primer caso con modelo y planos del mismo proyecto. Ojo: es un IFC *sintetizado*, no nativo de Tekla |
+| `Ampliación bodega 50 4.pdf` | Planos, 21 MB | Referencia | El otro lado del par. Insumo directo de D2 y de P20 |
+| `Resumen_HHton_Soldadura_IFC_...pdf` | 596.2 t · **28.2 HH/ton ponderado** · 16,808 HH · 9 familias con su HH/ton · cómputo de soldadura en metros lineales | **Referencia (oráculo)** | Segundo caso real después de CNARCCS, y el único con desglose por familia. Declara su propia clase de estimación: **Clase 4/5, banda ±15–20%** |
+| `IFC Bodega-1/2/3.jpeg` | Capturas del modelo | Referencia | Verificación visual rápida |
+
+### `Analisis planta/` — de layout a carga de planta
+
+| Archivo | Naturaleza | Autoridad | Uso |
+|---|---|---|---|
+| `Carga de Planta Zapotlan.xlsx` | 4 proyectos reales × semana con ton y HH; 65 → 235 t/sem; ~8,850 HH/sem | **Referencia (oráculo)** | Es exactamente la estructura de P14. Valida la superficie contra un caso real |
+| `LAYOUT METALITEC 2026.01.19-Model (6).pdf` | Layout de la planta | Referencia | Uno de los entregables que Daniel debía enviar. Insumo del paso de procesos y estaciones (#115) |
+| `metalitec-baysa-v7_2.html` | «El acueducto»: pieza narrada sobre flujo, capacidad, HH y los dos cuellos de botella | Comercial / didáctica | Explica el modelo mental de capacidad. **No es spec**, pero es la mejor explicación de por qué HH es la unidad |
+
+### `Elementos estructurales/` — análisis pieza por pieza
+
+| Archivo | Naturaleza | Autoridad | Uso |
+|---|---|---|---|
+| `Analisis_habilitado_armado_soldadura_AG22_Rev1.html` | Trabe armada de alma esbelta, 7 ud, 2,031.56 kg/ud, 33 piezas/ud. Habilitado + armado + soldadura costeados, con verificación AISC/AWS y RFIs | **Referencia (oráculo)** | El nivel de detalle al que aspira el motor de HH. Declara la frontera: **«la pintura no entra en el total de fabricación bajo ninguna circunstancia»** |
+| `Analisis_habilitado_armado_soldadura_AC6_Rev0_1.html` | Mismo formato, otra marca | Referencia (oráculo) | AG22 cierra un RFI heredado de este |
+
+Ambos llevan en la cabecera **«Instrucciones Rev. 3.8»**, mientras nuestros documentos citan el rector
+en **v1.7**. La numeración del consultor avanzó y no sabemos qué cambió en el camino.
+
+### `Modulo montaje/` y `Sistema completo/`
+
+Ya inventariadas: la primera en [MOTOR_MONTAJE.md](MOTOR_MONTAJE.md), la segunda es la sección 1 de
+este mapa con su ruta nueva.
 
 ---
 

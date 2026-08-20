@@ -49,7 +49,7 @@ de resolución de conflictos completo.
 
 | Dominio | Autoridad |
 |---|---|
-| Aritmética, invariantes, parámetros | `docs/Contexto completo Michelena/Kit_Desarrollo_Sistema_DM.zip` → `motor_calculo_spec.md` + los 2 JSON Schema · luego `Ejemplo_Presupuesto_Sistema_DM.xlsx` · luego la narrativa del Documento Maestro |
+| Aritmética, invariantes, parámetros | `docs/doc inicial/Contexto completo Michelena/Sistema completo/Kit_Desarrollo_Sistema_DM/` → `motor_calculo_spec.md` + los 2 JSON Schema · luego `Ejemplo_Presupuesto_Sistema_DM.xlsx` · luego la narrativa del Documento Maestro |
 | Cifras del caso de referencia | `golden_test.json` — **ley, tolerancia cero** |
 | Reparto de trabajo y arquitectura | `docs/Diseño de producto/Segmentacion_Tareas_Kabunik_dcode_v2.md` |
 | Alcance de la v1 | `docs/00-Fundamentos/ALCANCE_v1.md` → GitHub Project [kabunik/projects/2](https://github.com/orgs/kabunik/projects/2) |

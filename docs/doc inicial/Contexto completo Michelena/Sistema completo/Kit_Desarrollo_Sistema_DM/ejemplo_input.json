@@ -1,0 +1,166 @@
+{
+  "version_parametros": "v2026.1",
+  "e1_ficha": {
+    "proyecto": "Caso de referencia",
+    "peso_planos_t": 100.0,
+    "clase_hh_ton": 40,
+    "fase_rss": "ambar"
+  },
+  "e2_take_off": {
+    "fuente": "ifc",
+    "factor_facturable_aisc": 1.137,
+    "peso_reconstruido_t": 113.68,
+    "exclusiones": [
+      "escaleras",
+      "pernos_anclaje_F1554",
+      "nelson_studs"
+    ]
+  },
+  "e3_precios": {
+    "materiales": [
+      {
+        "material": "Perfil W A992",
+        "precio_kg": 24.8,
+        "fuente": "molino",
+        "fecha": "2026-07-21",
+        "vigencia_dias": 9
+      },
+      {
+        "material": "Placa A572-50",
+        "precio_kg": 26.1,
+        "fuente": "distribuidor",
+        "fecha": "2026-07-24",
+        "vigencia_dias": 12
+      },
+      {
+        "material": "HSS A500-C",
+        "precio_kg": 28.35,
+        "fuente": "distribuidor",
+        "fecha": "2026-07-18",
+        "vigencia_dias": 6
+      },
+      {
+        "material": "FCAW E71T-1",
+        "precio_kg": 118.0,
+        "fuente": "proveedor",
+        "fecha": "2026-07-15",
+        "vigencia_dias": 30
+      }
+    ],
+    "confirmacion_precios": {
+      "confirmado": true,
+      "por": "Dirección",
+      "fecha": "2026-08-01",
+      "referencia_oferta": "OF-2026-014"
+    }
+  },
+  "e4_planta_vsm": {
+    "velocidad_base_t_sem": 15,
+    "velocidad_ot_t_sem": 24,
+    "cuello_botella": "soldadura_fcaw",
+    "ahorro_lean_pct": 0.084
+  },
+  "e5_financieros": {
+    "costo_hh_propio": 122.79,
+    "costo_hh_subcontrato": 164.85,
+    "cargas_planta_hh": 99.61,
+    "overhead_disponible_hh": 115.45
+  },
+  "e6_especificaciones": {
+    "plan_montaje_t_sem": [
+      22,
+      38,
+      24,
+      21,
+      10
+    ],
+    "desviaciones_concurso": [
+      {
+        "concepto": "NDT taller",
+        "norma": "visual 100%",
+        "concurso": "UT 20% adicional",
+        "rige": "concurso",
+        "impacto": 48200
+      },
+      {
+        "concepto": "Recubrimiento",
+        "norma": "SP6 1 capa",
+        "concurso": "SP10 2 capas",
+        "rige": "concurso",
+        "impacto": 121400
+      },
+      {
+        "concepto": "Contraflecha",
+        "norma": "AISC 303",
+        "concurso": "estrecha 75%",
+        "rige": "concurso",
+        "impacto": 18600
+      }
+    ]
+  },
+  "e7_bases": {
+    "carga_planta": {
+      "hh_libres_sem": 600,
+      "capacidad_habilitado_hh_sem": 600,
+      "proyectos_en_curso": [
+        {
+          "proyecto": "San Antonio Abad",
+          "hh_sem": [
+            180,
+            210,
+            160,
+            190,
+            160
+          ],
+          "t_sem": [
+            18,
+            20,
+            17,
+            19,
+            20
+          ]
+        },
+        {
+          "proyecto": "Chabacano",
+          "hh_sem": [
+            140,
+            160,
+            120,
+            150,
+            100
+          ],
+          "t_sem": [
+            13,
+            15,
+            12,
+            14,
+            15
+          ]
+        },
+        {
+          "proyecto": "World Park El Salto",
+          "hh_sem": [
+            80,
+            96,
+            80,
+            98,
+            100
+          ],
+          "t_sem": [
+            9,
+            10,
+            9,
+            9,
+            10
+          ]
+        }
+      ]
+    },
+    "inventario": {
+      "disponible_t": 61.0,
+      "asignado_t": 27.0,
+      "libre_t": 34.0
+    },
+    "registro_cierres": []
+  }
+}

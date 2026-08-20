@@ -1,0 +1,156 @@
+{
+  "descripcion": "Caso de referencia — LEY del sistema. Debe reproducirse EXACTO.",
+  "version_parametros": "v2026.1",
+  "parametros_registrados": {
+    "familias": "una sola (clase 40 HH/t): subproyectos no aplica",
+    "crecimiento_mas6": {
+      "aplicado": 0.06,
+      "default_fase_ambar": 0.1,
+      "justificacion": "caso de referencia"
+    },
+    "confirmar_precios_mp": "confirmada",
+    "leyenda_alcance": "presente",
+    "cierre": "pendiente"
+  },
+  "entrada": {
+    "peso_planos_t": 100.0,
+    "clase_hh_ton": 40,
+    "conexion": "apernada",
+    "fase_rss": "ambar",
+    "plan_montaje_t_sem": [
+      22,
+      38,
+      24,
+      21,
+      10
+    ],
+    "velocidad_base_t_sem": 15,
+    "velocidad_ot_t_sem": 24,
+    "costo_hh_propio": 122.79,
+    "costo_hh_subcontrato": 164.85,
+    "hh_libres_sem": 600,
+    "capacidad_habilitado_hh_sem": 600,
+    "inventario_libre_t": 34.0
+  },
+  "salida_esperada": {
+    "peso": {
+      "facturable_t": 113.7,
+      "comprar_t": 121.25,
+      "factor": 1.2125
+    },
+    "apu_aisc": {
+      "total": 5977353,
+      "por_kg": 52.57
+    },
+    "mas6": {
+      "total": 7914933,
+      "a_margen_comparable_21": 6011342,
+      "por_perfil": 7793628,
+      "peso_propuesto_t": 106.0,
+      "reconciliacion_vs_apu": 0.0057
+    },
+    "lean": {
+      "ahorro": 429263,
+      "pct": 0.084
+    },
+    "costo_empresa": {
+      "propio": 122.79,
+      "subcontrato": 164.85,
+      "cargas": 99.61,
+      "overhead": 115.45,
+      "estado": "cubiertas"
+    },
+    "grua": {
+      "piezas_criticas": 2,
+      "costo_partir": 76000
+    },
+    "lotes": {
+      "deficit_sem2_hh": 920,
+      "costo_fuerza_bruta": 145521
+    },
+    "capitulo_financiero": 206054,
+    "precio_licitacion": {
+      "total": 6183408,
+      "por_kg": 54.38
+    },
+    "s11": {
+      "pico_t_sem": 38,
+      "alerta_subcontrato_hh": 560,
+      "volumen_t_mes": 318,
+      "equilibrio_t_mes": 490,
+      "equilibrio_lean_t_mes": 368,
+      "advertencia_bajo_equilibrio": {
+        "activa": true,
+        "deficit_t": 172,
+        "deficit_lean_t": 50
+      }
+    },
+    "requisicion": {
+      "bruta_t": 121.55,
+      "inventario_libre_t": 34.0,
+      "neta_t": 87.55
+    },
+    "s12": {
+      "carga_combinada_t_sem": [
+        67,
+        83,
+        60,
+        70,
+        45
+      ],
+      "hh_habilitado_sem": [
+        534,
+        666,
+        480,
+        558,
+        360
+      ],
+      "ocupacion_pct": [
+        0.89,
+        1.11,
+        0.8,
+        0.93,
+        0.6
+      ],
+      "escenarios": {
+        "utilidad_base": 896603,
+        "a": {
+          "costo": 145521,
+          "utilidad": 751082
+        },
+        "b": {
+          "costo": 115025,
+          "utilidad": 781578
+        },
+        "b_optimizado": {
+          "ot_hh": 1000,
+          "desplazar_hh": 600,
+          "retraso_semanas": 1,
+          "costo": 64148,
+          "utilidad": 832455,
+          "pena_maxima": 81373
+        }
+      },
+      "recomendacion": "escenario_b_optimizado",
+      "advertencia_comunicacion_cliente": true
+    },
+    "rss": {
+      "valor": 0.0927,
+      "fase": "ambar",
+      "componentes": [
+        0.0624,
+        0.046,
+        0.036,
+        0.026,
+        0.02,
+        0.0145
+      ]
+    },
+    "alerta_interferencia_familias": {
+      "estado": "no_aplica"
+    },
+    "confirmar_precios_mp": {
+      "estado_emision": "habilitada"
+    }
+  }
+}

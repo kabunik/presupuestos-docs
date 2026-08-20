@@ -2,7 +2,7 @@
 
 > El consultor entregó el **12-ago** un motor de montaje funcional en Python, con su especificación de
 > integración declarada vinculante. Dirección decidió el **13-ago** incluirlo en la v1.
-> Cierra #112. Material en `docs/Contexto completo Michelena/Modulo montaje/`.
+> Cierra #112. Material en `docs/doc inicial/Contexto completo Michelena/Modulo montaje/`.
 
 ## La decisión y su reparto
 
@@ -62,7 +62,7 @@ más de **±3%**. El inv. 4 y el resumen de CNARCCS hablan de **≤5%**.
 
 | | Compara | Tolerancia |
 |---|---|---|
-| **Inv. 4 · doble chequeo** | Dos cálculos internos: peso del modelo vs. peso reconstruido | La del invariante |
+| **Inv. 4 · doble chequeo** | Dos cálculos internos: peso del modelo vs. peso reconstruido | **Δ < 1%** (regla R7 de v1.3) |
 | **G1 del motor de montaje** | El modelo contra el **tonelaje contractual firmado** | ±3% |
 
 El primero pregunta «¿calculé bien?». El segundo, «¿lo que voy a montar coincide con lo que se
@@ -146,6 +146,13 @@ los costos de loteo y la conversión a USD.
 Ojo con una diferencia de vocabulario: él usa **pesada / mediana / liviana**; nuestro eje es
 **24 / 40 / 60 / 90**. Hay que mapearlos explícitamente, no asumir la correspondencia.
 
+> **Resuelto el 19-ago** (#119). El paquete v1.3 trae las bandas y la regla R5 las hace normativas:
+> **pesada 14–26 · mediana 40–60 · liviana 80–999 HH/ton** → nuestro **24 · 40 y 60 · 90**.
+> La nomenclatura es la contraria a la intuitiva —«pesada» es sección pesada, que rinde *menos* HH por
+> tonelada— y por eso no había que adivinarla. Las tarifas de montaje (20 / 50 / 95) caen las tres
+> dentro de su banda: dos archivos distintos concuerdan. Detalle en
+> [SISTEMA_PRESUPUESTOS_v1.3.md](SISTEMA_PRESUPUESTOS_v1.3.md).
+
 ---
 
 ## El wizard de montaje
@@ -186,7 +193,7 @@ Dos reglas de diseño que salen del propio motor:
 | # | Abierto | Quién |
 |---|---|---|
 | 1 | ¿Tool con estado o cuatro tools encadenadas? | dcode |
-| 2 | Mapeo de tipologías: pesada/mediana/liviana ↔ eje 24/40/60/90 | Daniel |
+| 2 | ~~Mapeo de tipologías: pesada/mediana/liviana ↔ eje 24/40/60/90~~ · **cerrado el 19-ago** (#119) | — |
 | 3 | ¿Dónde vive el FX y cómo se sella en la oferta? | Conjunto |
 | 4 | Formato de la requisición a fabricación — declarado pendiente en la reunión | Conjunto |
 | 5 | El **empalme de piezas** afecta el desperdicio de forma significativa y no está en nuestro modelo | Daniel + C1 |

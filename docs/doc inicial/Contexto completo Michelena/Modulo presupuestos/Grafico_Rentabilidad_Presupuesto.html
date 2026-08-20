@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gráfico de Rentabilidad y Presupuesto — Sistema de Presupuesto Automático (v1.3)</title>
+<style>
+  :root{
+    --rojo:#CE142B; --gris:#93938E; --resalte:#F7DCE1; --azul:#1F5FA8;
+    --ink:#1f1f1f; --ink2:#55554F; --muted:#8a8a85; --line:#e4e4e0; --surface:#ffffff; --bg:#f6f6f4;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:Arial,Helvetica,sans-serif;color:var(--ink);background:var(--bg)}
+  header{background:var(--surface);border-bottom:4px solid var(--rojo);padding:16px 28px}
+  header h1{margin:0;font-size:20px}
+  header p{margin:4px 0 0;color:var(--ink2);font-size:13px}
+  .tabs{display:flex;gap:4px;background:var(--surface);padding:0 28px;border-bottom:1px solid var(--line)}
+  .tab{padding:12px 18px;border:none;background:none;font:inherit;font-size:14px;cursor:pointer;color:var(--ink2);border-bottom:3px solid transparent}
+  .tab.active{color:var(--rojo);border-bottom-color:var(--rojo);font-weight:bold}
+  main{max-width:1180px;margin:0 auto;padding:20px 28px}
+  .panel{display:none}.panel.active{display:block}
+  .grid{display:grid;grid-template-columns:300px 1fr;gap:20px;align-items:start}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px}
+  .card h3{margin:0 0 10px;font-size:13px;text-transform:uppercase;letter-spacing:.4px;color:var(--ink2)}
+  .ctl{margin-bottom:12px}
+  .ctl label{display:flex;justify-content:space-between;font-size:12.5px;color:var(--ink2);margin-bottom:3px}
+  .ctl label b{color:var(--ink);font-weight:bold}
+  .ctl input[type=range]{width:100%;accent-color:var(--rojo)}
+  .presets{display:flex;gap:6px;margin-bottom:14px}
+  .presets button{flex:1;padding:7px 4px;font:inherit;font-size:12px;border:1px solid var(--line);background:var(--surface);border-radius:6px;cursor:pointer;color:var(--ink2)}
+  .presets button.on{background:var(--resalte);border-color:var(--rojo);color:var(--rojo);font-weight:bold}
+  .tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px}
+  .tile{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+  .tile .k{font-size:11.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.4px}
+  .tile .v{font-size:20px;font-weight:bold;margin-top:2px}
+  .tile .s{font-size:11.5px;color:var(--ink2);margin-top:2px}
+  .pos{color:#1a7a3c}.neg{color:var(--rojo)}
+  svg text{font-family:Arial,Helvetica,sans-serif}
+  .tooltip{position:absolute;pointer-events:none;background:var(--ink);color:#fff;font-size:12px;padding:6px 9px;border-radius:6px;opacity:0;transition:opacity .08s;white-space:nowrap;z-index:5}
+  .chartwrap{position:relative}
+  .note{font-size:12px;color:var(--muted);margin-top:10px;line-height:1.5}
+  table.mini{width:100%;border-collapse:collapse;font-size:12.5px;margin-top:8px}
+  table.mini td{padding:4px 6px;border-bottom:1px solid var(--line)}
+  table.mini td:last-child{text-align:right;font-weight:bold}
+</style>
+</head>
+<body data-palette="#CE142B,#1F5FA8">
+<header>
+  <h1>Rentabilidad de planta y Presupuesto de proyecto</h1>
+  <p>Referencia interactiva del Sistema de Presupuesto Automático · v1.3 (Memoria del Estimador incorporada) · MXN</p>
+</header>
+<div class="tabs">
+  <button class="tab active" data-p="p1">Rentabilidad de planta</button>
+  <button class="tab" data-p="p2">Presupuesto de proyecto</button>
+</div>
+<main>
+
+<!-- ================= TAB 1: RENTABILIDAD ================= -->
+<section id="p1" class="panel active">
+  <div class="tiles">
+    <div class="tile"><div class="k">Punto de equilibrio</div><div class="v" id="t_eq">—</div><div class="s" id="t_eqp">—</div></div>
+    <div class="tile"><div class="k">Tarifa de venta</div><div class="v" id="t_tar">—</div><div class="s">costo HH × (1+margen)</div></div>
+    <div class="tile"><div class="k">Resultado del mes</div><div class="v" id="t_res">—</div><div class="s" id="t_pos">—</div></div>
+    <div class="tile"><div class="k">Utilización</div><div class="v" id="t_uti">—</div><div class="s">HH ganadas ÷ instaladas</div></div>
+  </div>
+  <div class="grid">
+    <div class="card">
+      <h3>Parámetros de planta</h3>
+      <div class="presets">
+        <button id="pre_did" class="on">Planta Didáctica</button>
+        <button id="pre_met">Metalitec real</button>
+      </div>
+      <div class="ctl"><label>Gastos fijos / mes <b id="v_fijos"></b></label><input type="range" id="fijos" min="2000000" max="8000000" step="50000"></div>
+      <div class="ctl"><label>Costo HH (operativo) <b id="v_costo"></b></label><input type="range" id="costo" min="150" max="450" step="5"></div>
+      <div class="ctl"><label>Margen del CEO <b id="v_margen"></b></label><input type="range" id="margen" min="0" max="50" step="1"></div>
+      <div class="ctl"><label>Consumibles por HH <b id="v_cons"></b></label><input type="range" id="cons" min="0" max="150" step="5"></div>
+      <div class="ctl"><label>HH instaladas <b id="v_cap"></b></label><input type="range" id="cap" min="8000" max="30000" step="10"></div>
+      <div class="ctl"><label>HH ganadas del mes <b id="v_hh"></b></label><input type="range" id="hh" min="0" max="30000" step="100"></div>
+      <div class="note">La distancia vertical entre las dos rectas es la utilidad o pérdida. Regla del sistema: monitorear semanalmente — decisiones oportunas, no <i>post&nbsp;mortem</i>.</div>
+    </div>
+    <div class="card chartwrap">
+      <h3>Curva de rentabilidad — ingresos vs. gastos</h3>
+      <svg id="chart1" width="100%" height="430" viewBox="0 0 820 430" role="img" aria-label="Curva de rentabilidad"></svg>
+      <div class="tooltip" id="tip1"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= TAB 2: PRESUPUESTO ================= -->
+<section id="p2" class="panel">
+  <div class="tiles">
+    <div class="tile"><div class="k">Costo de fabricación</div><div class="v" id="b_costo">—</div><div class="s" id="b_costokg">—</div></div>
+    <div class="tile"><div class="k">Precio mínimo (×1.18)</div><div class="v" id="b_pmin">—</div><div class="s" id="b_pminkg">—</div></div>
+    <div class="tile"><div class="k">Precio objetivo (×1.21)</div><div class="v" id="b_pobj">—</div><div class="s" id="b_pobjkg">—</div></div>
+    <div class="tile"><div class="k">HH del proyecto</div><div class="v" id="b_hh">—</div><div class="s" id="b_sem">—</div></div>
+  </div>
+  <div class="grid">
+    <div class="card">
+      <h3>Variables del proyecto</h3>
+      <div class="ctl"><label>Tonelaje (facturable) <b id="w_ton"></b></label><input type="range" id="ton" min="20" max="1500" step="10" value="100"></div>
+      <div class="ctl"><label>HH/ton (núcleo) <b id="w_hht"></b></label><input type="range" id="hht" min="14" max="95" step="1" value="40"></div>
+      <div class="ctl"><label>Costo HH <b id="w_chh"></b></label><input type="range" id="chh" min="150" max="450" step="5" value="265"></div>
+      <div class="ctl"><label>Consumibles $/kg <b id="w_ckg"></b></label><input type="range" id="ckg" min="0" max="6" step="0.1" value="2.4"></div>
+      <div class="ctl"><label>Material $/kg (comprado) <b id="w_mat"></b></label><input type="range" id="mat" min="0" max="45" step="0.5" value="24"></div>
+      <div class="ctl"><label>Factor global de compra <b id="w_fg"></b></label><input type="range" id="fg" min="100" max="130" step="1" value="121"></div>
+      <div class="note">Costo = HH×costoHH + consumibles + material×factor global (criterio del estimador: precio mínimo ×1.18, objetivo ×1.21). El HH/ton clasifica el precio: baja dificultad ≈15, alta ≈90.</div>
+      <table class="mini" id="b_desg"></table>
+    </div>
+    <div class="card chartwrap">
+      <h3>Precio de maquila por dificultad (HH/ton) — su proyecto posicionado</h3>
+      <svg id="chart2" width="100%" height="430" viewBox="0 0 820 430" role="img" aria-label="Precio por HH/ton"></svg>
+      <div class="tooltip" id="tip2"></div>
+    </div>
+  </div>
+</section>
+</main>
+
+<script>
+"use strict";
+const AZUL="#1F5FA8", ROJO="#CE142B", GRIS="#93938E", INK="#1f1f1f", MUT="#8a8a85", LINEA="#e4e4e0";
+const $=id=>document.getElementById(id);
+const fmt=n=>"$"+Math.round(n).toLocaleString("es-MX");
+const fmtM=n=>"$"+(n/1e6).toFixed(2)+" M";
+const fmtHH=n=>Math.round(n).toLocaleString("es-MX")+" HH";
+
+/* tabs */
+document.querySelectorAll(".tab").forEach(t=>t.addEventListener("click",()=>{
+  document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));
+  document.querySelectorAll(".panel").forEach(x=>x.classList.remove("active"));
+  t.classList.add("active"); $(t.dataset.p).classList.add("active");
+}));
+
+/* ---------- TAB 1 ---------- */
+const PRESETS={
+  did:{fijos:3744000,costo:300,margen:20,cons:20,cap:12480,hh:12030},
+  met:{fijos:4750000,costo:265,margen:21,cons:115,cap:25000,hh:24000}
+};
+function setPreset(p,btn){
+  $("cap").value=p.cap; $("hh").max=p.cap;
+  for(const k in p)$(k).value=p[k];
+  $("pre_did").classList.toggle("on",btn==="did");
+  $("pre_met").classList.toggle("on",btn==="met");
+  draw1();
+}
+$("pre_did").onclick=()=>setPreset(PRESETS.did,"did");
+$("pre_met").onclick=()=>setPreset(PRESETS.met,"met");
+
+function draw1(){
+  const F=+$("fijos").value,C=+$("costo").value,M=+$("margen").value/100,K=+$("cons").value,CAP=+$("cap").value;
+  let HH=+$("hh").value; $("hh").max=CAP; if(HH>CAP){HH=CAP;$("hh").value=CAP;}
+  const tar=C*(1+M), eq=(tar-K)>0?F/(tar-K):Infinity;
+  const ing=HH*tar, gas=F+HH*K, res=ing-gas;
+  $("v_fijos").textContent=fmtM(F); $("v_costo").textContent=fmt(C)+"/HH";
+  $("v_margen").textContent=Math.round(M*100)+"%"; $("v_cons").textContent=fmt(K)+"/HH";
+  $("v_cap").textContent=fmtHH(CAP); $("v_hh").textContent=fmtHH(HH);
+  $("t_eq").textContent=isFinite(eq)?fmtHH(eq):"—";
+  $("t_eqp").textContent=isFinite(eq)?(100*eq/CAP).toFixed(1)+"% de la capacidad":"tarifa ≤ consumibles";
+  $("t_tar").textContent=fmt(tar)+"/HH";
+  $("t_res").textContent=fmtM(res); $("t_res").className="v "+(res>=0?"pos":"neg");
+  $("t_pos").textContent=res>=0?"ARRIBA del equilibrio ✓":"DEBAJO del equilibrio ✗";
+  $("t_uti").textContent=(100*HH/CAP).toFixed(0)+"%";
+
+  const svg=$("chart1"); svg.innerHTML="";
+  const W=820,H=430,mL=86,mR=24,mT=18,mB=46,pw=W-mL-mR,ph=H-mT-mB;
+  const xmax=CAP*1.04, ymax=Math.max(CAP*tar,F+CAP*K)*1.06;
+  const X=v=>mL+pw*v/xmax, Y=v=>mT+ph*(1-v/ymax);
+  const NS="http://www.w3.org/2000/svg";
+  const el=(t,a)=>{const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);svg.appendChild(e);return e;};
+  const txt=(x,y,s,a)=>{const e=el("text",Object.assign({x,y,fill:MUT,"font-size":11.5},a||{}));e.textContent=s;return e;};
+  // grid + ejes
+  for(let i=0;i<=5;i++){const v=ymax*i/5;el("line",{x1:mL,x2:W-mR,y1:Y(v),y2:Y(v),stroke:LINEA,"stroke-width":1});txt(mL-8,Y(v)+4,fmtM(v),{"text-anchor":"end"});}
+  for(let i=0;i<=5;i++){const v=xmax*i/5;txt(X(v),H-mB+18,Math.round(v/1000)+"k",{"text-anchor":"middle"});}
+  txt(mL+pw/2,H-8,"HH ganadas en el mes",{"text-anchor":"middle",fill:"#55554F","font-size":12.5});
+  // zona de utilidad (entre rectas después del equilibrio)
+  if(isFinite(eq)&&eq<xmax){
+    el("path",{d:`M ${X(eq)} ${Y(eq*tar)} L ${X(xmax)} ${Y(xmax*tar)} L ${X(xmax)} ${Y(F+xmax*K)} Z`,fill:"#1a7a3c",opacity:.07});
+  }
+  // capacidad instalada
+  el("line",{x1:X(CAP),x2:X(CAP),y1:mT,y2:H-mB,stroke:GRIS,"stroke-width":1.5,"stroke-dasharray":"5 4"});
+  txt(X(CAP)-6,H-mB-10,"Capacidad "+Math.round(CAP/1000)+"k",{ "text-anchor":"end",fill:"#55554F"});
+  // rectas
+  el("line",{x1:X(0),y1:Y(0),x2:X(xmax),y2:Y(xmax*tar),stroke:AZUL,"stroke-width":2.5});
+  el("line",{x1:X(0),y1:Y(F),x2:X(xmax),y2:Y(F+xmax*K),stroke:ROJO,"stroke-width":2.5});
+  // leyenda (siempre presente, sin colisiones)
+  el("rect",{x:mL+10,y:mT+6,width:14,height:4,rx:2,fill:AZUL});
+  txt(mL+30,mT+13,"Ingresos (HH ganadas × tarifa)",{fill:"#1f1f1f","font-size":12});
+  el("rect",{x:mL+230,y:mT+6,width:14,height:4,rx:2,fill:ROJO});
+  txt(mL+250,mT+13,"Gastos (fijos + consumibles×HH)",{fill:"#1f1f1f","font-size":12});
+  // equilibrio
+  if(isFinite(eq)&&eq<xmax){
+    el("circle",{cx:X(eq),cy:Y(eq*tar),r:6,fill:"#fff",stroke:INK,"stroke-width":2});
+    const eqRight=eq>0.72*xmax;
+    txt(X(eq)+(eqRight?-10:10),Y(eq*tar)+18,"Equilibrio "+fmtHH(eq),{fill:INK,"font-weight":"bold","text-anchor":eqRight?"end":"start"});
+  }
+  // punto ejecutado
+  el("circle",{cx:X(HH),cy:Y(ing),r:7,fill:res>=0?"#1a7a3c":ROJO,stroke:"#fff","stroke-width":2});
+  const nearTop=Y(ing)<mT+46, nearRight=HH>0.82*xmax;
+  const nearEq=isFinite(eq)&&Math.abs(X(HH)-X(eq))<140;
+  let dy=nearTop?26:-14; if(nearTop&&nearEq)dy=44;
+  txt(X(HH)+(nearRight?-14:0),Y(ing)+dy,(res>=0?"Utilidad ":"Pérdida ")+fmtM(Math.abs(res)),{ "text-anchor":nearRight?"end":"middle",fill:res>=0?"#1a7a3c":ROJO,"font-weight":"bold","font-size":12.5});
+  // hover crosshair
+  const tip=$("tip1");
+  const hov=el("rect",{x:mL,y:mT,width:pw,height:ph,fill:"transparent"});
+  const cross=el("line",{x1:0,x2:0,y1:mT,y2:H-mB,stroke:MUT,"stroke-width":1,"stroke-dasharray":"3 3",opacity:0});
+  hov.addEventListener("mousemove",e=>{
+    const r=svg.getBoundingClientRect(), sx=(e.clientX-r.left)*(W/r.width);
+    const v=Math.max(0,Math.min(xmax,(sx-mL)/pw*xmax));
+    cross.setAttribute("x1",X(v));cross.setAttribute("x2",X(v));cross.setAttribute("opacity",1);
+    tip.style.opacity=1;
+    tip.style.left=(e.clientX-r.left+14)+"px"; tip.style.top=(e.clientY-r.top-10)+"px";
+    tip.innerHTML=`<b>${fmtHH(v)}</b><br>Ingresos: ${fmtM(v*tar)}<br>Gastos: ${fmtM(F+v*K)}<br>Resultado: ${fmtM(v*tar-F-v*K)}`;
+  });
+  hov.addEventListener("mouseleave",()=>{tip.style.opacity=0;cross.setAttribute("opacity",0);});
+}
+["fijos","costo","margen","cons","cap","hh"].forEach(id=>$(id).addEventListener("input",()=>{
+  $("pre_did").classList.remove("on");$("pre_met").classList.remove("on");draw1();
+}));
+setPreset(PRESETS.did,"did");
+
+/* ---------- TAB 2 ---------- */
+function draw2(){
+  const T=+$("ton").value, HT=+$("hht").value, CHH=+$("chh").value, CKG=+$("ckg").value, MAT=+$("mat").value, FG=+$("fg").value/100;
+  const hh=T*HT;
+  const mo=hh*CHH, cons=T*1000*CKG, mate=T*1000*MAT*FG;
+  const costo=mo+cons+mate, pmin=costo*1.18, pobj=costo*1.21;
+  $("w_ton").textContent=T+" t"; $("w_hht").textContent=HT+" HH/ton";
+  $("w_chh").textContent=fmt(CHH)+"/HH"; $("w_ckg").textContent="$"+CKG.toFixed(1)+"/kg";
+  $("w_mat").textContent="$"+MAT.toFixed(1)+"/kg"; $("w_fg").textContent=(FG).toFixed(2)+"×";
+  $("b_costo").textContent=fmtM(costo); $("b_costokg").textContent="$"+(costo/(T*1000)).toFixed(2)+"/kg";
+  $("b_pmin").textContent=fmtM(pmin); $("b_pminkg").textContent="$"+(pmin/(T*1000)).toFixed(2)+"/kg";
+  $("b_pobj").textContent=fmtM(pobj); $("b_pobjkg").textContent="$"+(pobj/(T*1000)).toFixed(2)+"/kg";
+  $("b_hh").textContent=fmtHH(hh);
+  $("b_sem").textContent="≈ "+(hh/ (25000/4.33)).toFixed(1)+" semanas de planta completa";
+  $("b_desg").innerHTML=
+    `<tr><td>Mano de obra (${fmtHH(hh)} × ${fmt(CHH)})</td><td>${fmtM(mo)}</td></tr>`+
+    `<tr><td>Consumibles (${T} t × $${CKG.toFixed(1)}/kg)</td><td>${fmtM(cons)}</td></tr>`+
+    `<tr><td>Material (× factor global ${FG.toFixed(2)})</td><td>${fmtM(mate)}</td></tr>`;
+
+  // Curva $/kg maquila vs HH/ton, con punto del proyecto
+  const svg=$("chart2"); svg.innerHTML="";
+  const W=820,H=430,mL=70,mR=24,mT=18,mB=46,pw=W-mL-mR,ph=H-mT-mB;
+  const x0=14,x1=95;
+  const fkg=h=>(h*CHH/1000+CKG); // costo maquila $/kg (sin material)
+  const ymax=fkg(x1)*1.21*1.12;
+  const X=v=>mL+pw*(v-x0)/(x1-x0), Y=v=>mT+ph*(1-v/ymax);
+  const NS="http://www.w3.org/2000/svg";
+  const el=(t,a)=>{const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);svg.appendChild(e);return e;};
+  const txt=(x,y,s,a)=>{const e=el("text",Object.assign({x,y,fill:MUT,"font-size":11.5},a||{}));e.textContent=s;return e;};
+  for(let i=0;i<=5;i++){const v=ymax*i/5;el("line",{x1:mL,x2:W-mR,y1:Y(v),y2:Y(v),stroke:LINEA,"stroke-width":1});if(i<5)txt(mL-8,Y(v)+4,"$"+v.toFixed(1),{"text-anchor":"end"});}
+  [15,25,40,60,90].forEach(v=>txt(X(v),H-mB+18,v,{"text-anchor":"middle"}));
+  txt(mL+pw/2,H-8,"Dificultad de fabricación — HH/ton (núcleo)",{"text-anchor":"middle",fill:"#55554F","font-size":12.5});
+  txt(mL-8,mT+2,"Maquila $/kg",{fill:"#55554F","font-size":12.5,"text-anchor":"end"});
+  // banda min-objetivo
+  let dTop="",dBot="";
+  for(let h=x0;h<=x1;h++){dTop+=(h===x0?"M":"L")+X(h)+" "+Y(fkg(h)*1.21)+" ";}
+  for(let h=x1;h>=x0;h--){dBot+="L"+X(h)+" "+Y(fkg(h)*1.18)+" ";}
+  el("path",{d:dTop+dBot+"Z",fill:"#F7DCE1",opacity:.65});
+  // lineas costo / min / objetivo
+  const line=(f,color,w,dash)=>{let d="";for(let h=x0;h<=x1;h++)d+=(h===x0?"M":"L")+X(h)+" "+Y(f(h))+" ";el("path",{d,fill:"none",stroke:color,"stroke-width":w,"stroke-dasharray":dash||"none"});};
+  line(h=>fkg(h),GRIS,2,"5 4");
+  line(h=>fkg(h)*1.18,ROJO,2);
+  line(h=>fkg(h)*1.21,AZUL,2.5);
+  txt(X(90),Y(fkg(90))+20,"Costo",{fill:"#55554F","font-weight":"bold","text-anchor":"end"});
+  txt(X(62),Y(fkg(62)*1.18)+20,"Mínimo ×1.18",{fill:ROJO,"font-weight":"bold","text-anchor":"end"});
+  txt(X(90),Y(fkg(90)*1.21)-12,"Objetivo ×1.21",{fill:AZUL,"font-weight":"bold","text-anchor":"end"});
+  // punto del proyecto
+  el("circle",{cx:X(HT),cy:Y(fkg(HT)*1.21),r:7,fill:AZUL,stroke:"#fff","stroke-width":2});
+  txt(X(HT),Y(fkg(HT)*1.21)-14,"Su proyecto: $"+(fkg(HT)*1.21).toFixed(2)+"/kg",{"text-anchor":"middle",fill:AZUL,"font-weight":"bold","font-size":12.5});
+  // hover
+  const tip=$("tip2");
+  const hov=el("rect",{x:mL,y:mT,width:pw,height:ph,fill:"transparent"});
+  const cross=el("line",{x1:0,x2:0,y1:mT,y2:H-mB,stroke:MUT,"stroke-width":1,"stroke-dasharray":"3 3",opacity:0});
+  hov.addEventListener("mousemove",e=>{
+    const r=svg.getBoundingClientRect(), sx=(e.clientX-r.left)*(W/r.width);
+    const h=Math.max(x0,Math.min(x1,x0+(sx-mL)/pw*(x1-x0)));
+    cross.setAttribute("x1",X(h));cross.setAttribute("x2",X(h));cross.setAttribute("opacity",1);
+    tip.style.opacity=1; tip.style.left=(e.clientX-r.left+14)+"px"; tip.style.top=(e.clientY-r.top-10)+"px";
+    tip.innerHTML=`<b>${h.toFixed(0)} HH/ton</b><br>Costo: $${fkg(h).toFixed(2)}/kg<br>Mínimo: $${(fkg(h)*1.18).toFixed(2)}/kg<br>Objetivo: $${(fkg(h)*1.21).toFixed(2)}/kg`;
+  });
+  hov.addEventListener("mouseleave",()=>{tip.style.opacity=0;cross.setAttribute("opacity",0);});
+}
+["ton","hht","chh","ckg","mat","fg"].forEach(id=>$(id).addEventListener("input",draw2));
+draw2();
+</script>
+</body>
+</html>
