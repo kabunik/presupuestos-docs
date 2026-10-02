@@ -102,12 +102,25 @@ primer par IFC + planos.
 | `LAYOUT METALITEC 2026.01.19-Model (6).pdf` | Layout de la planta | Referencia | Uno de los entregables que Daniel debía enviar. Insumo del paso de procesos y estaciones (#115) |
 | `metalitec-baysa-v7_2.html` | «El acueducto»: pieza narrada sobre flujo, capacidad, HH y los dos cuellos de botella | Comercial / didáctica | Explica el modelo mental de capacidad. **No es spec**, pero es la mejor explicación de por qué HH es la unidad |
 
-### `Elementos estructurales/` — análisis pieza por pieza
+### `Elementos estructurales/` — el motor de piezas complejas (etapa 2)
+
+**Reclasificado el 20-ago.** Daniel aclaró en la reunión qué es esta carpeta, y no era lo que supusimos.
+No son dos oráculos de HH: son **dos tipologías de elemento complejo**, de las que aparecen
+habitualmente en proyectos **mineros** —tolvas, cintas transportadoras—, y el material detalla su forma
+de cálculo y presupuesto. Es un **motor propio** y entra en la **etapa 2**, no en la v1.
 
 | Archivo | Naturaleza | Autoridad | Uso |
 |---|---|---|---|
-| `Analisis_habilitado_armado_soldadura_AG22_Rev1.html` | Trabe armada de alma esbelta, 7 ud, 2,031.56 kg/ud, 33 piezas/ud. Habilitado + armado + soldadura costeados, con verificación AISC/AWS y RFIs | **Referencia (oráculo)** | El nivel de detalle al que aspira el motor de HH. Declara la frontera: **«la pintura no entra en el total de fabricación bajo ninguna circunstancia»** |
-| `Analisis_habilitado_armado_soldadura_AC6_Rev0_1.html` | Mismo formato, otra marca | Referencia (oráculo) | AG22 cierra un RFI heredado de este |
+| `Analisis_habilitado_armado_soldadura_AG22_Rev1.html` | Trabe armada de alma esbelta, 7 ud, 2,031.56 kg/ud, 33 piezas/ud, con verificación AISC/AWS y RFIs | Referencia — **etapa 2** | Especificación del motor de piezas complejas. Y declara una frontera que **sí aplica ya**: «la pintura no entra en el total de fabricación bajo ninguna circunstancia» |
+| `Analisis_habilitado_armado_soldadura_AC6_Rev0_1.html` | Mismo formato, otra marca | Referencia — etapa 2 | AG22 cierra un RFI heredado de este |
+
+Lo que el motor analiza va más allá del costo: **armado, soldadura y accesibilidad de antorcha y de
+llaves**. Cubre los casos en los que la geometría obliga a *cambiar de proceso* —electrodo doblado en
+lugar de Fluxor porque la antorcha no entra—. Eso no es un factor: es una decisión de método que cambia
+el rendimiento.
+
+Hoy trabaja sobre **planos de taller**, y Daniel tiene en curso un **convertidor de PDF a planos de
+taller** para alimentarlo.
 
 Ambos llevan en la cabecera **«Instrucciones Rev. 3.8»**, mientras nuestros documentos citan el rector
 en **v1.7**. La numeración del consultor avanzó y no sabemos qué cambió en el camino.

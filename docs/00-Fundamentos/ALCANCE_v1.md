@@ -33,6 +33,29 @@ multicliente, RAG/memoria multicliente, optimizador de nesting, puente a Strumis
 
 ---
 
+## La familia de motores y su etapa
+
+*Añadido el 20-ago (#127).* En tres semanas el sistema pasó de un motor a **seis**. Daniel aclaró que
+buena parte del material enviado es **complementario y explicativo**, no alcance nuevo — así que no son
+seis frentes de construcción. Pero el registro hace falta: sin él, cada entrega añade un motor sin decir
+en qué etapa entra y el alcance se vuelve indefendible.
+
+| Motor | Estado | Etapa |
+|---|---|---|
+| **Presupuesto** (M1–M6) | Especificado y calibrado contra la planta real | **v1** |
+| **Planta** (capacidad, VSM, S11/S12) | Especificado | **v1** |
+| **Montaje** | Código funcional + especificación vinculante | **v1** |
+| **Pintura** | Excel completo con contrato de datos | por decidir — #122 |
+| **M7 ingeniería de valor** | Especificado, sin superficie | por decidir — #125 |
+| **Piezas complejas** (minería: tolvas, cintas) | Dos tipologías analizadas | **etapa 2** |
+| **Puentes** | Desarrollado, pendiente de compartir | etapa 2 *(por confirmar)* |
+
+**El hito inmediato no es ninguno de ellos**: es el **modelo canónico geométrico hasta el BOM**. Una vez
+en pie, la capa determinista se encadena. Es la misma cadena que el flujo ya derivaba del motor —B1
+primero— con un corte más estrecho: solo geometría y propiedades derivadas.
+
+---
+
 ## Inventario de pantallas
 
 ### Pantallas ya diseñadas — mockup hi-fi disponible
